@@ -9,6 +9,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));	
 
-// routes
+const { graphqlHTTP } = require('express-graphql');
+const schema = require('./src/api/schema');
+app.use(
+    '/api',
+    graphqlHTTP({
+        schema: schema,
+        graphiql: true
+    })
+)
 
 module.exports = app;
