@@ -1,6 +1,6 @@
-const User = require('../user/user.model');
+const User = require('./user.model');
 
-const resolvers = {
+const UserResolvers = {
     Query: {
         getUser: async (_, { id }) => {
             return await User.findById(id);
@@ -31,4 +31,4 @@ const resolvers = {
     }
 }
 
-module.exports = resolvers;
+module.exports = UserResolvers;

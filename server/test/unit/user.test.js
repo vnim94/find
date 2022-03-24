@@ -1,12 +1,11 @@
-const User = require('../../src/user/user.model');
-const typeDefs = require('../../src/api/typeDefs');
-const resolvers = require('../../src/api/resolvers');
+const UserTypes = require('../../src/user/user.types');
+const UserResolvers = require('../../src/user/user.resolvers');
 const EasyGraphQLTester = require('easygraphql-tester');
-const tester = new EasyGraphQLTester(typeDefs, resolvers);
+const tester = new EasyGraphQLTester(UserTypes, UserResolvers);
 
-describe('user typeDefs', () => {
-
-    test('getUsers', () => {
+describe('user queries', () => {
+    
+    test.only('getUsers', async () => {
         const query = `
             {
                 getUsers {
@@ -17,7 +16,7 @@ describe('user typeDefs', () => {
             }
         `
 
-        tester.test(true, query)
+        tester.test(true, query);
     })
 
     test('invalid getUsers', () => {
@@ -29,7 +28,33 @@ describe('user typeDefs', () => {
             }
         `
 
-        tester.test(false, query)
+        tester.test(false, query);
+    })
+
+    test('getUser', () => {
+        const query = `
+            {
+                getUser(id: "user_id") {
+                    firstName
+                    lastName
+                    email
+                }
+            }
+        `
+
+        tester.test(true, query);
+    })  
+
+    test('invalid getUser', () => {
+        const query = `
+            {
+                getUser(id: "user_id") {
+                    dob
+                }
+            }
+        `
+
+        tester.test(false, query);
     })
 
 })

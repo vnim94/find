@@ -1,4 +1,4 @@
-const typeDefs = `
+const UserTypes = `
     type User {
         id: ID!
         firstName: String!
@@ -29,4 +29,4 @@ const typeDefs = `
     }
 
 `
-module.exports = typeDefs;
+module.exports = UserTypes;

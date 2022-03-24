@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));	
 
 const { graphqlHTTP } = require('express-graphql');
-const schema = require('./src/api/schema');
+const { schema } = require('./src/api/schema');
 app.use(
     '/api',
     graphqlHTTP({
