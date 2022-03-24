@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 require('dotenv').config();
-const fake = require('@faker-js/faker').faker;
+const { faker } = require('@faker-js/faker');
 const mongoose = require('mongoose');
 const async = require('async');
 const bcrypt = require('bcryptjs');
@@ -18,12 +18,15 @@ function getRandomIndex(array) {
     return Math.floor(Math.random() * array.length);
 }
 
-async function createUser(name, email, password, callback) {
+function createUser(firstName, lastName, email, location, password, phone, callback) {
 
-    details = {
-        name: name,
-		email: email,
-        password: await bcrypt.hash(password, 10)
+    let details = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        location: location,
+        password: bcrypt.hashSync(password, 10),
+        phone: phone
     }
 
     let user = new User(details);
@@ -31,12 +34,12 @@ async function createUser(name, email, password, callback) {
     user.save((err) => {
 
         if (err) {
-            console.log(`[ERROR] Error creating user: ${user.name} - ${err}`);
+            console.log(`[ERROR] Error creating user: ${user.firstName} ${user.lastName} - ${err}`);
             callback(err, null);
             return;
         }
 
-        console.log(`[INFO] New user created: ${user.name}`);
+        console.log(`[INFO] New user created: ${user.firstName} ${user.lastName}`);
         users.push(user);
         callback(null, user);
 
@@ -49,7 +52,7 @@ function populateUsers(callback) {
     let usersToCreate = [];
 
     for (let i = 0; i < 5; i++) {
-        usersToCreate.push(function(callback) { createUser(fake.name.findName(), fake.internet.email(), fake.internet.password(), callback) });
+        usersToCreate.push(function(callback) { createUser(faker.name.firstName(), faker.name.lastName(), faker.internet.email(), faker.address.city(), faker.internet.password(), faker.phone.phoneNumber(),callback) });
     }
 
     async.series(usersToCreate, callback);
@@ -58,7 +61,7 @@ function populateUsers(callback) {
 
 console.log('[INFO] Populating database...');
 
-async.series([populateUsers], (err, results) => {
+async.series([populateUsers], (err) => {
 
     if (err) {
         console.log(`[ERROR] ${err}`);
