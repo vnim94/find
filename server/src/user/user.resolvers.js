@@ -10,8 +10,12 @@ const UserResolvers = {
         }
     },
     Mutation: {
-        createUser: async () => {
-
+        createUser: async (_, args) => {
+            try {
+                await User.create(args);
+            } catch (err) {
+                throw new Error(err.message);
+            }
         },
         login: async () => {
 

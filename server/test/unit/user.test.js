@@ -64,9 +64,9 @@ describe('user queries', () => {
 
 describe('user mutations', () => {
 
-    test.only('createUser', () => {
+    test('createUser', () => {
         const createUser = `
-            mutation createUser($firstName: String!, $lastName: String!, $email: String!, $location: String!, $password: String!, $phone: String!) {
+            mutation createUser($firstName: String!, $lastName: String!, $email: String!, $location: String!, $password: String!, $phone: String) {
                 createUser(firstName: $firstName, lastName: $lastName, email: $email, location: $location, password: $password, phone: $phone) {
                     firstName
                     lastName
@@ -86,15 +86,45 @@ describe('user mutations', () => {
     })
 
     test('login', () => {
-
+        const login = `
+            mutation login($email: String!, $password: String!) {
+                login(email: $email, password: $password) {
+                    token
+                    user {
+                        email
+                    }
+                }
+            }
+        `
+        tester.test(true, login, {
+            email: 'jsmith@email.com',
+            password: 'password'
+        })
     })
 
     test('updateUser', () => {
-
+        const updateUser = `
+            mutation updateUser($id: ID!, $firstName: String!, $lastName: String!, $location: String!, $phone: String) {
+                updateUser(id: $id, firstName: $firstName, lastName: $lastName, location: $location, phone: $phone) {
+                    firstName
+                    lastName
+                    location
+                    phone
+                }
+            }
+        `
+        tester.test(true, updateUser, {
+            id: 'abc',
+            firstName: 'John',
+            lastName: 'Smith',
+            location: 'Sydney',
+            phone: '0123456789'
+        })
     })
 
     test('updateEmail', () => {
-
+        const updateEmail = `
+        `
     })
 
     test('updatePassword', () => {
@@ -107,7 +137,7 @@ describe('user mutations', () => {
 
 })
 
-describe('user resolvers', () => {
+describe.skip('user resolvers', () => {
 
     const database = require('../../util/memoryDatabase');
     const User = require('../../src/user/user.model');
@@ -160,7 +190,24 @@ describe('user resolvers', () => {
     })
 
     test('createUser', async () => {
-
+        const createUser = `
+            mutation createUser($firstName: String!, $lastName: String!, $email: String!, $location: String!, $password: String!, $phone: String) {
+                createUser(firstName: $firstName, lastName: $lastName, email: $email, location: $location, password: $password, phone: $phone) {
+                    firstName
+                    lastName
+                    email
+                }
+            }
+        `
+        const result = tester.graphql(createUser, {}, {}, {
+            firstName: 'John',
+            lastName: 'Smith,',
+            email: 'jsmith@email.com',
+            location: 'Melbourne',
+            password: 'password',
+            phone: '0123456789'
+        })        
+        console.log(result);
     })
 
     test('login', async () => {
