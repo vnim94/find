@@ -16,11 +16,11 @@ const UserTypes = `
 
     type UserError implements Error {
         message: String!
-        firstName: String
-        lastName: String
-        email: String
-        location: String
-        password: String
+        firstName: String!
+        lastName: String!
+        email: String!
+        location: String!
+        password: String!
         phone: String
     }
 

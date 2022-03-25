@@ -267,6 +267,9 @@ describe('user resolvers', () => {
         expect(lastName).toBe('Brown');
         expect(email).toBe('bbrown@email.com');
         expect(location).toBe('Melbourne');
+
+        const newUser = await User.findOne({ email: "bbrown@email.com" });
+        expect(newUser).toBeTruthy();
     })
 
     test('createUser error', async () => {
@@ -329,7 +332,29 @@ describe('user resolvers', () => {
 
     test('updateUser', async () => {
         const updateUser = `
+            mutation {
+                updateUser(id: "${user._id.toString()}", firstName: "Bruce", lastName: "Wayne", location: "Perth", phone: "0987654321") {
+                    ... on User {
+                        id
+                    }
+                    ... on UserError {
+                        message
+                        firstName
+                        lastName
+                        location
+                        phone
+                    }
+                }
+            }
         `
+        const result = await tester.graphql(updateUser, {}, {}, {});
+        expect(result.data.updateUser).toBeTruthy();
+
+        const { firstName, lastName, location, phone } = await User.findOne({ _id: user._id.toString() });
+        expect(firstName).toBe('Bruce');
+        expect(lastName).toBe('Wayne');
+        expect(location).toBe('Perth');
+        expect(phone).toBe('0987654321');
     })
 
     test('updateEmail', async () => {
