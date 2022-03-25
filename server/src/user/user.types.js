@@ -15,8 +15,8 @@ const UserTypes = `
     }
 
     type Query {
-        user(id: ID!): User
-        users: [User]
+        user(id: ID!): User!
+        users: [User]!
     }
 
     type Mutation {
@@ -27,6 +27,5 @@ const UserTypes = `
         updatePassword(id: ID!, password: String!): User
         deleteUser(id: ID!): User
     }
-
 `
 module.exports = UserTypes;

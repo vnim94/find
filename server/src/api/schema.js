@@ -1,14 +1,19 @@
-const { makeExecutableSchema, mergeSchemas } = require('@graphql-tools/schema');
-const typeDefs = require('../user/user.types');
-const resolvers = require('../user/user.resolvers');
+const { makeExecutableSchema } = require('@graphql-tools/schema');
+const { mergeTypeDefs, mergeResolvers } = require('@graphql-tools/merge');
 
-exports.userSchema = makeExecutableSchema({
-    typeDefs,
+const GeneralTypes = `
+    interface Payload {
+        status: String!
+        message: String!
+    }
+`
+const UserTypes = require('../../src/user/user.types');
+const UserResolvers = require('../../src/user/user.resolvers');
+
+exports.typeDefs = mergeTypeDefs([GeneralTypes, UserTypes]);
+const resolvers = mergeResolvers([UserResolvers]);
+
+exports.schema = makeExecutableSchema({
+    typeDefs: this.typeDefs,
     resolvers
-})
-
-exports.schema = mergeSchemas({
-    schemas: [this.userSchema],
-    typeDefs: {},
-    resolvers: {},
 })

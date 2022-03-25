@@ -24,7 +24,7 @@ exports.seed = async () => {
         lastName: 'Smith',
         email: 'jsmith@email.com',
         location: 'Melbourne',
-        password: await bcrypt.hash('password', 10),
+        password: 'password',
         phone: '01234567890'
     })    
 

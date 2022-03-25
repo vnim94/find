@@ -1,4 +1,5 @@
 const User = require('./user.model');
+const { authenticateUser } = require('../middleware/auth');
 
 const UserResolvers = {
     Query: {
@@ -11,14 +12,18 @@ const UserResolvers = {
     },
     Mutation: {
         createUser: async (_, args) => {
+            let user;
             try {
-                await User.create(args);
+                user = await User.create(args);
             } catch (err) {
                 throw new Error(err.message);
             }
+            return user;
         },
-        login: async () => {
-
+        login: async (_, args) => {
+            const authPayload = await authenticateUser(args.email, args.password);
+            if (authPayload) return authPayload
+            throw new Error('invalid credentials'); 
         },
         updateUser: async (_, args, context) => {
             

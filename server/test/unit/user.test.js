@@ -34,7 +34,7 @@ describe('user queries', () => {
         tester.test(false, query);
     })
 
-    test('user', () => {
+    test.only('user', () => {
         const query = `
             {
                 user(id: "user_id") {
@@ -124,20 +124,48 @@ describe('user mutations', () => {
 
     test('updateEmail', () => {
         const updateEmail = `
+            mutation updateEmail($id: ID!, $email: String!) {
+                updateEmail(id: $id, email: $email) {
+                    id
+                    email
+                }
+            }
         `
+        tester.test(true, updateEmail, {
+            id: 'abc',
+            email: 'updated@email.com'
+        })
     })
 
     test('updatePassword', () => {
-
+        const updatePassword = `
+            mutation updatePassword($id: ID!, $password: String!) {
+                updatePassword(id: $id, password: $password) {
+                    id
+                }
+            }
+        `
+        tester.test(true, updatePassword, {
+            id: 'abc',
+            password: 'updated'
+        })
     })
 
     test('deleteUser', () => {
-
+        const deleteUser = `
+            mutation deleteUser($id: ID!) {
+                deleteUser(id: $id) {
+                    id
+                }
+            }
+        `
+        tester.test(true, deleteUser, {
+            id: 'abc'
+        })
     })
-
 })
 
-describe.skip('user resolvers', () => {
+describe('user resolvers', () => {
 
     const database = require('../../util/memoryDatabase');
     const User = require('../../src/user/user.model');
@@ -191,27 +219,56 @@ describe.skip('user resolvers', () => {
 
     test('createUser', async () => {
         const createUser = `
-            mutation createUser($firstName: String!, $lastName: String!, $email: String!, $location: String!, $password: String!, $phone: String) {
-                createUser(firstName: $firstName, lastName: $lastName, email: $email, location: $location, password: $password, phone: $phone) {
+            mutation {
+                createUser(firstName: "Bob", lastName: "Brown", email: "bbrown@email.com", location: "Melbourne", password: "password", phone: "0123456789") {
                     firstName
                     lastName
                     email
+                    location
                 }
             }
         `
-        const result = tester.graphql(createUser, {}, {}, {
-            firstName: 'John',
-            lastName: 'Smith,',
-            email: 'jsmith@email.com',
-            location: 'Melbourne',
-            password: 'password',
-            phone: '0123456789'
-        })        
-        console.log(result);
+        const result = await tester.graphql(createUser, {}, {}, {})     
+        expect(result.data.createUser).toBeTruthy();
+
+        const { firstName, lastName, email, location } = result.data.createUser
+        expect(firstName).toBe('Bob');
+        expect(lastName).toBe('Brown');
+        expect(email).toBe('bbrown@email.com');
+        expect(location).toBe('Melbourne');
     })
 
     test('login', async () => {
+        const login = `
+            mutation {
+                login(email: "jsmith@email.com", password: "password") {
+                    token
+                    user {
+                        email
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(login, {}, {}, {})
+        expect(result.data.login.token).toBeTruthy();
+        expect(result.data.login.user).toBeTruthy();
+    })
 
+    test('login with invalid credentials', async () => {
+        const login = `
+            mutation {
+                login(email: "abc@email.com", password: "password") {
+                    token
+                    user {
+                        email
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(login, {}, {}, {})
+        console.log(result)
+        expect(result.errors).toBeTruthy();
+        expect(result.errors[0].message).toBe('invalid credentials');
     })
 
     test('updateUser', async () => {
