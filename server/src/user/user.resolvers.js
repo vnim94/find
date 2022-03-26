@@ -1,10 +1,13 @@
 const User = require('./user.model');
 const { authenticateUser } = require('../middleware/auth');
+const validate = require('../middleware/validator');
 
 const UserResolvers = {
     Query: {
         user: async (_, { id }) => {
-            return await User.findById(id);
+            const user = await User.findById(id);
+            if (!user) throw new Error('not found');
+            return user;
         },
         users: async () => {
             return await User.find({});
@@ -12,6 +15,13 @@ const UserResolvers = {
     },
     Mutation: {
         createUser: async (_, args) => {
+            const errors = [
+                ...validate.user(args),
+                ...validate.email(args.email),
+                ...validate.password(args.password)
+            ]
+            if (errors.length > 0) throw new Error(errors); 
+
             return await User.create(args);
         },
         login: async (_, args) => {
@@ -21,6 +31,9 @@ const UserResolvers = {
         },
         updateUser: async (_, args, context) => {
             if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            const errors = validate.user(args);
+            if (errors.length > 0) throw new Error(errors);
+
             const { id, firstName, lastName, location, phone } = args;
             return await User.findByIdAndUpdate(id, { 
                 firstName: firstName,
@@ -31,10 +44,15 @@ const UserResolvers = {
         }, 
         updateEmail: async (_, args, context) => {
             if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            const error = validate.email(args.email);
+            if (error.length > 0) throw new Error(error);
             return await User.findByIdAndUpdate(args.id, { email: args.email }, { new: true })
         },
         updatePassword: async (_, args, context) => {
             if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            const error = validate.password(args.password);
+            if (error.length > 0) throw new Error(error);
+
             let user = await User.findById(args.id);
             user.password = args.password;
             return await user.save();

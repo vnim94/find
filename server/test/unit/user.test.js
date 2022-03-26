@@ -299,6 +299,22 @@ describe.only('user resolvers', () => {
         expect(updatedUser.location).toBe('London');
     })
 
+    test('updateUser with invalid input', async () => {
+        const updateUser = `
+            mutation {
+                updateUser(id: "${user._id.toString()}", firstName: "J", lastName: "B", location: "") {
+                    id
+                    firstName
+                    lastName
+                    location
+                    phone
+                }
+            }
+        `
+        const result = await tester.graphql(updateUser, {}, context, {});
+        expect(result.errors).toBeTruthy();
+    })
+
     test('updateEmail', async () => {
         const updateEmail = `
             mutation {
@@ -316,6 +332,19 @@ describe.only('user resolvers', () => {
         expect(updatedUser.email).toBe('updated@email.com');
     })
 
+    test('updateEmail with invalid input', async () => {
+        const updateEmail = `
+            mutation {
+                updateEmail(id: "${user._id.toString()}", email: "email.com") {
+                    id
+                    email
+                }
+            }
+        `
+        const result = await tester.graphql(updateEmail, {}, context, {});
+        expect(result.errors).toBeTruthy();
+    })
+
     test('updatePassword', async () => {
         const updatePassword = `
             mutation {
@@ -329,6 +358,18 @@ describe.only('user resolvers', () => {
 
         const updatedUser = await User.findById(user._id.toString());
         expect(bcrypt.compareSync('updated', updatedUser.password)).toBeTruthy();
+    })
+
+    test('updatePassword with invalid input', async () => {
+        const updatePassword = `
+            mutation {
+                updatePassword(id: "${user._id.toString()}", password: "a") {
+                    id
+                }
+            }
+        `
+        const result = await tester.graphql(updatePassword, {}, context, {});
+        expect(result.errors).toBeTruthy();
     })
 
     test('deleteUser', async () => {
