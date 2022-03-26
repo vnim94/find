@@ -12,13 +12,7 @@ const UserResolvers = {
     },
     Mutation: {
         createUser: async (_, args) => {
-            let user;
-            try {
-                user = await User.create(args);
-            } catch (err) {
-                throw new Error(err.message);
-            }
-            return user;
+            return await User.create(args);
         },
         login: async (_, args) => {
             const authPayload = await authenticateUser(args.email, args.password);
@@ -26,16 +20,28 @@ const UserResolvers = {
             throw new Error('invalid credentials'); 
         },
         updateUser: async (_, args, context) => {
-            
+            if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            const { id, firstName, lastName, location, phone } = args;
+            return await User.findByIdAndUpdate(id, { 
+                firstName: firstName,
+                lastName: lastName,
+                location: location,
+                phone: phone
+            }, { new: true })
         }, 
         updateEmail: async (_, args, context) => {
-
+            if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            return await User.findByIdAndUpdate(args.id, { email: args.email }, { new: true })
         },
         updatePassword: async (_, args, context) => {
-
+            if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            let user = await User.findById(args.id);
+            user.password = args.password;
+            return await user.save();
         },
         deleteUser: async (_, args, context) => {
-            
+            if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            return await User.findByIdAndDelete(args.id);
         }
     }
 }

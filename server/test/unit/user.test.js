@@ -34,7 +34,7 @@ describe('user queries', () => {
         tester.test(false, query);
     })
 
-    test.only('user', () => {
+    test('user', () => {
         const query = `
             {
                 user(id: "user_id") {
@@ -165,17 +165,19 @@ describe('user mutations', () => {
     })
 })
 
-describe('user resolvers', () => {
+describe.only('user resolvers', () => {
 
     const database = require('../../util/memoryDatabase');
     const User = require('../../src/user/user.model');
-
+    const bcrypt = require('bcryptjs');
+    let context;
     let user;
 
     beforeAll(async () => {
         await database.connect();
         await database.seed();
         user = await User.findOne();
+        context = { user: { id: user._id.toString() } };
     });
 
     afterAll(async () => { await database.disconnect() });
@@ -269,24 +271,78 @@ describe('user resolvers', () => {
             }
         `
         const result = await tester.graphql(login, {}, {}, {})
-        console.log(result)
         expect(result.errors).toBeTruthy();
         expect(result.errors[0].message).toBe('invalid credentials');
     })
 
     test('updateUser', async () => {
+        const updateUser = `
+            mutation {
+                updateUser(id: "${user._id.toString()}", firstName: "James", lastName: "Bond", location: "London", phone: "09876544321") {
+                    id
+                    firstName
+                    lastName
+                    location
+                    phone
+                }
+            }
+        `
+        const result = await tester.graphql(updateUser, {}, context, {});
+        expect(result.data.updateUser.id).toBeTruthy();
+        expect(result.data.updateUser.firstName).toBe('James')
+        expect(result.data.updateUser.lastName).toBe('Bond');
+        expect(result.data.updateUser.location).toBe('London');
+
+        const updatedUser = await User.findById(user._id.toString());
+        expect(updatedUser.firstName).toBe('James');
+        expect(updatedUser.lastName).toBe('Bond');
+        expect(updatedUser.location).toBe('London');
     })
 
     test('updateEmail', async () => {
+        const updateEmail = `
+            mutation {
+                updateEmail(id: "${user._id.toString()}", email: "updated@email.com") {
+                    id
+                    email
+                }
+            }
+        `
+        const result = await tester.graphql(updateEmail, {}, context, {});
+        expect(result.data.updateEmail.id).toBeTruthy();
+        expect(result.data.updateEmail.email).toBe("updated@email.com");
 
+        const updatedUser = await User.findById(user._id.toString());
+        expect(updatedUser.email).toBe('updated@email.com');
     })
 
     test('updatePassword', async () => {
+        const updatePassword = `
+            mutation {
+                updatePassword(id: "${user._id.toString()}", password: "updated") {
+                    id
+                }
+            }
+        `
+        const result = await tester.graphql(updatePassword, {}, context, {});
+        expect(result.data.updatePassword.id).toBeTruthy();
 
+        const updatedUser = await User.findById(user._id.toString());
+        expect(bcrypt.compareSync('updated', updatedUser.password)).toBeTruthy();
     })
 
     test('deleteUser', async () => {
-
+        const deleteUser = `
+            mutation {
+                deleteUser(id: "${user._id.toString()}") {
+                    id
+                }
+            }
+        `
+        const result = await tester.graphql(deleteUser, {}, context, {});
+        expect(result.data.deleteUser.id).toBeTruthy();
+        const deletedUser = await User.findById(user._id.toString());
+        expect(deletedUser).toBeFalsy();
     })
 
 })
