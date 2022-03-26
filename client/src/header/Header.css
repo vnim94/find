@@ -1,0 +1,15 @@
+.header {
+    width: 100%;
+}
+
+.header > a {
+    text-decoration: none;
+}
+
+.domain {
+    width: 90%;
+}
+
+.country {
+    width: 10%;
+}

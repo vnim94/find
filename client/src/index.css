@@ -10,3 +10,117 @@ body {
 html {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
+:root {
+    --white: #ffffff;
+    --light-grey: #e5e8e1;
+    --grey: #acaca7;
+    --dark-grey: #848484;
+    --light-black: #3c3c3c;
+    --black: #2c2c2c;
+    --light-green: #a4d454;
+    --green: #80b24b;
+    --dark-green: #4c843c;
+}
+
+/* colours */
+.bg-white {
+    background-color: var(--white);
+}
+
+.white {
+    color: var(--white);
+}
+
+.bg-light-grey {
+    background-color: var(--light-grey);
+}
+
+.light-grey {
+    color: var(--light-grey);
+}
+
+.bg-grey {
+    background-color: var(--grey);
+}
+
+.grey {
+    color: var(--grey);
+}
+
+.bg-dark-grey {
+    background-color: var(--dark-grey);
+}
+
+.dark-grey {
+    color: var(--dark-grey);
+}
+
+.bg-light-black {
+    background-color: var(--light-black);
+}
+
+.light-black {
+    color: var(--light-black);
+}
+
+.bg-black {
+    background-color: var(--black);
+}
+
+.black {
+    color: var(--black);
+}
+
+.bg-light-green {
+    background-color: var(--light-green);
+}
+
+.light-green {
+    color: var(--light-green);
+}
+
+.bg-green {
+    background-color: var(--green);
+}
+
+.green {
+    color: var(--green);
+}
+
+.bg-dark-green {
+    background-color: var(--dark-green)
+}
+
+.dark-green {
+    color: var(--dark-green)
+}
+
+/* flexbox */
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-ai-c {
+    align-items: center;
+}
+
+.flex-jc-c {
+    justify-content: center;
+}
+
+.flex-jc-sa {
+    justify-content: space-around;
+}
+
+.flex-jc-sb {
+    justify-content: space-between;
+}
