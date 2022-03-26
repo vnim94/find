@@ -19,3 +19,42 @@ describe('authenticate user', () => {
     })
 
 })
+
+describe('authenticate token', () => {
+
+    const { authenticateToken, createToken } = require('../../src/middleware/auth');
+    const jwt = require('jsonwebtoken');
+
+    test('adds user id to request object if valid token', () => {
+        const token = createToken('abc');
+        const req = {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+        }
+        const res = {}
+        const next = jest.fn();
+
+        authenticateToken(req, res, next);
+
+        expect(req.user).toBeTruthy();
+        expect(req.user).toBe('abc')
+        expect(next).toHaveBeenCalled();
+    })
+
+    test('no user property on req object if invalid token', () => {
+        const token = jwt.sign('abc', 'abc');
+        const req = {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+        }
+        const res = {}
+        const next = jest.fn();
+
+        authenticateToken(req, res, next);
+
+        expect(req.user).toBeFalsy();
+    })
+
+})

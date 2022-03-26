@@ -10,3 +10,15 @@ exports.authenticateUser = async (email, password) => {
         return { token, user }
     }
 }
+
+exports.createToken = (id) => {
+    return jwt.sign(id, process.env.TOKEN_SECRET);
+}
+
+exports.authenticateToken = (req, res, next) => {
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, id) => {
+        if (!err) req.user = id;
+    });
+    next();
+}
