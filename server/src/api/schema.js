@@ -1,8 +1,7 @@
 const { makeExecutableSchema } = require('@graphql-tools/schema');
 const { mergeTypeDefs, mergeResolvers } = require('@graphql-tools/merge');
 
-const GeneralTypes = `
-`
+const GeneralTypes = ``
 const UserTypes = require('../../src/user/user.types');
 const UserResolvers = require('../../src/user/user.resolvers');
 

@@ -5,34 +5,34 @@ exports.user = (user) => {
     const { firstName, lastName, location } = user;
     
     if (validator.isEmpty(firstName)) {
-        errors.push(JSON.stringify({
+        errors.push({
             key: 'firstName',
             message: 'First name must be provided'
-        }))
+        })
     } else if (!validator.isLength(firstName, { min: 2, max: 25 })) {
-        errors.push(JSON.stringify({
+        errors.push({
             key: 'firstName',
             message: 'First name must be between 2 and 30 characters'
-        }))
+        })
     }
 
     if (validator.isEmpty(lastName)) {
-        errors.push(JSON.stringify({
+        errors.push({
             key: 'lastName',
             message: 'Last name must be provided'
-        }))
+        })
     } else if (!validator.isLength(lastName, { min: 2, max: 25 })) {
-        errors.push(JSON.stringify({
+        errors.push({
             key: 'lastName',
             message: 'Last name must be between 2 and 30 characters'
-        }))
+        })
     }
 
     if (validator.isEmpty(location)) {
-        errors.push(JSON.stringify({
+        errors.push({
             key: 'location',
             message: 'Location must be provided'
-        }))
+        })
     }
 
     return errors;

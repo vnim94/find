@@ -6,7 +6,7 @@ const UserResolvers = {
     Query: {
         user: async (_, { id }) => {
             const user = await User.findById(id);
-            if (!user) throw new Error('not found');
+            if (!user) throw new Error('NOT_FOUND');
             return user;
         },
         users: async () => {
@@ -27,10 +27,10 @@ const UserResolvers = {
         login: async (_, args) => {
             const authPayload = await authenticateUser(args.email, args.password);
             if (authPayload) return authPayload
-            throw new Error('invalid credentials'); 
+            throw new Error('UNAUTHORIZED'); 
         },
         updateUser: async (_, args, context) => {
-            if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            if (!context.user || context.user.id !== args.id) throw new Error('UNAUTHORIZED');
             const errors = validate.user(args);
             if (errors.length > 0) throw new Error(errors);
 
@@ -43,13 +43,13 @@ const UserResolvers = {
             }, { new: true })
         }, 
         updateEmail: async (_, args, context) => {
-            if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            if (!context.user || context.user.id !== args.id) throw new Error('UNAUTHORIZED');
             const error = validate.email(args.email);
             if (error.length > 0) throw new Error(error);
             return await User.findByIdAndUpdate(args.id, { email: args.email }, { new: true })
         },
         updatePassword: async (_, args, context) => {
-            if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            if (!context.user || context.user.id !== args.id) throw new Error('UNAUTHORIZED');
             const error = validate.password(args.password);
             if (error.length > 0) throw new Error(error);
 
@@ -58,7 +58,7 @@ const UserResolvers = {
             return await user.save();
         },
         deleteUser: async (_, args, context) => {
-            if (!context.user || context.user.id !== args.id) throw new Error('unauthorised');
+            if (!context.user || context.user.id !== args.id) throw new Error('UNAUTHORIZED');
             return await User.findByIdAndDelete(args.id);
         }
     }

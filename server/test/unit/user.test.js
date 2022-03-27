@@ -201,6 +201,20 @@ describe.only('user resolvers', () => {
         expect(email).toBe('jsmith@email.com');
     })
 
+    test('user not found', async () => {
+        const query = `
+            {
+                user(id: "623fb7ceeb0db10460a55d43") {
+                    firstName
+                    lastName
+                    email
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.errors[0].message).toBe('NOT_FOUND');
+    })
+
     test('users', async () => {
         const query = `
             {
