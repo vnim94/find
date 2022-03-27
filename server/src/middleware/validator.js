@@ -2,7 +2,7 @@ const validator = require('validator');
 
 exports.user = (user) => {
     const errors = {}
-    const { firstName, lastName, location } = user;
+    const { firstName, lastName, location, phone } = user;
     
     if (validator.isEmpty(firstName)) {
         errors['firstName'] = 'First name must be provided';
@@ -17,7 +17,11 @@ exports.user = (user) => {
     }
 
     if (validator.isEmpty(location)) {
-        errors['location'] = 'Location must be provided'
+        errors['location'] = 'Location must be provided';
+    }
+
+    if (!validator.isEmpty(phone) && !validator.isMobilePhone(phone, 'en-AU')) {
+        errors['phone'] = 'Phone number must be a valid mobile phone number';
     }
 
     return errors;
