@@ -5,9 +5,10 @@ const validate = require('../middleware/validator');
 const UserResolvers = {
     UserResult: {
         __resolveType: (_) => {
-            if (_.id) return 'User';
-            if (_.errors) return 'InvalidInput';
-            if (_.message) return 'Error';
+            if (_.firstName) return 'User';
+            if (_.__typename === 'InvalidInput') return 'InvalidInput';
+            if (_.__typename === 'UserNotFound') return 'UserNotFound';
+            if (_.__typename === 'UserExists') return 'UserExists';
             return null;
         }
     },
@@ -47,11 +48,12 @@ const UserResolvers = {
             return { __typename: 'InvalidCredentials', message: 'Invalid credentials' } 
         },
         updateUser: async (_, args, context) => {
-            if (!context.user || context.user.id !== args.id) throw new Error('UNAUTHORIZED');
+            if (!context.user || context.user !== args.id) throw new Error('UNAUTHORIZED');
 
             const errors = validate.user(args);
-            if (errors.length > 0) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors };
-
+            console.log(errors)
+            if (Object.keys(errors).length > 0) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors };
+            
             const { id, firstName, lastName, location, phone } = args;
             return await User.findByIdAndUpdate(id, { 
                 firstName: firstName,
@@ -61,25 +63,25 @@ const UserResolvers = {
             }, { new: true })
         }, 
         updateEmail: async (_, args, context) => {
-            if (!context.user || context.user.id !== args.id) throw new Error('UNAUTHORIZED');
+            if (!context.user || context.user !== args.id) throw new Error('UNAUTHORIZED');
 
             const error = validate.email(args.email);
-            if (error.length > 0) return { __typename: 'InvalidInput', message: 'Invalid input', errors: error };
+            if (error) return { __typename: 'InvalidInput', message: 'Invalid input', errors: error };
             
             return await User.findByIdAndUpdate(args.id, { email: args.email }, { new: true })
         },
         updatePassword: async (_, args, context) => {
-            if (!context.user || context.user.id !== args.id) throw new Error('UNAUTHORIZED');
+            if (!context.user || context.user !== args.id) throw new Error('UNAUTHORIZED');
 
             const error = validate.password(args.password);
-            if (error.length > 0) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors };
+            if (error) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors };
 
             let user = await User.findById(args.id);
             user.password = args.password;
             return await user.save();
         },
         deleteUser: async (_, args, context) => {
-            if (!context.user || context.user.id !== args.id) throw new Error('UNAUTHORIZED');
+            if (!context.user || context.user !== args.id) throw new Error('UNAUTHORIZED');
             return await User.findByIdAndDelete(args.id);
         }
     }

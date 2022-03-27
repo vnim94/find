@@ -1,7 +1,6 @@
-const UserTypes = require('../../src/user/user.types');
-const UserResolvers = require('../../src/user/user.resolvers');
+const { typeDefs, resolvers } = require('../../src/api/schema');
 const EasyGraphQLTester = require('easygraphql-tester');
-const tester = new EasyGraphQLTester(UserTypes, UserResolvers);
+const tester = new EasyGraphQLTester(typeDefs, resolvers);
 
 describe('user queries', () => {
     
@@ -38,9 +37,11 @@ describe('user queries', () => {
         const query = `
             {
                 user(id: "user_id") {
-                    firstName
-                    lastName
-                    email
+                    ... on User {
+                        firstName
+                        lastName
+                        email
+                    }
                 }
             }
         `
@@ -52,7 +53,9 @@ describe('user queries', () => {
         const query = `
             {
                 user(id: "user_id") {
-                    dob
+                    ... on User {
+                        dob
+                    }
                 }
             }
         `
@@ -66,106 +69,94 @@ describe('user mutations', () => {
 
     test('createUser', () => {
         const createUser = `
-            mutation createUser($firstName: String!, $lastName: String!, $email: String!, $location: String!, $password: String!, $phone: String) {
-                createUser(firstName: $firstName, lastName: $lastName, email: $email, location: $location, password: $password, phone: $phone) {
-                    firstName
-                    lastName
-                    email
-                }
-            }
-        `
-
-        tester.test(true, createUser, {
-            firstName: 'John',
-            lastName: 'Smith,',
-            email: 'jsmith@email.com',
-            location: 'Melbourne',
-            password: 'password',
-            phone: '0123456789'
-        })
-    })
-
-    test('login', () => {
-        const login = `
-            mutation login($email: String!, $password: String!) {
-                login(email: $email, password: $password) {
-                    token
-                    user {
+            mutation {
+                createUser(firstName: "John", lastName: "Smith", email: "jsmith@email.com", location: "Melbourne", password: "password", phone: "012345678") {
+                    ... on User {
+                        firstName
+                        lastName
                         email
                     }
                 }
             }
         `
-        tester.test(true, login, {
-            email: 'jsmith@email.com',
-            password: 'password'
-        })
+
+        tester.test(true, createUser)
+    })
+
+    test('login', () => {
+        const login = `
+            mutation {
+                login(email: "jsmith@email.com", password: "password") {
+                    ... on AuthPayload {
+                        token
+                        user {
+                            email
+                        }
+                    }
+                }
+            }
+        `
+        tester.test(true, login)
     })
 
     test('updateUser', () => {
         const updateUser = `
-            mutation updateUser($id: ID!, $firstName: String!, $lastName: String!, $location: String!, $phone: String) {
-                updateUser(id: $id, firstName: $firstName, lastName: $lastName, location: $location, phone: $phone) {
-                    firstName
-                    lastName
-                    location
-                    phone
+            mutation {
+                updateUser(id: "abc", firstName: "John", lastName: "Smith", location: "Sydney", phone: "0123456789") {
+                    ... on User {
+                        firstName
+                        lastName
+                        location
+                        phone
+                    }
                 }
             }
         `
-        tester.test(true, updateUser, {
-            id: 'abc',
-            firstName: 'John',
-            lastName: 'Smith',
-            location: 'Sydney',
-            phone: '0123456789'
-        })
+        tester.test(true, updateUser)
     })
 
     test('updateEmail', () => {
         const updateEmail = `
-            mutation updateEmail($id: ID!, $email: String!) {
-                updateEmail(id: $id, email: $email) {
-                    id
-                    email
+            mutation {
+                updateEmail(id: "abc", email: "updated@email.com") {
+                    ... on User {
+                        id
+                        email
+                    }
                 }
             }
         `
-        tester.test(true, updateEmail, {
-            id: 'abc',
-            email: 'updated@email.com'
-        })
+        tester.test(true, updateEmail)
     })
 
     test('updatePassword', () => {
         const updatePassword = `
-            mutation updatePassword($id: ID!, $password: String!) {
-                updatePassword(id: $id, password: $password) {
-                    id
+            mutation  {
+                updatePassword(id: "abc", password: "password") {
+                    ... on User {
+                        id
+                    }
                 }
             }
         `
-        tester.test(true, updatePassword, {
-            id: 'abc',
-            password: 'updated'
-        })
+        tester.test(true, updatePassword)
     })
 
     test('deleteUser', () => {
         const deleteUser = `
-            mutation deleteUser($id: ID!) {
-                deleteUser(id: $id) {
-                    id
+            mutation {
+                deleteUser(id: "abc") {
+                    ... on User {
+                        id
+                    }
                 }
             }
         `
-        tester.test(true, deleteUser, {
-            id: 'abc'
-        })
+        tester.test(true, deleteUser)
     })
 })
 
-describe.only('user resolvers', () => {
+describe('user resolvers', () => {
 
     const database = require('../../util/memoryDatabase');
     const User = require('../../src/user/user.model');
@@ -177,7 +168,7 @@ describe.only('user resolvers', () => {
         await database.connect();
         await database.seed();
         user = await User.findOne();
-        context = { user: { id: user._id.toString() } };
+        context = { user: user._id.toString() };
     });
 
     afterAll(async () => { await database.disconnect() });
@@ -186,9 +177,15 @@ describe.only('user resolvers', () => {
         const query = `
             {
                 user(id: "${user._id.toString()}") {
-                    firstName
-                    lastName
-                    email
+                    ... on User {
+                        firstName
+                        lastName
+                        email
+                    }
+                    ... on UserNotFound {
+                        message
+                        id
+                    }
                 }
             }
         `
@@ -205,14 +202,19 @@ describe.only('user resolvers', () => {
         const query = `
             {
                 user(id: "623fb7ceeb0db10460a55d43") {
-                    firstName
-                    lastName
-                    email
+                    ... on User {
+                        firstName
+                        lastName
+                        email
+                    }
+                    ... on UserNotFound {
+                        message
+                    }
                 }
             }
         `
         const result = await tester.graphql(query, {}, {}, {});
-        expect(result.errors[0].message).toBe('NOT_FOUND');
+        expect(result.data.user.message).toBe('User not found');
     })
 
     test('users', async () => {
@@ -237,10 +239,12 @@ describe.only('user resolvers', () => {
         const createUser = `
             mutation {
                 createUser(firstName: "Bob", lastName: "Brown", email: "bbrown@email.com", location: "Melbourne", password: "password", phone: "0123456789") {
-                    firstName
-                    lastName
-                    email
-                    location
+                    ... on User {
+                        firstName
+                        lastName
+                        email
+                        location
+                    }
                 }
             }
         `
@@ -261,9 +265,11 @@ describe.only('user resolvers', () => {
         const login = `
             mutation {
                 login(email: "jsmith@email.com", password: "password") {
-                    token
-                    user {
-                        email
+                    ... on AuthPayload { 
+                        token
+                        user {
+                            email
+                        }
                     }
                 }
             }
@@ -277,27 +283,28 @@ describe.only('user resolvers', () => {
         const login = `
             mutation {
                 login(email: "abc@email.com", password: "password") {
-                    token
-                    user {
-                        email
+                    ... on InvalidCredentials {
+                        message
                     }
                 }
             }
         `
         const result = await tester.graphql(login, {}, {}, {})
-        expect(result.errors).toBeTruthy();
-        expect(result.errors[0].message).toBe('invalid credentials');
+        expect(result.data.login.message).toBeTruthy();
+        expect(result.data.login.message).toBe('Invalid credentials');
     })
 
     test('updateUser', async () => {
         const updateUser = `
             mutation {
-                updateUser(id: "${user._id.toString()}", firstName: "James", lastName: "Bond", location: "London", phone: "09876544321") {
-                    id
-                    firstName
-                    lastName
-                    location
-                    phone
+                updateUser(id: "${user._id.toString()}", firstName: "James", lastName: "Bond", location: "London", phone: "+61467662228") {
+                    ... on User { 
+                        id
+                        firstName
+                        lastName
+                        location
+                        phone
+                    }
                 }
             }
         `
@@ -306,35 +313,43 @@ describe.only('user resolvers', () => {
         expect(result.data.updateUser.firstName).toBe('James')
         expect(result.data.updateUser.lastName).toBe('Bond');
         expect(result.data.updateUser.location).toBe('London');
+        expect(result.data.updateUser.phone).toBe('+61467662228')
 
         const updatedUser = await User.findById(user._id.toString());
         expect(updatedUser.firstName).toBe('James');
         expect(updatedUser.lastName).toBe('Bond');
         expect(updatedUser.location).toBe('London');
+        expect(updatedUser.phone).toBe('+61467662228')
     })
 
     test('updateUser with invalid input', async () => {
         const updateUser = `
             mutation {
-                updateUser(id: "${user._id.toString()}", firstName: "J", lastName: "B", location: "") {
-                    id
-                    firstName
-                    lastName
-                    location
-                    phone
+                updateUser(id: "${user._id.toString()}", firstName: "J", lastName: "B", location: "", phone: "") {
+                    ... on InvalidInput {
+                        message
+                        errors {
+                            firstName
+                            lastName
+                            location
+                        }
+                    }
                 }
             }
         `
         const result = await tester.graphql(updateUser, {}, context, {});
-        expect(result.errors).toBeTruthy();
+        expect(result.data.updateUser.message).toBe('Invalid input');
+        expect(result.data.updateUser.errors).toBeTruthy();
     })
 
     test('updateEmail', async () => {
         const updateEmail = `
             mutation {
                 updateEmail(id: "${user._id.toString()}", email: "updated@email.com") {
-                    id
-                    email
+                    ... on User { 
+                        id
+                        email
+                    }
                 }
             }
         `
@@ -350,20 +365,27 @@ describe.only('user resolvers', () => {
         const updateEmail = `
             mutation {
                 updateEmail(id: "${user._id.toString()}", email: "email.com") {
-                    id
-                    email
+                    ... on InvalidInput {
+                        message
+                        errors {
+                            email
+                        }
+                    }
                 }
             }
         `
         const result = await tester.graphql(updateEmail, {}, context, {});
-        expect(result.errors).toBeTruthy();
+        expect(result.data.updateEmail.message).toBeTruthy();
+        expect(result.data.updateEmail.errors.email).toBeTruthy();
     })
 
     test('updatePassword', async () => {
         const updatePassword = `
             mutation {
                 updatePassword(id: "${user._id.toString()}", password: "updated") {
-                    id
+                    ... on User {
+                        id
+                    }
                 }
             }
         `
@@ -378,7 +400,12 @@ describe.only('user resolvers', () => {
         const updatePassword = `
             mutation {
                 updatePassword(id: "${user._id.toString()}", password: "a") {
-                    id
+                    ... on InvalidInput {
+                        message
+                        errors {
+                            password
+                        }
+                    }
                 }
             }
         `

@@ -11,10 +11,12 @@ const UserTypes = `
 
     type UserNotFound implements Error {
         message: String!
+        id: String!
     }
 
     type UserExists implements Error {
         message: String!
+        email: String!
     }
 
     type InputErrors {
@@ -44,7 +46,7 @@ const UserTypes = `
     union LoginResult = AuthPayload | InvalidCredentials
 
     type Query {
-        user(id: ID!): User!
+        user(id: ID!): UserResult
         users: [User]!
     }
 
@@ -54,7 +56,7 @@ const UserTypes = `
         updateUser(id: ID!, firstName: String!, lastName: String!, location: String!, phone: String): UserResult
         updateEmail(id: ID!, email: String!): UserResult
         updatePassword(id: ID!, password: String!): UserResult
-        deleteUser(id: ID!): UserResult
+        deleteUser(id: ID!): User
     }
 `
 module.exports = UserTypes;
