@@ -118,7 +118,7 @@ describe('user mutations', () => {
         expect(location).toBe('Melbourne');
     })
 
-    test('createUser with invalid input return error', async () => {
+    test.only('createUser with invalid input return error', async () => {
         const createUser = `
             mutation {
                 createUser(firstName: "a", lastName: "b", email: "abcde", location: "", password: "123") {
@@ -132,7 +132,7 @@ describe('user mutations', () => {
             })
 
         expect(response.body.errors).toBeTruthy();
-        console.log(response.body.errors);
+        console.log(response.body);
     })
 
 })

@@ -18,7 +18,10 @@ app.use(
     '/api',
     graphqlHTTP({
         schema: schema,
-        graphiql: true
+        graphiql: true,
+        customFormatErrorFn: (error) => ({
+            message: error.message
+        })
     })
 )
 
