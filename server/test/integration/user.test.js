@@ -23,9 +23,11 @@ describe('user queries', () => {
         const query = `
             {
                 user(id: "${user._id.toString()}") {
-                    id
-                    firstName
-                    lastName
+                    ... on User {
+                        id
+                        firstName
+                        lastName
+                    }
                 }
             }
         `
@@ -38,13 +40,14 @@ describe('user queries', () => {
 
     });
 
-    test('return NOT_FOUND if invalid id', async () => {
+    test('return user not found if invalid id', async () => {
         const query = `
             {
                 user(id: "623fb7ceeb0db10460a55d43") {
-                    id
-                    firstName
-                    lastName
+                    ... on UserNotFound {
+                        message
+                        id
+                    }
                 }
             }
         `
@@ -53,8 +56,8 @@ describe('user queries', () => {
                 query: query
             })
 
-        expect(response.body.errors).toBeTruthy();
-        expect(response.body.errors[0].message).toBe('NOT_FOUND');
+        expect(response.body.user.id).toBeTruthy();
+        expect(response.body.user.message).toBe('User not found');
     })
 
     test('returns all users', async () => {
@@ -90,11 +93,13 @@ describe('user mutations', () => {
         const createUser = `
             mutation {
                 createUser(firstName: "Bob", lastName: "Brown", email: "bbrown@email.com", location: "Melbourne", password: "password") {
-                    id
-                    firstName
-                    lastName
-                    email
-                    location
+                    ... on User {
+                        id
+                        firstName
+                        lastName
+                        email
+                        location
+                    }
                 }
             }
         `
@@ -118,11 +123,14 @@ describe('user mutations', () => {
         expect(location).toBe('Melbourne');
     })
 
-    test.only('createUser with invalid input return error', async () => {
+    test('createUser with invalid input return error', async () => {
         const createUser = `
             mutation {
                 createUser(firstName: "a", lastName: "b", email: "abcde", location: "", password: "123") {
-                    id
+                    ... on InvalidInput {
+                        message
+                        errors
+                    }
                 }
             }
         `
@@ -131,8 +139,8 @@ describe('user mutations', () => {
                 query: createUser
             })
 
-        expect(response.body.errors).toBeTruthy();
-        console.log(response.body);
+        expect(response.body.data.createUser.errors).toBeTruthy();
+        expect(response.body.data.createUser.messsage).toBe('Invalid input')
     })
 
 })
