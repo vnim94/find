@@ -7,7 +7,8 @@ const GeneralTypes = `
     }
 
     type NotFound implements Error {
-
+        message: String!
+        id: ID!
     }
 `
 const GeneralResolvers = {
