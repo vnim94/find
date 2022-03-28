@@ -14,7 +14,7 @@ const UserTypes = `
         email: String!
     }
 
-    type InputErrors {
+    type UserInputErrors {
         firstName: String
         lastName: String
         email: String
@@ -25,7 +25,7 @@ const UserTypes = `
 
     type InvalidUserInput implements Error {
         message: String!
-        errors: InputErrors!
+        errors: UserInputErrors!
     }
 
     type AuthPayload {
