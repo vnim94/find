@@ -37,17 +37,15 @@ const JobSchema = Schema({
     },
     added: {
         type: Date,
-        default: Date.now,
-        required: true
+        default: Date.now
     },
     closing: {
         type: Date,
-        default: () => Date.now() + 30 * 24 * 60 * 60 * 1000,
-        required: true
+        default: () => Date.now() + (30 * 24 * 60 * 60 * 1000)
     },
     expired: {
         type: Boolean,
-        required: true
+        default: false
     }
 })
 
