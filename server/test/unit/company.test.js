@@ -26,7 +26,7 @@ describe('company mutations', () => {
     })
 })
 
-describe.only('company resolvers', () => {
+describe('company resolvers', () => {
 
     const database = require('../../util/memoryDatabase');
     const Company = require('../../src/company/company.model');
@@ -63,7 +63,20 @@ describe.only('company resolvers', () => {
     })
 
     test('company not found', async () => {
-        
+        const companyQuery = `
+            {
+                company(id: "624167619b433f33c562b7b1") {
+                    ... on NotFound {
+                        message
+                        id
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(companyQuery, {}, {}, {});
+        console.log(result)
+        expect(result.data.company.message).toBe('Company not found');
+        expect(result.data.company.id).toBeTruthy();
     })
 
     test('companies', async () => {
@@ -122,7 +135,22 @@ describe.only('company resolvers', () => {
     })
 
     test('createCompany with invalid input', async () => {
-
+        const createCompany = `
+            mutation {
+                createCompany(name: "", headquarters: "") {
+                    ... on InvalidCompanyInput {
+                        message
+                        errors {
+                            name
+                            headquarters
+                        }
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(createCompany, {}, context, {});
+        expect(result.data.createCompany.message).toBe('Invalid input');
+        expect(result.data.createCompany.errors).toBeTruthy();
     })
 
     test('updateCompany', async () => {
@@ -146,11 +174,38 @@ describe.only('company resolvers', () => {
     })
 
     test('updateCompany with name taken', async () => {
-
+        const updateCompany = `
+            mutation {
+                updateCompany(id: "${company._id.toString()}", name: "updated", headquarters: "XYZ Street") {
+                    ... on CompanyExists {
+                        message
+                        name
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(updateCompany, {}, context, {});
+        expect(result.data.updateCompany.message).toBe('Company already exists');
+        expect(result.data.updateCompany.name).toBe('updated');
     })
 
     test('updateCompany with invalid input', async () => {
-
+        const updateCompany = `
+            mutation {
+                updateCompany(id: "${company._id.toString()}", name: "", headquarters: "") {
+                    ... on InvalidCompanyInput {
+                        message
+                        errors {
+                            name
+                            headquarters
+                        }
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(updateCompany, {}, context, {});
+        expect(result.data.updateCompany.message).toBe('Invalid input');
+        expect(result.data.updateCompany.errors).toBeTruthy();
     })
 
     test('deleteCompany', async () => {
