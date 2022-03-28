@@ -22,7 +22,7 @@ const UserResolvers = {
     Query: {
         user: async (_, { id }) => {
             const user = await User.findById(id);
-            if (!user) return { __typename: 'UserNotFound', message: 'User not found' }
+            if (!user) return { __typename: 'UserNotFound', message: 'User not found', id: id }
             return user;
         },
         users: async () => {
@@ -36,9 +36,9 @@ const UserResolvers = {
                 ...validate.email(args.email),
                 ...validate.password(args.password)
             }
-            if (errors.length > 0) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors }; 
+            if (Object.keys(errors).length > 0) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors }; 
 
-            if (await User.findOne({ email: args.email })) return { __typename: 'UserExists', message: 'User already exists' };
+            if (await User.findOne({ email: args.email })) return { __typename: 'UserExists', message: 'User already exists', email: args.email };
 
             return await User.create(args);
         },
@@ -51,7 +51,6 @@ const UserResolvers = {
             if (!context.user || context.user !== args.id) throw new Error('UNAUTHORIZED');
 
             const errors = validate.user(args);
-            console.log(errors)
             if (Object.keys(errors).length > 0) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors };
             
             const { id, firstName, lastName, location, phone } = args;
@@ -67,6 +66,8 @@ const UserResolvers = {
 
             const error = validate.email(args.email);
             if (error) return { __typename: 'InvalidInput', message: 'Invalid input', errors: error };
+
+            if (await User.findOne({ email: args.email })) return { __typename: 'UserExists', message: 'User already exists', email: args.email };
             
             return await User.findByIdAndUpdate(args.id, { email: args.email }, { new: true })
         },

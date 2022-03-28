@@ -261,6 +261,45 @@ describe('user resolvers', () => {
         expect(newUser).toBeTruthy();
     })
 
+    test('createUser with invalid input', async () => {
+        const createUser = `
+            mutation {
+                createUser(firstName: "B", lastName: "B", email: "bbrownemail.com", location: "", password: "", phone: "0") {
+                    ... on InvalidInput {
+                        message
+                        errors {
+                            firstName
+                            lastName
+                            email
+                            location
+                            password
+                            phone
+                        }
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(createUser, {}, {}, {})     
+        expect(result.data.createUser.message).toBe('Invalid input');
+        expect(result.data.createUser.errors).toBeTruthy();
+    })
+
+    test('createUser with existing email', async () => {
+        const createUser = `
+            mutation {
+                createUser(firstName: "Bob", lastName: "Brown", email: "jsmith@email.com", location: "Melbourne", password: "password", phone: "+61467662228") {
+                    ... on UserExists {
+                        message
+                        email
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(createUser, {}, {}, {}) 
+        expect(result.data.createUser.message).toBe('User already exists');
+        expect(result.data.createUser.email).toBe('jsmith@email.com')
+    })
+
     test('login', async () => {
         const login = `
             mutation {
@@ -377,6 +416,22 @@ describe('user resolvers', () => {
         const result = await tester.graphql(updateEmail, {}, context, {});
         expect(result.data.updateEmail.message).toBeTruthy();
         expect(result.data.updateEmail.errors.email).toBeTruthy();
+    })
+
+    test('updateEmail with existing email', async () => {
+        const updateEmail = `
+            mutation {
+                updateEmail(id: "${user._id.toString()}", email: "jsmith@email.com") {
+                    ... on UserExists { 
+                        message
+                        email
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(updateEmail, {}, context, {});
+        expect(result.data.updateEmail.message).toBeTruthy();
+        expect(result.data.updateEmail.email).toBe("jsmith@email.com");
     })
 
     test('updatePassword', async () => {

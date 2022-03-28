@@ -55,9 +55,9 @@ describe('user queries', () => {
             .send({
                 query: query
             })
-
-        expect(response.body.user.id).toBeTruthy();
-        expect(response.body.user.message).toBe('User not found');
+        
+        expect(response.body.data.user.id).toBeTruthy();
+        expect(response.body.data.user.message).toBe('User not found');
     })
 
     test('returns all users', async () => {
@@ -92,7 +92,7 @@ describe('user mutations', () => {
     test('createUser adds new user to database and returns new user', async () => {
         const createUser = `
             mutation {
-                createUser(firstName: "Bob", lastName: "Brown", email: "bbrown@email.com", location: "Melbourne", password: "password") {
+                createUser(firstName: "Bob", lastName: "Brown", email: "bbrown@email.com", location: "Melbourne", password: "password", phone: "") {
                     ... on User {
                         id
                         firstName
@@ -107,14 +107,14 @@ describe('user mutations', () => {
             .send({
                 query: createUser
             })
-
+        
         expect(response.body.data.createUser).toBeTruthy();
         const { id, firstName, lastName, email, location } = response.body.data.createUser;
         expect(firstName).toBe('Bob');
         expect(lastName).toBe('Brown');
         expect(email).toBe('bbrown@email.com');
         expect(location).toBe('Melbourne');
-
+        
         const newUser = await User.findById(id);
         expect(newUser).toBeTruthy();
         expect(newUser.firstName).toBe('Bob');
@@ -126,10 +126,16 @@ describe('user mutations', () => {
     test('createUser with invalid input return error', async () => {
         const createUser = `
             mutation {
-                createUser(firstName: "a", lastName: "b", email: "abcde", location: "", password: "123") {
+                createUser(firstName: "a", lastName: "b", email: "abcde", location: "", password: "123", phone: "") {
                     ... on InvalidInput {
                         message
-                        errors
+                        errors {
+                            firstName
+                            lastName
+                            email
+                            password
+                            phone
+                        }
                     }
                 }
             }
@@ -140,7 +146,25 @@ describe('user mutations', () => {
             })
 
         expect(response.body.data.createUser.errors).toBeTruthy();
-        expect(response.body.data.createUser.messsage).toBe('Invalid input')
+        expect(response.body.data.createUser.message).toBe('Invalid input')
+    })
+
+    test('login', async () => {
+
+    })
+
+    test('login with invalid credentials', async () => {
+
+    })
+
+    test('updateUser', async () => {
+
+    })
+
+    test('updateUser with invalid input')
+
+    test('updateEmail', async () => {
+
     })
 
 })
