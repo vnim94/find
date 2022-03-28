@@ -5,6 +5,10 @@ const GeneralTypes = `
     interface Error {
         message: String!
     }
+
+    type NotFound implements Error {
+
+    }
 `
 const GeneralResolvers = {
     Error: {
