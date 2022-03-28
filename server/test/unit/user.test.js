@@ -182,7 +182,7 @@ describe('user resolvers', () => {
                         lastName
                         email
                     }
-                    ... on UserNotFound {
+                    ... on NotFound {
                         message
                         id
                     }
@@ -207,8 +207,9 @@ describe('user resolvers', () => {
                         lastName
                         email
                     }
-                    ... on UserNotFound {
+                    ... on NotFound {
                         message
+                        id
                     }
                 }
             }
@@ -238,7 +239,7 @@ describe('user resolvers', () => {
     test('createUser', async () => {
         const createUser = `
             mutation {
-                createUser(firstName: "Bob", lastName: "Brown", email: "bbrown@email.com", location: "Melbourne", password: "password", phone: "0123456789") {
+                createUser(firstName: "Bob", lastName: "Brown", email: "bbrown@email.com", location: "Melbourne", password: "password", phone: "+61467662228") {
                     ... on User {
                         firstName
                         lastName
@@ -250,7 +251,7 @@ describe('user resolvers', () => {
         `
         const result = await tester.graphql(createUser, {}, {}, {})     
         expect(result.data.createUser).toBeTruthy();
-
+        
         const { firstName, lastName, email, location } = result.data.createUser
         expect(firstName).toBe('Bob');
         expect(lastName).toBe('Brown');
@@ -421,7 +422,7 @@ describe('user resolvers', () => {
     test('updateEmail with existing email', async () => {
         const updateEmail = `
             mutation {
-                updateEmail(id: "${user._id.toString()}", email: "jsmith@email.com") {
+                updateEmail(id: "${user._id.toString()}", email: "updated@email.com") {
                     ... on UserExists { 
                         message
                         email
@@ -431,7 +432,7 @@ describe('user resolvers', () => {
         `
         const result = await tester.graphql(updateEmail, {}, context, {});
         expect(result.data.updateEmail.message).toBeTruthy();
-        expect(result.data.updateEmail.email).toBe("jsmith@email.com");
+        expect(result.data.updateEmail.email).toBe("updated@email.com");
     })
 
     test('updatePassword', async () => {

@@ -7,7 +7,7 @@ const UserResolvers = {
         __resolveType: (_) => {
             if (_.firstName) return 'User';
             if (_.__typename === 'InvalidInput') return 'InvalidInput';
-            if (_.__typename === 'UserNotFound') return 'UserNotFound';
+            if (_.__typename === 'NotFound') return 'NotFound';
             if (_.__typename === 'UserExists') return 'UserExists';
             return null;
         }
@@ -22,7 +22,7 @@ const UserResolvers = {
     Query: {
         user: async (_, { id }) => {
             const user = await User.findById(id);
-            if (!user) return { __typename: 'UserNotFound', message: 'User not found', id: id }
+            if (!user) return { __typename: 'NotFound', message: 'User not found', id: id }
             return user;
         },
         users: async () => {
@@ -66,7 +66,7 @@ const UserResolvers = {
 
             const error = validate.email(args.email);
             if (error) return { __typename: 'InvalidInput', message: 'Invalid input', errors: error };
-
+            
             if (await User.findOne({ email: args.email })) return { __typename: 'UserExists', message: 'User already exists', email: args.email };
             
             return await User.findByIdAndUpdate(args.id, { email: args.email }, { new: true })

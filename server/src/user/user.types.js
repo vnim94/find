@@ -9,11 +9,6 @@ const UserTypes = `
         phone: String
     }
 
-    type UserNotFound implements Error {
-        message: String!
-        id: String!
-    }
-
     type UserExists implements Error {
         message: String!
         email: String!
@@ -42,7 +37,7 @@ const UserTypes = `
         message: String!
     }
 
-    union UserResult = User | UserNotFound | UserExists | InvalidInput
+    union UserResult = User | NotFound | UserExists | InvalidInput
     union LoginResult = AuthPayload | InvalidCredentials
 
     type Query {
