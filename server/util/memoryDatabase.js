@@ -4,6 +4,7 @@ let database;
 
 const User = require('../src/user/user.model');
 const Company = require('../src/company/company.model');
+const Job = require('../src/job/job.model');
 
 exports.connect = async () => {
     database = await MongoMemoryServer.create();
@@ -28,12 +29,22 @@ exports.seed = async () => {
         phone: '01234567890'
     })    
 
-    await Company.create({
+    const company = await Company.create({
         name: "McDonalds",
         headquarters: '123 ABC Street',
         overview: "overview",
         averageRating: 3.4,
         size: 'More than 10,001'
+    })
+
+    await Job.create({
+        title: 'burger flipper',
+        description: 'flip stuff',
+        company: company._id,
+        city: 'Melbourne',
+        industry: 'Fast Food',
+        profession: 'Burger Flipper',
+        workType: 'Full time'
     })
 
 }
