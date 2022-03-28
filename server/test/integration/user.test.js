@@ -161,7 +161,9 @@ describe('user mutations', () => {
 
     })
 
-    test('updateUser with invalid input')
+    test('updateUser with invalid input', async () => {
+        
+    })
 
     test('updateEmail', async () => {
 
