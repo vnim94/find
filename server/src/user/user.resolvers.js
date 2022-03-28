@@ -5,7 +5,7 @@ const validate = require('../middleware/validator');
 const UserResolvers = {
     UserResult: {
         __resolveType: (_) => {
-            if (_.firstName) return 'User';
+            if (!_.__typename) return 'User';
             if (_.__typename === 'InvalidUserInput') return 'InvalidUserInput';
             if (_.__typename === 'NotFound') return 'NotFound';
             if (_.__typename === 'UserExists') return 'UserExists';
