@@ -266,7 +266,7 @@ describe('user resolvers', () => {
         const createUser = `
             mutation {
                 createUser(firstName: "B", lastName: "B", email: "bbrownemail.com", location: "", password: "", phone: "0") {
-                    ... on InvalidInput {
+                    ... on InvalidUserInput {
                         message
                         errors {
                             firstName
@@ -366,7 +366,7 @@ describe('user resolvers', () => {
         const updateUser = `
             mutation {
                 updateUser(id: "${user._id.toString()}", firstName: "J", lastName: "B", location: "", phone: "") {
-                    ... on InvalidInput {
+                    ... on InvalidUserInput {
                         message
                         errors {
                             firstName
@@ -405,7 +405,7 @@ describe('user resolvers', () => {
         const updateEmail = `
             mutation {
                 updateEmail(id: "${user._id.toString()}", email: "email.com") {
-                    ... on InvalidInput {
+                    ... on InvalidUserInput {
                         message
                         errors {
                             email
@@ -456,7 +456,7 @@ describe('user resolvers', () => {
         const updatePassword = `
             mutation {
                 updatePassword(id: "${user._id.toString()}", password: "a") {
-                    ... on InvalidInput {
+                    ... on InvalidUserInput {
                         message
                         errors {
                             password

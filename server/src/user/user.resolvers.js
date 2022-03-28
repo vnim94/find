@@ -6,7 +6,7 @@ const UserResolvers = {
     UserResult: {
         __resolveType: (_) => {
             if (_.firstName) return 'User';
-            if (_.__typename === 'InvalidInput') return 'InvalidInput';
+            if (_.__typename === 'InvalidUserInput') return 'InvalidUserInput';
             if (_.__typename === 'NotFound') return 'NotFound';
             if (_.__typename === 'UserExists') return 'UserExists';
             return null;
@@ -36,7 +36,7 @@ const UserResolvers = {
                 ...validate.email(args.email),
                 ...validate.password(args.password)
             }
-            if (Object.keys(errors).length > 0) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors }; 
+            if (Object.keys(errors).length > 0) return { __typename: 'InvalidUserInput', message: 'Invalid input', errors: errors }; 
 
             if (await User.findOne({ email: args.email })) return { __typename: 'UserExists', message: 'User already exists', email: args.email };
 
@@ -51,7 +51,7 @@ const UserResolvers = {
             if (!context.user || context.user !== args.id) throw new Error('UNAUTHORIZED');
 
             const errors = validate.user(args);
-            if (Object.keys(errors).length > 0) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors };
+            if (Object.keys(errors).length > 0) return { __typename: 'InvalidUserInput', message: 'Invalid input', errors: errors };
             
             const { id, firstName, lastName, location, phone } = args;
             return await User.findByIdAndUpdate(id, { 
@@ -65,7 +65,7 @@ const UserResolvers = {
             if (!context.user || context.user !== args.id) throw new Error('UNAUTHORIZED');
 
             const error = validate.email(args.email);
-            if (error) return { __typename: 'InvalidInput', message: 'Invalid input', errors: error };
+            if (error) return { __typename: 'InvalidUserInput', message: 'Invalid input', errors: error };
             
             if (await User.findOne({ email: args.email })) return { __typename: 'UserExists', message: 'User already exists', email: args.email };
             
@@ -75,7 +75,7 @@ const UserResolvers = {
             if (!context.user || context.user !== args.id) throw new Error('UNAUTHORIZED');
 
             const error = validate.password(args.password);
-            if (error) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors };
+            if (error) return { __typename: 'InvalidUserInput', message: 'Invalid input', errors: errors };
 
             let user = await User.findById(args.id);
             user.password = args.password;

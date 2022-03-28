@@ -23,7 +23,7 @@ const UserTypes = `
         phone: String
     }
 
-    type InvalidInput implements Error {
+    type InvalidUserInput implements Error {
         message: String!
         errors: InputErrors!
     }
@@ -37,7 +37,7 @@ const UserTypes = `
         message: String!
     }
 
-    union UserResult = User | NotFound | UserExists | InvalidInput
+    union UserResult = User | NotFound | UserExists | InvalidUserInput
     union LoginResult = AuthPayload | InvalidCredentials
 
     type Query {
