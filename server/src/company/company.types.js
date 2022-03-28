@@ -13,6 +13,16 @@ const CompanyTypes = `
         name: String!
     }
 
+    type CompanyInputErrors {
+        name: String
+        headquarters: String
+    }
+
+    type InvalidCompanyInput implements Error {
+        message: String!
+        errors: CompanyInput
+    }
+
     union CompanyResult = Company | NotFound | CompanyExists
 
     type Query {
