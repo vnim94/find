@@ -25,7 +25,7 @@ const CompanyResolvers = {
         createCompany: async (_, args, context) => {
             if (!context.user) throw new Error('UNAUTHORIZED');
             const errors = validate.company(args);
-            if (Object.keys(errors) > 0) return { __typename: 'InvalidCompanyInput', message: 'Invalid input', errors: errors }
+            if (Object.keys(errors).length > 0) return { __typename: 'InvalidCompanyInput', message: 'Invalid input', errors: errors }
             
             if (await Company.findOne({ name: args.name })) return { 
                 __typename: 'CompanyExists', 
@@ -38,7 +38,13 @@ const CompanyResolvers = {
         updateCompany: async (_, args, context) => {
             if (!context.user) throw new Error('UNAUTHORIZED');
             const errors = validate.company(args);
-            if (Object.keys(errors) > 0) return { __typename: 'InvalidCompanyInput', message: 'Invalid input', errors: errors }
+            if (Object.keys(errors).length > 0) return { __typename: 'InvalidCompanyInput', message: 'Invalid input', errors: errors }
+
+            if (await Company.findOne({ name: args.name })) return { 
+                __typename: 'CompanyExists', 
+                message: 'Company already exists', 
+                name: args.name 
+            }
 
             const { id, name, headquarters, overview, size } = args;
             return await Company.findByIdAndUpdate(id, {
