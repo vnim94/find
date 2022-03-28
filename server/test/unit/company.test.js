@@ -106,7 +106,19 @@ describe.only('company resolvers', () => {
     })
 
     test('createCompany that already exists', async () => {
-
+        const createCompany = `
+            mutation {
+                createCompany(name: "McDonalds", headquarters: "123 Street") {
+                    ... on CompanyExists {
+                        message
+                        name
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(createCompany, {}, context, {});
+        expect(result.data.createCompany.message).toBe('Company already exists');
+        expect(result.data.createCompany.name).toBe('McDonalds');
     })
 
     test('createCompany with invalid input', async () => {

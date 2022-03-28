@@ -4,10 +4,10 @@ const validate = require('../middleware/validator');
 const CompanyResolvers = {
     CompanyResult: {
         __resolveType: (_) => {
-            if (_.name) return 'Company';
             if (_.__typename === 'NotFound') return 'NotFound';
             if (_.__typename === 'InvalidCompanyInput') return 'InvalidCompanyInput';
             if (_.__typename === 'CompanyExists') return 'CompanyExists';
+            if (!_.__typename) return 'Company';
             return null;
         }
     },
