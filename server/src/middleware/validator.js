@@ -42,3 +42,20 @@ exports.password = (password) => {
         return { password: 'Password must be between 5 and 25 characters' }
     }
 }
+
+exports.company = (company) => {
+    const errors = {}
+    const { name, headquarters } = company
+
+    if (validator.isEmpty(name)) {
+        errors['name'] = 'Name must be provided';
+    } else if (validator.isLength(name, { min: 2, max: 25 })) {
+        errors['name'] = 'Name must be between 2 and 25 characters';
+    }
+
+    if(validator.isEmpty(headquarters)) {
+        errors['headquarters'] = 'Headquarters must be provided';
+    } 
+
+    return errors
+}

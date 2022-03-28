@@ -16,12 +16,14 @@ const CompanyTypes = `
     union CompanyResult = Company | NotFound | CompanyExists
 
     type Query {
-        company(id: ID!): Company!
+        company(id: ID!): CompanyResult!
         companies: [Company]!
     }
 
     type Mutation {
-        createCompany(name: String!, headquarters: String!, overview: String, size: String): Company
+        createCompany(name: String!, headquarters: String!, overview: String, size: String): CompanyResult
+        updateCompany(id: ID!, name: String, headquarters: String, overview: String, size: String): CompanyResult
+        deleteCompany(id: ID!): CompanyResult
     }
 `
-module.exports = CmopanyTypes;
+module.exports = CompanyTypes;
