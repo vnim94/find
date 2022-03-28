@@ -20,10 +20,10 @@ const CompanyTypes = `
 
     type InvalidCompanyInput implements Error {
         message: String!
-        errors: CompanyInput
+        errors: CompanyInputErrors!
     }
 
-    union CompanyResult = Company | NotFound | CompanyExists
+    union CompanyResult = Company | NotFound | CompanyExists | InvalidCompanyInput
 
     type Query {
         company(id: ID!): CompanyResult!

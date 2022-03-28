@@ -3,7 +3,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 let database;
 
 const User = require('../src/user/user.model');
-const bcrypt = require('bcryptjs');
+const Company = require('../src/company/company.model');
 
 exports.connect = async () => {
     database = await MongoMemoryServer.create();
@@ -27,5 +27,13 @@ exports.seed = async () => {
         password: 'password',
         phone: '01234567890'
     })    
+
+    await Company.create({
+        name: "McDonalds",
+        headquarters: '123 ABC Street',
+        overview: "overview",
+        averageRating: 3.4,
+        size: 'More than 10,001'
+    })
 
 }

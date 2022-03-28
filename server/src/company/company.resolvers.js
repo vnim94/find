@@ -4,8 +4,9 @@ const validate = require('../middleware/validator');
 const CompanyResolvers = {
     CompanyResult: {
         __resolveType: (_) => {
-            if (_.__typename === 'Company') return 'Company';
+            if (_.name) return 'Company';
             if (_.__typename === 'NotFound') return 'NotFound';
+            if (_.__typename === 'InvalidCompanyInput') return 'InvalidCompanyInput';
             if (_.__typename === 'CompanyExists') return 'CompanyExists';
             return null;
         }
@@ -24,17 +25,32 @@ const CompanyResolvers = {
         createCompany: async (_, args, context) => {
             if (!context.user) throw new Error('UNAUTHORIZED');
             const errors = validate.company(args);
-            if (errors) return { __typename: 'InvalidInput', message: 'Invalid input', errors: errors }
-
-            if (await Company.findOne({ name: args.name })) return { __typename: 'CompanyExists', message: 'Company already exists', name: args.name }
-
+            if (Object.keys(errors) > 0) return { __typename: 'InvalidCompanyInput', message: 'Invalid input', errors: errors }
+            
+            if (await Company.findOne({ name: args.name })) return { 
+                __typename: 'CompanyExists', 
+                message: 'Company already exists', 
+                name: args.name 
+            }
+            
             return await Company.create(args);
         },
         updateCompany: async (_, args, context) => {
             if (!context.user) throw new Error('UNAUTHORIZED');
+            const errors = validate.company(args);
+            if (Object.keys(errors) > 0) return { __typename: 'InvalidCompanyInput', message: 'Invalid input', errors: errors }
+
+            const { id, name, headquarters, overview, size } = args;
+            return await Company.findByIdAndUpdate(id, {
+                name: name,
+                headquarters: headquarters,
+                overview: overview,
+                size: size
+            }, { new: true });
         },
         deleteCompany: async (_, args, context) => {
             if (!context.user) throw new Error('UNAUTHORIZED');
+            return await Company.findByIdAndDelete(args.id);
         }
     }
 }

@@ -49,7 +49,7 @@ exports.company = (company) => {
 
     if (validator.isEmpty(name)) {
         errors['name'] = 'Name must be provided';
-    } else if (validator.isLength(name, { min: 2, max: 25 })) {
+    } else if (!validator.isLength(name, { min: 2, max: 25 })) {
         errors['name'] = 'Name must be between 2 and 25 characters';
     }
 

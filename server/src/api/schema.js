@@ -14,17 +14,19 @@ const GeneralTypes = `
 const GeneralResolvers = {
     Error: {
         __resolveType: (_) => {
-            if (_.message) return 'Error';
+            if (_.__typeName === 'Error') return 'Error';
             return null;
         }
     }
 }
 
 const UserTypes = require('../../src/user/user.types');
+const CompanyTypes = require('../../src/company/company.types');
 const UserResolvers = require('../../src/user/user.resolvers');
+const CompanyResolvers = require('../../src/company/company.resolvers');
 
-exports.typeDefs = mergeTypeDefs([GeneralTypes, UserTypes]);
-exports.resolvers = mergeResolvers([GeneralResolvers, UserResolvers]);
+exports.typeDefs = mergeTypeDefs([GeneralTypes, UserTypes, CompanyTypes]);
+exports.resolvers = mergeResolvers([GeneralResolvers, UserResolvers, CompanyResolvers]);
 
 exports.schema = makeExecutableSchema({
     typeDefs: this.typeDefs,
