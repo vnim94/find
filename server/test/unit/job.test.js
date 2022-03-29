@@ -89,7 +89,36 @@ describe('job queries', () => {
 })
 
 describe('job mutations', () => {
+    test('createJob', async () => {
+        const createJob = `
+            mutation {
+                createJob(title: "manager", description: "manage stuff", company: "${company._id.toString()}", city: "Melbourne", industry: "Fast Food", profession: "Management", workType: "Full time") {
+                    ... on Job {
+                        title
+                        description
+                        company {
+                            name
+                        }
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(createJob, {}, context, {});
+        expect(result.data.createJob.title).toBe('manager');
+        expect(result.data.createJob.company.name).toBe('McDonalds');
+    })
 
+    test('updateJob', async () => {
+
+    })
+
+    test('closeJob', async () => {
+
+    })
+
+    test('deleteJob', async () => {
+
+    })
 })
 
 describe('job resolvers', () => {

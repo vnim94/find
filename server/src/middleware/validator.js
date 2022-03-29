@@ -49,3 +49,38 @@ exports.company = (company) => {
 
     return errors
 }
+
+exports.job = (job) => {
+    const errors = {}
+    const { title, description, city, industry, profession, workType } = job;
+
+    if (validator.isEmpty(title)) {
+        errors['title'] = 'Title must be provided';
+    } else if (!validator.isLength(title, { min: 5, max: 30 })) {
+        errors['title'] = 'Title must be between 5 and 30 characters';
+    }
+
+    if (validator.isEmpty(description)) {
+        errors['description'] = 'Description must be provided';
+    } else if (!validator.isLength(description, { min: 5, max: 4000 })) {
+        errors['description'] = 'Description must between 5 and 4000 characters';
+    }
+
+    if (validator.isEmpty(city)) {
+        errors['city'] = 'City must be provided';
+    }
+
+    if (validator.isEmpty(industry)) {
+        errors['industry'] = 'Industry must be provided';
+    }
+
+    if (validator.isEmpty(profession)) {
+        errors['profession'] = 'Profession must be provided';
+    }
+
+    if (validator.isEmpty(workType)) {
+        errors['workType'] = 'Work type must be provided';
+    }
+    
+    return errors
+}

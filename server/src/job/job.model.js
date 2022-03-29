@@ -9,7 +9,7 @@ const JobSchema = Schema({
     },
     description: {
         type: String,
-        minLength: 10,
+        minLength: 5,
         maxLength: 4000,
         required: true
     },
