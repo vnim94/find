@@ -25,11 +25,24 @@ const JobResolvers = {
             if (!context.user) throw new Error('UNAUTHORISED');
             const errors = validator.job(args);
             if (Object.keys(errors).length > 0) return { __typename: 'InvalidJobInput', message: 'Invalid input', errors: errors }
+
             const job = await Job.create(args)
             return job.populate('company')
         },
         updateJob: async (_, args, context) => {
+            if (!context.user) throw new Error('UNAUTHORISED');
+            const errors = validator.job(args);
+            if (Object.keys(errors).length > 0) return { __typename: 'InvalidJobInput', message: 'Invalid input', errors: errors }
 
+            const { id, title, description, city, industry, profession, workType } = args;
+            return await Job.findByIdAndUpdate(id, {
+                title: title,
+                description: description,
+                city: city,
+                industry: industry,
+                profession: profession,
+                workType: workType
+            }, { new: true })
         },
         closeJob: async (_, args, context) => {
 

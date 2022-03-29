@@ -94,6 +94,7 @@ describe('job mutations', () => {
             mutation {
                 createJob(title: "manager", description: "manage stuff", company: "${company._id.toString()}", city: "Melbourne", industry: "Fast Food", profession: "Management", workType: "Full time") {
                     ... on Job {
+                        id
                         title
                         description
                         company {
@@ -106,10 +107,32 @@ describe('job mutations', () => {
         const result = await tester.graphql(createJob, {}, context, {});
         expect(result.data.createJob.title).toBe('manager');
         expect(result.data.createJob.company.name).toBe('McDonalds');
+
+        const newJob = await Job.findById(result.data.createJob.id);
+        expect(newJob).toBeTruthy();
     })
 
     test('updateJob', async () => {
+        const updateJob = `
+            mutation {
+                updateJob(id: "${job._id.toString()}", title: "updated", description: "updated", city: "Sydney", industry: "FMCG", profession: "Executive", workType: "Part time") {
+                    ... on Job {
+                        title
+                        description
+                        city
+                        industry
+                        profession
+                        workType
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(updateJob, {}, context, {});
+        expect(result.data.updateJob.title).toBe('updated');
+        expect(result.data.updateJob.description).toBe('updated');
 
+        const updatedJob = await Job.findById(job._id.toString());
+        expect(updatedJob.title).toBe('updated');
     })
 
     test('closeJob', async () => {
