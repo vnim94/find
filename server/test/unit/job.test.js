@@ -33,7 +33,59 @@ describe('job model', () => {
 })
 
 describe('job queries', () => {
+    test('job', async () => {
+        const query = `
+            {
+                job(id: "${job._id.toString()}") {
+                    ... on Job {
+                        title
+                        description
+                        company {
+                            name
+                        }
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.data.job.title).toBe('burger flipper');
+        expect(result.data.job.description).toBe('flip stuff');
+        expect(result.data.job.company.name).toBe('McDonalds');
+    })
 
+    test('job not found', async () => {
+        const query = `
+            {
+                job(id: "6242943990b42b3aa078d5d2") {
+                    ... on NotFound {
+                        message
+                        id
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.data.job.message).toBe('Job not found');
+        expect(result.data.job.id).toBeTruthy();
+    })
+
+    test('jobs', async () => {
+        const query = `
+            {
+                jobs {
+                    title
+                    description
+                    company {
+                        name
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs[0].title).toBe('burger flipper');
+        expect(result.data.jobs[0].company.name).toBe('McDonalds');
+    })
 })
 
 describe('job mutations', () => {
@@ -41,5 +93,4 @@ describe('job mutations', () => {
 })
 
 describe('job resolvers', () => {
-    test('')
 })

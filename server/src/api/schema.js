@@ -52,7 +52,8 @@ exports.typeDefs = mergeTypeDefs([
 exports.resolvers = mergeResolvers([
     GeneralResolvers, 
     UserResolvers, 
-    CompanyResolvers
+    CompanyResolvers,
+    JobResolvers
 ]);
 
 exports.schema = makeExecutableSchema({
