@@ -1,5 +1,6 @@
 const JobTypes = `
     type Job {
+        id: ID!
         title: String!
         description: String!
         company: Company!
