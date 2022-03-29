@@ -1,4 +1,5 @@
 const Job = require('./job.model');
+const validator = require('../middleware/validator');
 
 const JobResolvers = {
     JobResult: {
@@ -21,7 +22,11 @@ const JobResolvers = {
     },
     Mutation: {
         createJob: async (_, args, context) => {
-
+            if (!context.user) throw new Error('UNAUTHORISED');
+            const errors = validator.job(args);
+            if (Object.keys(errors).length > 0) return { __typename: 'InvalidJobInput', message: 'Invalid input', errors: errors }
+            const job = await Job.create(args)
+            return job.populate('company')
         },
         updateJob: async (_, args, context) => {
 
