@@ -44,11 +44,17 @@ const JobResolvers = {
                 workType: workType
             }, { new: true })
         },
-        closeJob: async (_, args, context) => {
-
+        closeJob: async (_, { id }, context) => {
+            if (!context.user) throw new Error('UNAUTHORISED');
+            const closedJob = await Job.findByIdAndUpdate(id, { expired: true }, { new: true });
+            if (!closedJob) return { __typename: 'NotFound', message: 'Job not found', id: id }
+            return closedJob
         },
-        deleteJob: async (_, args, context) => {
-
+        deleteJob: async (_, { id }, context) => {
+            if (!context.user) throw new Error('UNAUTHORISED');
+            const deletedJob = await Job.findByIdAndDelete(id);
+            if (!deletedJob) return { __typename: 'NotFound', message: 'Job not found', id: id }
+            return deletedJob
         }
     }
 }

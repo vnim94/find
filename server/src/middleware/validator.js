@@ -53,7 +53,7 @@ exports.company = (company) => {
 exports.job = (job) => {
     const errors = {}
     const { title, description, city, industry, profession, workType } = job;
-
+   
     if (validator.isEmpty(title)) {
         errors['title'] = 'Title must be provided';
     } else if (!validator.isLength(title, { min: 5, max: 30 })) {
