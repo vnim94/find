@@ -2,7 +2,7 @@ const JobTypes = `
     type Job {
         title: String!
         description: String!
-        company: ID!
+        company: Company!
         city: String!
         industry: String!
         profession: String!
@@ -15,7 +15,7 @@ const JobTypes = `
     type JobInputErrors {
         title: String
         description: String
-        company: ID
+        company: String
         city: String
         industry: String
         profession: String

@@ -1,3 +1,5 @@
+const Job = require('./job.model');
+
 const JobResolvers = {
     JobResult: {
         __resolveType: (_) => {
@@ -8,11 +10,13 @@ const JobResolvers = {
         }
     },
     Query: {
-        job: async (_, args) => {
-
+        job: async (_, { id }) => {
+            const job = await Job.findById(id).populate('company');
+            if (!job) return { __typename: 'NotFound', message: 'Job not found', id: id }
+            return job
         },
         jobs: async () => {
-
+            return await Job.find({}).populate('company');
         }
     },
     Mutation: {
