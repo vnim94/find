@@ -32,7 +32,7 @@ describe('job model', () => {
     })
 })
 
-describe('job queries', () => {
+describe('job query resolvers', () => {
     test('job', async () => {
         const query = `
             {
@@ -88,7 +88,7 @@ describe('job queries', () => {
     })
 })
 
-describe('job mutations', () => {
+describe('job mutation resolvers', () => {
     test('createJob', async () => {
         const createJob = `
             mutation {
@@ -110,6 +110,30 @@ describe('job mutations', () => {
 
         const newJob = await Job.findById(result.data.createJob.id);
         expect(newJob).toBeTruthy();
+    })
+
+    test('createJob input errors', async () => {
+        const createJob = `
+            mutation {
+                createJob(title: "", description: "", company: "${company._id.toString()}", city: "", industry: "", profession: "", workType: "") {
+                    ... on InvalidJobInput {
+                        message
+                        errors {
+                            title
+                            description
+                            city
+                            industry
+                            profession
+                            workType
+                        }
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(createJob, {}, context, {});
+        console.log(result.data.createJob.errors);
+        expect(result.data.createJob.message).toBe('Invalid input');
+        expect(result.data.createJob.errors).toBeTruthy();
     })
 
     test('updateJob', async () => {
@@ -135,14 +159,51 @@ describe('job mutations', () => {
         expect(updatedJob.title).toBe('updated');
     })
 
+    test('updateJob input errors', async () => {
+
+    })
+
     test('closeJob', async () => {
+        const closeJob = `
+            mutation {
+                closeJob(id: "${job._id.toString()}") {
+                    ... on Job {
+                        id
+                        expired
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(closeJob, {}, context, {});
+        expect(result.data.closeJob.id).toBe(job._id.toString());
+        expect(result.data.closeJob.expired).toBe(true);
+
+        const closedJob = await Job.findById(job._id.toString());
+        expect(closedJob.expired).toBe(true);
+    })
+
+    test('closeJob not found', async () => {
 
     })
 
     test('deleteJob', async () => {
+        const deleteJob = `
+            mutation {
+                deleteJob(id: "${job._id.toString()}") {
+                    ... on Job {
+                        id
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(deleteJob, {}, context, {});
+        expect(result.data.deleteJob.id).toBe(job._id.toString());
 
+        const deletedJob = await Job.findById(job._id.toString());
+        expect(deletedJob).toBeFalsy();
     })
-})
 
-describe('job resolvers', () => {
+    test('deleteJob not found', async () => {
+        
+    })
 })
