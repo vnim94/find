@@ -59,7 +59,22 @@ const ReviewTypes = `
             recommend: Boolean!,
             salary: String!
         ): ReviewResult
-        updateReview(id: ID!, title: String, rating: Float, good: String, bad: String, role: String, location: String, recommend: Boolean): ReviewResult
+        updateReview(
+            id: ID!, 
+            title: String, 
+            benefits: Float!, 
+            career: Float!,
+            balance: Float!,
+            environment: Float!,
+            management: Float!,
+            diversity: Float!, 
+            good: String, 
+            bad: String, 
+            role: String, 
+            location: String, 
+            recommend: Boolean, 
+            salary: String
+        ): ReviewResult
         deleteReview(id: ID!): Review
     }
 `

@@ -122,11 +122,50 @@ describe('review mutations', () => {
         `
         const result = await tester.graphql(createReview, {}, context, {});
         expect(result.data.createReview.title).toBe('Pretty good');
-        expect(result.data.createReview.rating).toBe(5.0)
+        expect(result.data.createReview.rating).toBe(5.0);
+
+        const newReview = await Review.findOne({ title: 'Pretty good' });
+        expect(newReview.title).toBeTruthy();
     })
 
     test('updateReview', async () => {
+        const updateReview = `
+            mutation {
+                updateReview(
+                    id: "${review._id.toString()}"
+                    title: "Not bad",
+                    benefits: 4.0,
+                    career: 4.0,
+                    balance: 4.0,
+                    environment: 4.0,
+                    management: 4.0,
+                    diversity: 4.0, 
+                    good: "good pay", 
+                    bad: "poor work/life balance", 
+                    role: "Executive", 
+                    location: "New South Wales", 
+                    recommend: false,
+                    salary: "High"
+                ) {
+                    ... on Review {
+                        title
+                        rating
+                        good
+                        bad
+                        role
+                        location
+                        recommend
+                        salary
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(updateReview, {}, context, {});
+        expect(result.data.updateReview.title).toBe('Not bad');
+        expect(result.data.updateReview.rating).toBe(4.0);
 
+        const updatedReview = await Review.findById(review._id);
+        expect(updatedReview.title).toBe('Not bad');
     })
 
     test('deleteReview', async () => {
