@@ -53,7 +53,8 @@ const ReviewResolvers = {
             }, { new: true })
         },
         deleteReview: async (_, { id }, context) => {
-
+            if (!context.user) throw new Error('UNAUTHORISED');
+            return await Review.findByIdAndDelete(id); 
         }
     }
 }
