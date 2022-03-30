@@ -4,14 +4,21 @@ const ReviewTypes = `
         user: User!
         company: Company!
         rating: Float!
+        benefits: Float!
+        career: Float!
+        balance: Float!
+        environment: Float!
+        management: Float!
+        diversity: Float!
         good: String!
         bad: String!
         date: Date!
         role: String!
         location: String!
         recommend: Boolean!
+        salary: String!
         helpful: Boolean
-        flagged: Boolean!
+        flagged: Boolean
     }
 
     type ReviewInputErrors {
@@ -35,7 +42,23 @@ const ReviewTypes = `
     }
 
     type Mutation {
-        createReview(title: String!, user: ID!, company: ID!, rating: Float!, good: String!, bad: String!, role: String!, location: String!, recommend: Boolean): ReviewResult
+        createReview(
+            title: String!, 
+            user: ID!, 
+            company: ID!, 
+            benefits: Float!, 
+            career: Float!,
+            balance: Float!,
+            environment: Float!,
+            management: Float!,
+            diversity: Float!,
+            good: String!, 
+            bad: String!, 
+            role: String!, 
+            location: String!, 
+            recommend: Boolean!,
+            salary: String!
+        ): ReviewResult
         updateReview(id: ID!, title: String, rating: Float, good: String, bad: String, role: String, location: String, recommend: Boolean): ReviewResult
         deleteReview(id: ID!): Review
     }

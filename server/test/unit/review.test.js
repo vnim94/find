@@ -1,9 +1,11 @@
-const Review = require('../../src/review/review.model');
-const Rating = require('../../src/review/rating.model');
+const { typeDefs, resolvers } = require('../../src/api/schema');
+const EasyGraphQLTester = require('easygraphql-tester');
+const tester = new EasyGraphQLTester(typeDefs, resolvers);
 
 const database = require('../../util/memoryDatabase');
 const User = require('../../src/user/user.model');
 const Company = require('../../src/company/company.model');
+const Review = require('../../src/review/review.model');
 
 let context;
 let user;
@@ -21,20 +23,114 @@ beforeAll(async () => {
 
 afterAll(async () => { await database.disconnect() });
 
-describe('rating model', () => {
-    test('averageRating virtual', () => {
-        const rating = new Rating({
-            review: review._id,
-            benefits: 5.0,
-            career: 5.0,
-            balance: 5.0,
-            environment: 5.0,
-            management: 5.0,
-            diversity: 5.0
-        })
+describe('review model', () => {
 
-        expect(rating.averageRating).toBeTruthy();
-        expect(rating.averageRating).toBe(5.0);
+    test('average rating virtual', async () => {
+        expect(review.rating).toBeTruthy();
+        expect(review.rating).toBe(5.0);
+    })
+
+})
+
+describe('review queries', () => {
+
+    test('review', async () => {
+        const reviewQuery = `
+            {
+                review(id: "${review._id.toString()}") {
+                    ... on Review {
+                        title
+                        company {
+                            name
+                        }
+                        rating 
+                        good
+                        bad
+                        role
+                        date
+                        location
+                        recommend
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(reviewQuery, {}, {}, {});
+        expect(result.data.review.title).toBe('Great place to work')
+        expect(result.data.review.rating).toBe(5.0)
+    })
+
+    test('reviews', async () => {
+        const reviewsQuery = `
+            {
+                reviews(company: "${company._id}") {
+                    title
+                    rating
+                    good
+                    bad
+                    role
+                    date
+                    location
+                    recommend
+                }
+            }
+        `
+        const result = await tester.graphql(reviewsQuery, {}, {}, {});
+        expect(result.data.reviews.length).toBe(1);
+        expect(result.data.reviews[0].title).toBe('Great place to work');
+        expect(result.data.reviews[0].rating).toBe(5.0)
+    })
+})
+
+describe('review mutations', () => {
+    test('createReview', async () => {
+        const createReview = `
+            mutation {
+                createReview(
+                    title: "Pretty good", 
+                    user: "${user._id.toString()}", 
+                    company: "${company._id.toString()}",
+                    benefits: 5.0,
+                    career: 5.0,
+                    balance: 5.0,
+                    environment: 5.0,
+                    management: 5.0,
+                    diversity: 5.0, 
+                    good: "good work/life balance", 
+                    bad: "short staffed", 
+                    role: "Customer Service", 
+                    location: "Victoria", 
+                    recommend: true,
+                    salary: "Average"
+                ) {
+                    ... on Review {
+                        title
+                        company {
+                            name
+                        }
+                        rating 
+                        good
+                        bad
+                        date
+                        role
+                        location
+                        recommend
+                        helpful
+                        flagged
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(createReview, {}, context, {});
+        expect(result.data.createReview.title).toBe('Pretty good');
+        expect(result.data.createReview.rating).toBe(5.0)
+    })
+
+    test('updateReview', async () => {
+
+    })
+
+    test('deleteReview', async () => {
+
     })
 })
 
