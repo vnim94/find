@@ -169,7 +169,20 @@ describe('review mutations', () => {
     })
 
     test('deleteReview', async () => {
+        const deleteReview = `
+            mutation {
+                deleteReview(id: "${review._id.toString()}") {
+                    ... on Review {
+                        id
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(deleteReview, {}, context, {});
+        expect(result.data.deleteReview.id).toBeTruthy();
 
+        const deletedReview = await Review.findById(review._id.toString());
+        expect(deletedReview).toBeFalsy();
     })
 })
 

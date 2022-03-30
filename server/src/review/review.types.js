@@ -1,5 +1,6 @@
 const ReviewTypes = `
     type Review {
+        id: ID!
         title: String!
         user: User!
         company: Company!
@@ -75,7 +76,7 @@ const ReviewTypes = `
             recommend: Boolean, 
             salary: String
         ): ReviewResult
-        deleteReview(id: ID!): Review
+        deleteReview(id: ID!): ReviewResult
     }
 `
 
