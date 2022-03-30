@@ -30,7 +30,27 @@ const ReviewResolvers = {
             return review.populate('company');
         },
         updateReview: async (_, args, context) => {
+            if (!context.user) throw new Error('UNAUTHORISED');
 
+            const errors = validator.review(args);
+            if (Object.keys(errors).length > 0) return { __typename: 'InvalidReviewInput', message: 'Invalid input', errors: errors }
+
+            const { id, title, benefits, career, balance, environment, management, diversity, good, bad, role, location, recommend, salary } = args;
+            return await Review.findByIdAndUpdate(id, {
+                title: title,
+                benefits: benefits,
+                career: career,
+                balance: balance,
+                environment: environment,
+                management: management,
+                diversity: diversity,
+                good: good,
+                bad: bad,
+                role: role,
+                location: location,
+                recommend: recommend,
+                salary: salary
+            }, { new: true })
         },
         deleteReview: async (_, { id }, context) => {
 
