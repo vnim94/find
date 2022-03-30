@@ -52,11 +52,17 @@ exports.seed = async () => {
         title: 'Great place to work',
         user: user._id,
         company: company._id,
+        benefits: 5.0,
+        career: 5.0,
+        balance: 5.0,
+        environment: 5.0,
+        management: 5.0,
+        diversity: 5.0,
         good: 'free burgers',
         bad: 'low pay',
         role: 'burger flipper',
-        location: 'Melbourne',
-        recommend: true
+        location: 'Victoria',
+        recommend: true,
+        salary: 'Low'
     })
-
 }

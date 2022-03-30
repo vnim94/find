@@ -1,3 +1,6 @@
+const Review = require('./review.model');
+const validator = require('../middleware/validator');
+
 const ReviewResolvers = {
     ReviewResult: {
         __resolveType: (_) => {
@@ -7,10 +10,31 @@ const ReviewResolvers = {
         }
     },
     Query: {
-        
+        review: async (_, { id }) => {
+            const review = await Review.findById(id).populate('company');
+            if (!review) return { __typename: 'NotFound', message: 'Review not found', id: id }
+            return review;
+        },
+        reviews: async () => {
+            return await Review.find({});
+        }
     },
     Mutation: {
+        createReview: async (_, args, context) => {
+            if (!context.user) throw new Error('UNAUTHORISED');
 
+            const errors = validator.review(args);
+            if (Object.keys(errors).length > 0) return { __typename: 'InvalidReviewInput', message: 'Invalid input', errors: errors }
+            
+            const review = await Review.create(args);
+            return review.populate('company');
+        },
+        updateReview: async (_, args, context) => {
+
+        },
+        deleteReview: async (_, { id }, context) => {
+
+        }
     }
 }
 
