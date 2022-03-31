@@ -19,6 +19,7 @@ const AppSchema = Schema({
     },
     status: {
         type: String,
+        default: 'New',
         enum: ['New', 'In Review', 'Interview', 'Offered', 'Hired', 'Rejected', 'Withdrawn'],
         required: true
     }

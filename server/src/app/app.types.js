@@ -16,7 +16,7 @@ const AppTypes = `
     }
 
     type Mutation {
-        createApp(applicant: ID!, job: ID!, resume: String, letter: String, status: String!): App
+        createApp(applicant: ID!, job: ID!, resume: String, letter: String, status: String): App
         updateApp(id: ID!, resume: String, letter: String, status: String): AppResult
         deleteApp(id: ID!): AppResult
     }

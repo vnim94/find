@@ -71,7 +71,6 @@ exports.seed = async () => {
         applicant: user._id,
         job: job._id,
         resume: 'attached resume',
-        letter: 'attached letter',
-        status: 'New'
+        letter: 'attached letter'
     })
 }
