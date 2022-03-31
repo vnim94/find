@@ -1,8 +1,8 @@
+import Header from './header/Header';
+
 function App() {
     return (
-        <div>
-            <h1>find</h1>
-        </div>
+        <Header />
     )
 }
 

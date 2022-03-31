@@ -1,15 +1,91 @@
-.header {
+.account > span > a {
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.account > span > a:hover {
+    text-decoration: underline;
+}
+
+.banner {
+    height: 50%;
     width: 100%;
 }
 
-.header > a {
-    text-decoration: none;
-}
-
-.domain {
-    width: 90%;
+.border {
+    border: 1px solid black;
 }
 
 .country {
     width: 10%;
+}
+
+.divider {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.domain {
+    width: 100%;
+}
+
+.domain > div {
+    width: 50%;
+}
+
+.domain > div > a, .country > a {
+    color: var(--grey);
+    text-decoration: none;
+}
+
+.domain > div > a:hover, .country > a:hover {
+    color: var(--green);
+    cursor: pointer;
+}
+
+.domain > div > .selected, .country > .selected {
+    border-bottom: 2px solid var(--black);
+    color: var(--black);
+    font-weight: 600;
+}
+
+header {
+    height: 17vh;
+    width: 100vw;
+}
+
+header > a:hover + .selected {
+    cursor: default;
+}
+
+.logo > img {
+    height: 50px;
+    width: 50px;
+}
+
+.logo > span {
+    font-weight: 600;
+}
+
+.tabs {
+    background-color: var(--light-grey);
+    height: 35%;
+    width: 100%;
+}
+
+.tab > li {
+    border: 1px solid black;
+    list-style-type: none;
+}
+
+.tab > .selected {
+    background-color: var(--black);
+    color: var(--white);
+}
+
+.top {
+    background-color: var(--light-grey);
+    font-size: 14px;
+    height: 15%;
+    width: 100%;
 }
