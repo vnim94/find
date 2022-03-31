@@ -147,6 +147,19 @@ describe('app mutations', () => {
     })
 
     test('deleteApp', async () => {
+        const deleteApp = `
+            mutation {
+                deleteApp(id: "${app._id.toString()}") {
+                    ... on App {
+                        id
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(deleteApp, {}, context, {});
+        expect(result.data.deleteApp.id).toBeTruthy();
 
+        const deletedApp = await App.findById(app._id);
+        expect(deletedApp).toBeFalsy();
     })
 })

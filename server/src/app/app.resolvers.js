@@ -48,7 +48,9 @@ const AppResolvers = {
                 .populate({ path: 'job', populate: { path: 'company' } })
         },
         deleteApp: async (_, { id }, context) => {
+            if (!context.user) throw new Error('UNAUTHORISED');
 
+            return await App.findByIdAndDelete(id);
         }
     }
 }
