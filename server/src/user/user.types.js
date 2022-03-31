@@ -3,6 +3,7 @@ const UserTypes = `
         id: ID!
         firstName: String!
         lastName: String!
+        fullName: String!
         email: String!
         location: String!
         password: String!

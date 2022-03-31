@@ -180,6 +180,7 @@ describe('user resolvers', () => {
                     ... on User {
                         firstName
                         lastName
+                        fullName
                         email
                     }
                     ... on NotFound {
@@ -192,9 +193,10 @@ describe('user resolvers', () => {
         const result = await tester.graphql(query, {}, {}, {});
         expect(result.data.user).toBeTruthy();
 
-        const { firstName, lastName, email } = result.data.user
+        const { firstName, lastName, fullName, email } = result.data.user
         expect(firstName).toBe('John');
         expect(lastName).toBe('Smith');
+        expect(fullName).toBe('John Smith');
         expect(email).toBe('jsmith@email.com');
     })
 
