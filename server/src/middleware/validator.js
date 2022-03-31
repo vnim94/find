@@ -94,6 +94,7 @@ exports.job = (job) => {
     }
     
     return errors
+<<<<<<< HEAD
 }
 
 exports.review = (review) => {
@@ -138,3 +139,6 @@ exports.review = (review) => {
 
     return errors;
 }
+=======
+}
+>>>>>>> 22f82ed2674af13861fae1b4381e7538334abb76

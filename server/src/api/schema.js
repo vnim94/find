@@ -27,7 +27,11 @@ const GeneralResolvers = {
             return new Date(value);
         },
         serialize: (value) => {
+<<<<<<< HEAD
             return value.toISOString();
+=======
+            return value.getTime();
+>>>>>>> 22f82ed2674af13861fae1b4381e7538334abb76
         },
         parseLiteral: (ast) => {
             if (ast.kind === Kind.INT) return new Date(+ast.value);
@@ -36,6 +40,7 @@ const GeneralResolvers = {
     })
 }
 
+<<<<<<< HEAD
 const UserTypes = require('../user/user.types');
 const CompanyTypes = require('../company/company.types');
 const JobTypes = require('../job/job.types');
@@ -46,22 +51,38 @@ const CompanyResolvers = require('../company/company.resolvers');
 const JobResolvers = require('../job/job.resolvers');
 const ReviewResolvers = require('../review/review.resolvers');
 const AppResolvers = require('../app/app.resolvers');
+=======
+const UserTypes = require('../../src/user/user.types');
+const CompanyTypes = require('../../src/company/company.types');
+const JobTypes = require('../../src/job/job.types');
+const UserResolvers = require('../../src/user/user.resolvers');
+const CompanyResolvers = require('../../src/company/company.resolvers');
+const JobResolvers = require('../../src/job/job.resolvers');
+>>>>>>> 22f82ed2674af13861fae1b4381e7538334abb76
 
 exports.typeDefs = mergeTypeDefs([
     GeneralTypes, 
     UserTypes, 
     CompanyTypes, 
+<<<<<<< HEAD
     JobTypes,
     ReviewTypes,
     AppTypes
+=======
+    JobTypes
+>>>>>>> 22f82ed2674af13861fae1b4381e7538334abb76
 ]);
 exports.resolvers = mergeResolvers([
     GeneralResolvers, 
     UserResolvers, 
     CompanyResolvers,
+<<<<<<< HEAD
     JobResolvers,
     ReviewResolvers,
     AppResolvers
+=======
+    JobResolvers
+>>>>>>> 22f82ed2674af13861fae1b4381e7538334abb76
 ]);
 
 exports.schema = makeExecutableSchema({
