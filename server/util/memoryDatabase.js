@@ -6,6 +6,7 @@ const User = require('../src/user/user.model');
 const Company = require('../src/company/company.model');
 const Job = require('../src/job/job.model');
 const Review = require('../src/review/review.model');
+const App = require('../src/app/app.model');
 
 exports.connect = async () => {
     database = await MongoMemoryServer.create();
@@ -38,7 +39,7 @@ exports.seed = async () => {
         size: 'More than 10,001'
     })
 
-    await Job.create({
+    const job = await Job.create({
         title: 'burger flipper',
         description: 'flip stuff',
         company: company._id,
@@ -64,5 +65,13 @@ exports.seed = async () => {
         location: 'Victoria',
         recommend: true,
         salary: 'Low'
+    })
+
+    await App.create({
+        applicant: user._id,
+        job: job._id,
+        resume: 'attached resume',
+        letter: 'attached letter',
+        status: 'New'
     })
 }

@@ -36,28 +36,32 @@ const GeneralResolvers = {
     })
 }
 
-const UserTypes = require('../../src/user/user.types');
-const CompanyTypes = require('../../src/company/company.types');
-const JobTypes = require('../../src/job/job.types');
-const ReviewTypes = require('../../src/review/review.types');
-const UserResolvers = require('../../src/user/user.resolvers');
-const CompanyResolvers = require('../../src/company/company.resolvers');
-const JobResolvers = require('../../src/job/job.resolvers');
-const ReviewResolvers = require('../../src/review/review.resolvers');
+const UserTypes = require('../user/user.types');
+const CompanyTypes = require('../company/company.types');
+const JobTypes = require('../job/job.types');
+const ReviewTypes = require('../review/review.types');
+const AppTypes = require('../app/app.types');
+const UserResolvers = require('../user/user.resolvers');
+const CompanyResolvers = require('../company/company.resolvers');
+const JobResolvers = require('../job/job.resolvers');
+const ReviewResolvers = require('../review/review.resolvers');
+const AppResolvers = require('../app/app.resolvers');
 
 exports.typeDefs = mergeTypeDefs([
     GeneralTypes, 
     UserTypes, 
     CompanyTypes, 
     JobTypes,
-    ReviewTypes
+    ReviewTypes,
+    AppTypes
 ]);
 exports.resolvers = mergeResolvers([
     GeneralResolvers, 
     UserResolvers, 
     CompanyResolvers,
     JobResolvers,
-    ReviewResolvers
+    ReviewResolvers,
+    AppResolvers
 ]);
 
 exports.schema = makeExecutableSchema({
