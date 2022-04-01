@@ -1,23 +1,33 @@
-.account > span > a {
-    text-decoration: none;
+.banner {
+    height: 78px;
+}
+
+.banner-link {
+    font-size: 18px;
     font-weight: 500;
 }
 
-.account > span > a:hover {
-    text-decoration: underline;
+.banner-link > a {
+    color: var(--green);
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
-.banner {
-    height: 50%;
-    width: 100%;
+.banner-link > a:hover {
+    text-decoration: underline;
 }
 
 .border {
     border: 1px solid black;
 }
 
+header {
+    width: 100%;
+}
+
 .country {
-    width: 10%;
+    position: absolute;
+    right: 0;
 }
 
 .divider {
@@ -26,66 +36,75 @@
 }
 
 .domain {
-    width: 100%;
-}
-
-.domain > div {
     width: 50%;
 }
 
-.domain > div > a, .country > a {
-    color: var(--grey);
-    text-decoration: none;
-}
-
-.domain > div > a:hover, .country > a:hover {
-    color: var(--green);
-    cursor: pointer;
-}
-
-.domain > div > .selected, .country > .selected {
-    border-bottom: 2px solid var(--black);
-    color: var(--black);
-    font-weight: 600;
-}
-
-header {
-    height: 17vh;
-    width: 100vw;
-}
-
-header > a:hover + .selected {
-    cursor: default;
-}
-
 .logo > img {
-    height: 50px;
-    width: 50px;
+    height: 65px;
+    width: 65px;
 }
 
-.logo > span {
-    font-weight: 600;
+.logo-heading {
+    font-size: 30px;
+    font-weight: 700;
 }
 
-.tabs {
-    background-color: var(--light-grey);
-    height: 35%;
+.sites {
+    background-color: var(--black);
     width: 100%;
 }
 
-.tab > li {
-    border: 1px solid black;
+.site-link {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid transparent;
+    font-size: 14px;
+    height: 30px;
     list-style-type: none;
 }
 
-.tab > .selected {
-    background-color: var(--black);
-    color: var(--white);
+.site-link > a {
+    color: var(--grey);
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
-.top {
-    background-color: var(--light-grey);
-    font-size: 14px;
-    height: 15%;
+.site-link > a:hover {
+    color: var(--green);
+}
+
+.site-links > .selected {
+    border-bottom: 2px solid var(--white);
+    font-weight: 600;
+}
+
+.selected > a, .selected > a:hover {
+    color: var(--white);
+    cursor: default;
+}
+
+.pages {
+    background-color: var(--black);
+} 
+
+.tab {
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    list-style-type: none;
+    text-align: center;
     width: 100%;
+}
+
+.tab > a {
+    color: var(--white);
+    line-height: 48px;
+}
+
+.tabs > .selected {
+    background-color: var(--light-green);
+}
+
+.tabs > .selected > a {
+    color: var(--black);
 }
