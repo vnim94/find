@@ -1,5 +1,6 @@
 import './Header.css';
 import { useState } from 'react';
+import Link from './Link';
 
 function Header() {
 
@@ -7,49 +8,22 @@ function Header() {
     const [selectedPage, setSelectedPage] = useState('jobs'); 
     const [selectedRegion, setSelectedRegion] = useState('AU');
 
-    const handleClick = (event) => {
-        event.preventDefault();
-
-        const parent = event.currentTarget.parentElement.parentElement.classList;
-        const id = event.currentTarget.id
-
-        if (parent.contains('site')) {
-            setSelectedSite(id);
-        } else if (parent.contains('region')) {
-            setSelectedRegion(id);
-        } else if (parent.contains('page')) {
-            setSelectedPage(id);
-        }
-    }
-
     return (
         <header>
             <div className="sites flex flex-jc-c">
                 <div className="page flex flex-row flex-jc-c">
                     <nav className="site">
                         <ul className="site-links flex flex-row flex-ai-c flex-jc-se">
-                            <li id="jobs" className={`site-link ${selectedSite === 'jobs' && 'selected'}`} onClick={handleClick}>
-                                <a href="/">Jobs</a>
-                            </li>
-                            <li id="courses" className={`site-link ${selectedSite === 'courses' && 'selected'}`} onClick={handleClick}>
-                                <a href="/">Courses</a>
-                            </li>
-                            <li id="businesses" className={`site-link ${selectedSite === 'businesses' && 'selected'}`} onClick={handleClick}>
-                                <a href="/">Businesses for sale</a>
-                            </li>
-                            <li id="volunteering" className={`site-link ${selectedSite === 'volunteering' && 'selected'}`} onClick={handleClick}>
-                                <a href="/">Volunteering</a>
-                            </li>
+                            <Link id="jobs" type="site-link" text="Jobs" selected={selectedSite} setSelected={setSelectedSite}/>
+                            <Link id="courses" type="site-link" text="Courses" selected={selectedSite} setSelected={setSelectedSite}/>
+                            <Link id="businesses" type="site-link" text="Businesses for sale" selected={selectedSite} setSelected={setSelectedSite}/>
+                            <Link id="volunteering" type="site-link" text="Volunteering" selected={selectedSite} setSelected={setSelectedSite}/>
                         </ul>
                     </nav>
                     <nav className="region">
                         <ul className="site-links flex flex-row">
-                            <li id="AU" className={`site-link ${selectedRegion === 'AU' && 'selected'}`} onClick={handleClick}>
-                                <a href="/">AU</a>
-                            </li>
-                            <li id="NZ" className={`site-link ${selectedRegion === 'NZ' && 'selected'}`} onClick={handleClick}>
-                                <a href="/">NZ</a>
-                            </li>
+                            <Link id="AU" type="site-link" text="AU" selected={selectedRegion} setSelected={setSelectedRegion}/>
+                            <Link id="NZ" type="site-link" text="NZ" selected={selectedRegion} setSelected={setSelectedRegion}/>
                         </ul>
                     </nav>
                 </div>
@@ -76,18 +50,10 @@ function Header() {
             <div className="pages flex flex-jc-c">
                 <nav className="page">
                     <ul className="tabs flex flex-row flex-jc-sb">
-                        <li id="jobs" className={`tab ${selectedPage === 'jobs' && 'selected'}`} onClick={handleClick}>
-                            <a href="/">Jobs</a>
-                        </li>
-                        <li id="profile" className={`tab ${selectedPage === 'profile' && 'selected'}`} onClick={handleClick}>
-                            <a href="/">Profile</a>
-                        </li>
-                        <li id="career" className={`tab ${selectedPage === 'career' && 'selected'}`} onClick={handleClick}>
-                            <a href="/">Career Advice</a>
-                        </li>
-                        <li id="reviews" className={`tab ${selectedPage === 'reviews' && 'selected'}`} onClick={handleClick}>
-                            <a href="/">Company Reviews</a>
-                        </li>
+                        <Link id="jobs" type="tab" text="Jobs" selected={selectedPage} setSelected={setSelectedPage}/>
+                        <Link id="profile" type="tab" text="Profile" selected={selectedPage} setSelected={setSelectedPage}/>
+                        <Link id="career" type="tab" text="Career Advice" selected={selectedPage} setSelected={setSelectedPage}/>
+                        <Link id="reviews" type="tab" text="Company Reviews" selected={selectedPage} setSelected={setSelectedPage}/>
                     </ul>
                 </nav>
             </div>
