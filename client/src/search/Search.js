@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 function Search() {
 
-    const [hidden, setHidden] = useState(false);
+    const [visible, setVisible] = useState(false);
     const [expanded, setExpanded] = useState(false);
 
     return (
@@ -18,11 +18,11 @@ function Search() {
                             <label>What</label>
                             <div className="flex flex-row">
                                 <input className="form-control" type="text" placeholder="Enter Keywords"></input>
-                                <div className={`classification form-control flex flex-ai-c flex-jc-sb ${hidden && 'outlined'}`} onClick={() => setHidden(!hidden)}>
+                                <div className={`classification form-control flex flex-ai-c flex-jc-sb ${visible && 'outlined'}`} onClick={() => setVisible(!visible)}>
                                     <span className="dark-grey">Any Classification</span>
-                                    <span className="material-icons-outlined">expand_more</span>
+                                    <span className={`${visible && 'flip'} expand material-icons-outlined`}>expand_more</span>
                                 </div>
-                                {hidden && <Dropdown />}
+                                {visible && <Dropdown />}
                             </div>
                         </div>
                         <div className="where flex flex-col">

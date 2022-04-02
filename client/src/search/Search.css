@@ -37,3 +37,12 @@
 .outlined {
     outline: 3px solid rgba(0, 0, 0, 0.5);
 }
+
+.expand {
+    transition: 0.6s;
+}
+
+.flip {
+    transition: 0.6s;
+    transform: rotateZ(180deg);
+}
