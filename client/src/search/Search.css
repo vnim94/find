@@ -1,0 +1,37 @@
+.dropdown {
+    color: var(--dark-grey);
+}
+
+.find {
+    width: 11%;
+}
+
+.more {
+    cursor: pointer;
+    font-size: 13px;
+    text-decoration: underline;
+}
+
+.search {
+    background-color: var(--light-green);
+    width: 100%;
+}
+
+.search-bar {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    width: 100%;
+}
+
+.search-bar > form {
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.what {
+    width: 60%;
+}
+
+.where {
+    width: 28%;
+}
