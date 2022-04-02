@@ -35,6 +35,24 @@ html {
     width: 940px;
 }
 
+/* font size */
+.small {
+    font-size: 13px;
+}
+
+.medium {
+    font-size: 14px;
+}
+
+.large {
+    font-size: 30px;
+}
+
+/* styling */
+.underlined {
+    text-decoration: underline;
+}
+
 /* colours */
 .bg-white {
     background-color: var(--white);
@@ -156,9 +174,8 @@ html {
 
 .form-control {
     background-color: var(--white);
-    border: 1px solid var(--light-grey);
-    border-radius: 4px;
-    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+    border: 3px solid transparent;
+    border-radius: 5px;
     height: 34px;
     margin-right: 5px;
     padding: 20px 10px 20px 10px;
@@ -168,7 +185,7 @@ html {
 }
 
 .form-control:focus {
-    outline: 3px solid var(--grey);
+    outline: 3px solid rgba(0, 0, 0, 0.5);
 }
 
 label {
@@ -187,11 +204,11 @@ label {
     white-space: nowrap;
     vertical-align: middle;
     cursor: pointer;
-    border: 00px solid transparent;
+    border: 1px solid transparent;
     padding: 10px 10px;
     font-size: 16px;
     line-height: 1.5;
-    border-radius: 4px;
+    border-radius: 7px;
     width: 100%;
 }
 

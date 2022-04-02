@@ -1,5 +1,5 @@
-.dropdown {
-    color: var(--dark-grey);
+.classification {
+    cursor: pointer;
 }
 
 .find {
@@ -8,8 +8,6 @@
 
 .more {
     cursor: pointer;
-    font-size: 13px;
-    text-decoration: underline;
 }
 
 .search {
@@ -34,4 +32,8 @@
 
 .where {
     width: 28%;
+}
+
+.outlined {
+    outline: 3px solid rgba(0, 0, 0, 0.5);
 }
