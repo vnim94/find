@@ -6,8 +6,13 @@
     border: 1px solid var(--grey);
 }
 
-.checkbox:after {
-
+.checkbox[class~="checked"]:after {
+    content: "\2713";
+    transform: scale(1.5);
+    height: 24px;
+    width: 24px;
+    position: absolute;
+    left: 25px;
 }
 
 .dropdown {
@@ -27,5 +32,6 @@
 .dropdown-list {
     cursor: pointer;
     list-style-type:lower-alpha;
+    margin-right: 5px;
     padding: 5px;
 }
