@@ -9,7 +9,7 @@ function Header() {
 
     const handleClick = (event) => {
         event.preventDefault();
-        
+
         const parent = event.currentTarget.parentElement.parentElement.classList;
         const id = event.currentTarget.id
 
@@ -56,10 +56,10 @@ function Header() {
             </div>
             <div className="banner flex flex-jc-c">
                 <div className="page flex flex-jc-sb flex-ai-c">
-                    <div className="logo flex flex-ai-c">
+                    <a className="logo flex flex-ai-c" href="/">
                         <img src="/magnifying-glass.png" alt="logo"></img>
                         <span className="logo-heading">find</span>
-                    </div>
+                    </a>
                     <nav className="flex flex-row">
                         <div className="banner-link">
                             <a href="/">Sign in</a>
