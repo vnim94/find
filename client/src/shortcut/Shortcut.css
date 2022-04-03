@@ -1,0 +1,63 @@
+.all {
+    cursor: pointer;
+    color: var(--green);
+    margin-left: 25px;
+}
+
+.all > span {
+    transition: 0.6s;
+}
+
+.all-shortcuts-links {
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.shortcuts {
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 15px;;
+}
+
+.shortcut {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.shortcut-link {
+    color: var(--green);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 33%;
+}
+
+.shortcut-link:hover {
+    text-decoration: underline;
+}
+
+.shortcut-link-type {
+    width: 12.5%;
+}
+
+.shortcut-links {
+    width: 87.5%;
+}
+
+.shortcut-links > a {
+    color: var(--green);
+    cursor: pointer;
+}
+
+.shortcut-links > a:hover {
+    text-decoration: underline;
+}
+
+.shortcut-links > a + a {
+    margin-left: 25px;
+}
+
+.expand {
+    transition: 0.6s;
+    transform: rotateZ(180deg);
+}
