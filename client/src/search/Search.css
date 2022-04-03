@@ -6,6 +6,10 @@
     width: 11%;
 }
 
+.find > .btn {
+    width: 100%;
+}
+
 .more {
     cursor: pointer;
 }
