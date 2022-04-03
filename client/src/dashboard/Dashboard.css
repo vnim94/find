@@ -1,0 +1,52 @@
+.dashboard {
+    height: 78px;
+    width: 100%;
+}
+
+.dashboard > .page {
+    border-left: 1px solid var(--light-grey);
+    border-right: 1px solid var(--light-grey);
+    height: 85%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.dashboard[class~="signed-in"] > .page {
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+}
+
+.signed-in {
+    height: 308px;
+}
+
+.tile {
+    width: 100%;
+}
+
+.tile + .tile {
+    border-left: 1px solid var(--light-grey);
+    padding-left: 15px;
+}
+
+.tile-heading {
+    padding-bottom: 15px;
+}
+
+.tile-heading > span {
+    margin-right: 5px;
+}
+
+.tile-item {
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.tile-item > a {
+    color: var(--green);
+}
+
+.tile-item > a:hover {
+    text-decoration: underline;
+}
