@@ -13,12 +13,21 @@
     margin-bottom: 10px;
 }
 
-.column > a {
+.footer-link {
     color: var(--green);
     cursor: pointer;
     font-size: 15px;
     margin-top: 7.5px;
     margin-bottom: 7.5px;;
+}
+
+.expandable-link {
+    color: var(--green);
+    cursor: pointer;
+}
+
+.expandable-link > span {
+    font-size: 18px;
 }
 
 .column > a:hover {
