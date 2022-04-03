@@ -18,3 +18,36 @@
     margin-left: 2.5px;
     margin-right: 2.5px;
 }
+
+.expanded-option {
+    background-color: var(--dark-green);
+    color: var(--white);
+    padding-bottom: 15px;
+    width: 100%;
+}
+
+.expanded-sub-options {
+    border: 1px solid var(--white);
+    border-radius: 5px;
+}
+
+.expanded-sub-options > li {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+}
+
+.expanded-sub-options > li + li {
+    border-left: 1px solid var(--white);
+} 
+
+.selected-sub-option {
+    background-color: var(--white);
+    color: var(--black);
+}
