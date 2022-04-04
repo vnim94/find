@@ -57,8 +57,3 @@
 .shortcut-links > a + a {
     margin-left: 25px;
 }
-
-.expand {
-    transition: 0.6s;
-    transform: rotateZ(180deg);
-}

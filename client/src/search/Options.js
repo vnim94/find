@@ -3,38 +3,53 @@ import { useState } from 'react';
 
 function Options() {
 
-    const [expanded, setExpanded] = useState(false);
+    const [selected, setSelected] = useState();
 
     return (
         <>
         <div className="options flex flex-jc-c">
             <div className="page flex flex-row">
                 <span className="light-black">|</span>
-                <Option value="All work types"/>
+                <Option selected={selected} setSelected={setSelected} text="work types" value="All" />
                 <span className="light-black">|</span>
-                <Option text="paying" value="$0"/>
+                <Option selected={selected} setSelected={setSelected} text="paying" value="$0"/>
                 <span className="light-black">|</span>
-                <Option text="to" value="$200k+" />
+                <Option selected={selected} setSelected={setSelected} text="to" value="$200k+" />
                 <span className="light-black">|</span>
-                <Option text="listed" value="any time" />
+                <Option selected={selected} setSelected={setSelected} text="listed" value="any time" />
                 <span className="light-black">|</span>
             </div>
         </div>
-        {expanded && <ExpandedOption />}
+        {/* {selected === "work types" && <ExpandedOption />} */}
         </>
     )
 }
 
 function Option(props) {
 
-    const { expand, expanded, text, value } = props;
+    const { selected, setSelected, text, value } = props;
+    const [expanded, setExpanded] = useState(false);
+
+    const handleClick = () => {
+        setExpanded(!expanded);
+        selected === undefined ? setSelected(text) : setSelected(undefined); 
+    }
 
     return (
-        <div className="option flex flex-row flex-jc-c" onClick={() => expand(!expanded)}>
+        <div className="option flex flex-row flex-jc-c" onClick={handleClick}>
             <div className="flex">
-                {text && <span className="grey">{text}</span>}
-                <span className="white">{value}</span>
-                <span className={`${expanded && 'flip'} white expand material-icons-outlined`}>expand_more</span>
+                {text === 'work types' ? 
+                <>
+                    <span className={selected !== undefined && selected !== text ? 'black' : 'white'}>{value}</span>
+                    <span className={selected !== undefined && selected !== text ? 'black' : 'white'}>{text}</span>
+                </>
+                :
+                <>
+                    <span className={selected !== undefined && selected !== text ? 'black' : 'grey'}>{text}</span>
+                    <span className={selected !== undefined && selected !== text ? 'black' : 'white'}>{value}</span>
+                </>
+                }
+                <span className={`${expanded && 'flip'} ${selected !== undefined && selected !== text ? 'black' : 'white'} material-icons-outlined`}>expand_more</span>
             </div>
         </div>
     )
