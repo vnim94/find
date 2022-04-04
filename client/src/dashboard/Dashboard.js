@@ -40,8 +40,8 @@ function Dashboard() {
                         <span className="medium dark-green">50</span>
                         <span className="medium">Recommended jobs</span>
                     </div>
-                    {recommended.map(job => { 
-                        return <div className="tile-item flex flex-col">
+                    {recommended.map((job,index) => { 
+                        return <div key={index} className="tile-item flex flex-col">
                             <a href="/">{job.title}</a>
                             <span>{job.company}</span>
                         </div>
@@ -53,8 +53,8 @@ function Dashboard() {
                         <span className="medium green">1</span>
                         <span className="medium">Saved job</span>
                     </div>
-                    {saved.map(job => { 
-                        return <div className="tile-item flex flex-col">
+                    {saved.map((job,index) => { 
+                        return <div key={index} className="tile-item flex flex-col">
                             <a href="/">{job.title}</a>
                             <span>{job.company}</span>
                         </div>
@@ -66,8 +66,8 @@ function Dashboard() {
                         <span className="medium green">0</span>
                         <span className="medium">Saved search</span>
                     </div>
-                    {searches.map(search => { 
-                        return <div className="tile-item flex flex-row flex-jc-sa">
+                    {searches.map((search,index) => { 
+                        return <div key={index} className="tile-item flex flex-row flex-jc-sa">
                             <span>{search.new} new</span>
                             <a href="/">{search.what} in {search.where}</a>
                         </div>

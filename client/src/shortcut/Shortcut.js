@@ -86,8 +86,8 @@ function Shortcut() {
                 </div>
                 {visible && 
                 <div className="all-shortcuts-links flex flex-row">
-                    {classifications.map(classification => {
-                        return <a className="shortcut-link" href="/">{classification}</a>
+                    {classifications.map((classification, index) => {
+                        return <a key={index} className="shortcut-link" href="/">{classification}</a>
                     })}
                 </div>
                 }
@@ -96,8 +96,8 @@ function Shortcut() {
                         <span>Major cities</span>
                     </div>
                     <div className="shortcut-links">
-                    {cities.map(city => {
-                        return <a href="/">{city}</a>
+                    {cities.map((city, index) => {
+                        return <a key={index} href="/">{city}</a>
                     })}
                     </div>
                 </div>
@@ -106,8 +106,8 @@ function Shortcut() {
                         <span>Other</span>
                     </div>
                     <div className="shortcut-links">
-                    {others.map(other => {
-                        return <a href="/">{other}</a>
+                    {others.map((other, index) => {
+                        return <a key={index} href="/">{other}</a>
                     })}
                     </div>
                 </div>
