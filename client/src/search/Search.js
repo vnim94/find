@@ -20,7 +20,7 @@ function Search() {
                                 <input className="form-control" type="text" placeholder="Enter Keywords"></input>
                                 <div className={`classification form-control flex flex-ai-c flex-jc-sb ${visible && 'outlined'}`} onClick={() => setVisible(!visible)}>
                                     <span className="dark-grey">Any Classification</span>
-                                    <span className={`${visible && 'flip'} expand material-icons-outlined`}>expand_more</span>
+                                    <span className={`${visible && 'flip'} material-icons-outlined`}>expand_more</span>
                                 </div>
                                 {visible && <Dropdown />}
                             </div>
