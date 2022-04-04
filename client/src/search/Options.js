@@ -61,7 +61,7 @@ function Options() {
                 <span className="light-black">|</span>
             </div>
         </div>
-        {selected === 'work types' ? <ExpandedOption values={workTypes}/> : undefined}
+        {selected === 'work types' ? <ExpandedOption type='multi' values={workTypes}/> : undefined}
         {selected === 'paying' ? <ExpandedOption values={payBase}/> : undefined}
         {selected === 'to' ? <ExpandedOption values={payRange}/> : undefined}
         {selected === 'listed' ? <ExpandedOption values={time}/> : undefined}
@@ -99,20 +99,25 @@ function Option(props) {
 }
 
 function ExpandedOption(props) {
+
+    const [selectedSubOption, setSubOption] = useState();
+
     return (
         <div className="expanded-option flex flex-jc-c">
             <nav className="page">
                 <ul className="expanded-sub-options flex flex-row flex-jc-sb">
-                    {props.values.map(value => {
-                        return <SubOption key={value} text={value} />
-                    })}
+                    {props.type ? 
+                        props.values.map((value,index) => { return <MultiSubOption key={index} text={value} /> })
+                    : 
+                        props.values.map((value,index) => { return <SingleSubOption key={index} selected={selectedSubOption} setSelected={setSubOption} text={value} /> })
+                    }
                 </ul>
             </nav>
         </div>
     )
 }
 
-function SubOption(props) {
+function MultiSubOption(props) {
 
     const [selected, setSelected] = useState(false);
 
@@ -120,6 +125,17 @@ function SubOption(props) {
         <li className={selected ? 'selected-sub-option' :  undefined} onClick={() => setSelected(!selected)}>
             <span>{props.text}</span>
         </li>
+    )
+}
+
+function SingleSubOption(props) {
+
+    const { selected, setSelected, text} = props;
+
+    return (
+        <li className={selected === text ? 'selected-sub-option' :  undefined} onClick={() => setSelected(text)}>
+            <span>{text}</span>
+        </li>        
     )
 }
 
