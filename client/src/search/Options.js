@@ -51,7 +51,7 @@ function Options() {
     const [payBase, setPayBase] = useState(0);
     const [payCeiling, setPayCeiling] = useState('200k+');
     const [time, setTime] = useState('any time');
-    
+
     return (
         <>
         <div className="options flex flex-jc-c">
@@ -67,7 +67,7 @@ function Options() {
                 <span className="light-black">|</span>
             </div>
         </div>
-        {!['paying','to','listed'].includes(selected) ? <ExpandedOption type='multi' values={workTypes} display={workType} setDisplay={setWorkType}/> : undefined}
+        {selected !== undefined && !['paying','to','listed'].includes(selected) ? <ExpandedOption type='multi' values={workTypes} display={workType} setDisplay={setWorkType} /> : undefined}
         {selected === 'paying' ? <ExpandedOption values={payBases} setDisplay={setPayBase}/> : undefined}
         {selected === 'to' ? <ExpandedOption values={payCeilings} setDisplay={setPayCeiling}/> : undefined}
         {selected === 'listed' ? <ExpandedOption values={times} setDisplay={setTime}/> : undefined}
@@ -89,8 +89,8 @@ function Option(props) {
             <div className="flex">
                 {!value ? 
                 <>
-                    <span className={selected !== undefined && selected !== text ? 'black' : 'white'}>{text}</span>
-                    <span className={`${expanded !== undefined ? 'flip' : undefined} ${selected !== undefined && selected !== text ? 'black' : 'white'} material-icons-outlined`}>expand_more</span>
+                    <span className={selected !== undefined && selected !== 'All work types' ? 'black' : 'white'}>{text}</span>
+                    <span className={`${expanded !== undefined ? 'flip' : undefined} ${selected !== undefined && selected !== 'All work types' ? 'black' : 'white'} material-icons-outlined`}>expand_more</span>
                 </>
                 :
                 <>
@@ -130,7 +130,6 @@ function MultiSubOption(props) {
     const [selected, setSelected] = useState(false);
 
     const handleClick = () => {
-        console.log(text);
         setSelected(!selected);
         display.indexOf(text) > -1 ? setDisplay(display.filter(type => type !== text)) : setDisplay([ ...display, text]);
     }
