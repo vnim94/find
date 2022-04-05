@@ -9,7 +9,7 @@ function Content() {
                         <span className="medium">Take advantage of</span>
                         <span className="large"><b>The Great Job Boom</b></span>
                     </div>
-                    <button className="btn">Search jobs</button>
+                    <button className="bg-light-grey black btn">Search jobs</button>
                 </div>
                 <div className="bg-black light-grey jumbo-card">
                     <div className="flex flex-col">
@@ -17,7 +17,7 @@ function Content() {
                         <span className="medium">The best jobs ads find</span> 
                         <span className="medium">the best people</span>
                     </div>
-                    <button className="btn">Find out more</button>
+                    <button className="bg-light-grey black btn">Find out more</button>
                 </div>
             </div>
         </div>
