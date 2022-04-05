@@ -35,3 +35,12 @@
     margin-right: 5px;
     padding: 5px;
 }
+
+.item {
+    width: 100%;
+}
+
+.item-text {
+    width: 80%;
+    overflow-wrap: break-word;
+}
