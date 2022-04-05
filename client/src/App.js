@@ -5,17 +5,19 @@ import Dashboard from './dashboard/Dashboard';
 import Content from './content/Content';
 import Shortcut from './shortcut/Shortcut';
 import Footer from './footer/Footer';
+import Form from './profile/Form';
 
 function App() {
     return (
         <>
-        <Header />
+        <Form />
+        {/* <Header />
         <Search />
         <Recent />
         <Dashboard />
         <Content />
         <Shortcut /> 
-        <Footer />
+        <Footer /> */}
         </>
     )
 }
