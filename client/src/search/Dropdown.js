@@ -1,17 +1,15 @@
 import './Dropdown.css';
 import Item from './Item';
 
-function Dropdown() {
+function Dropdown(props) {
 
-    const data = [
-        { classification: 'Accounting', jobCount: '8,875' },
-    ]
+    const { classifications, setClassifications, data } = props;
 
     return (
         <div className="dropdown">
             <ul className="dropdown-list">
-                {data.map(item => { 
-                    return <Item classification={item.classification} jobCount={item.jobCount}/>
+                {data.map((item,index) => { 
+                    return <Item key={index} classification={item.classification} classifications={classifications} setClassifications={setClassifications} jobCount={item.jobCount}/>
                 })}
             </ul>
         </div>
