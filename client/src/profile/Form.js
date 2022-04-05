@@ -1,8 +1,9 @@
 import './Form.css';
 import { useState } from 'react';
 
-function Form() {
+function Form(props) {
 
+    const { type } = props;
     const [visible, setVisible] = useState(false);
 
     return (
@@ -14,15 +15,16 @@ function Form() {
                 </a>
             </header>
             <div className="form-container">
-                <div className="form">
+                <div className="border form">
+                    <div className="bg-light-grey flex flex-jc-fe">
+                        <a className="green" href="/">Are you an employer?</a>
+                    </div>
                     <form>
-                        <div className="flex flex-jc-fe">
-                            <a className="green" href="/">Are you an employer?</a>
-                        </div>
-                        <div className="">
-                            <h1>Sign in</h1>
-                            <div className="form-group">
+                        <div>
+                            <h1>{type === 'sign-in' ? 'Sign in' : 'Register'}</h1>
+                            <div className="form-group flex flex-col">
                                 <label>Email address</label>
+                                {type === 'register' && <span className="light-black">Please check your email address is correct. Employers will use it to contact you.</span>}
                                 <input className="form-control" type="text" required/>
                             </div>
                             <div className="form-group">
@@ -34,11 +36,18 @@ function Form() {
                                 <span className="toggle-visibility material-icons-outlined" onClick={() => setVisible(!visible)}>{visible ? 'visibility_off' : 'visibility'}</span> 
                             </div>
                         </div>
+                        {type === 'register' && <div>
+                            <span>By registering you agree to Find's <a className="green" href="/">Privacy Statement</a></span>
+                        </div>}
                         <div className="form-btn">
                             <button className="bg-black white btn">Sign in</button>
                         </div>
                         <div>
-                            <span>Don't have an account? <a className="green" href="/">Register</a></span>
+                            {type === 'sign-in' ? 
+                                <span>Don't have an account? <a className="green" href="/">Register</a></span>
+                            :
+                                <span>Already have an account? <a className="green" href="/">Sign in</a></span>
+                            }
                         </div>
                     </form>
                 </div>

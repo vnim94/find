@@ -10,7 +10,7 @@ import Form from './profile/Form';
 function App() {
     return (
         <>
-        <Form />
+        <Form type="register"/>
         {/* <Header />
         <Search />
         <Recent />

@@ -187,6 +187,10 @@ h1 {
     width: 100%;
 }
 
+.form-group + .form-group {
+    padding-bottom: 0px;
+}
+
 .form-group > .form-control {
     border: 1px solid var(--black);
 }
@@ -218,7 +222,6 @@ label {
 
 /* buttons */
 .btn {
-    color: var(--white);
     font-weight: 400;
     text-align: center;
     white-space: nowrap;
@@ -237,4 +240,8 @@ label {
 
 .btn[class~="bg-black"]:hover {
     background-color: var(--light-black);
+}
+
+.btn[class~="bg-light-grey"]:hover {
+    background-color: var(--white);
 }
