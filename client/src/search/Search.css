@@ -1,5 +1,12 @@
 .classification {
     cursor: pointer;
+    position: relative;
+}
+
+.clear {
+    border-left: 1px solid var(--light-grey);
+    padding: 14px 10px 14px 12.5px;
+    margin-left: 10px;
 }
 
 .find {
@@ -8,6 +15,16 @@
 
 .find > .btn {
     width: 100%;
+}
+
+.list-action {
+    position: absolute;
+    right: -45px;
+    transition: 0.3s;
+}
+
+.shrink {
+    right: 0px;
 }
 
 .more {
@@ -42,11 +59,11 @@
     outline: 3px solid rgba(0, 0, 0, 0.5);
 }
 
-.classification > span {
-    transition: 0.6s;
-}
-
 .flip {
     transition: 0.6s;
     transform: rotateZ(180deg);
+}
+
+.hidden {
+    visibility: hidden;
 }
