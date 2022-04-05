@@ -83,6 +83,21 @@ header {
     background-color: var(--black);
 } 
 
+.panda {
+    position: absolute;
+    top: -60px;
+    transition: 0.7s;
+    height: 130px;
+    width: 130px;
+    z-index: -1;
+}
+
+.tab[id="career"]:hover > .panda {
+    transition: 0.7s;
+    cursor: pointer;
+    top: -90px;
+}
+
 .tab {
     cursor: pointer;
     font-size: 18px;
