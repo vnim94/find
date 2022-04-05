@@ -12,7 +12,7 @@ function Options() {
         'Contract/Temp',
         'Casual/Vacation'
     ];
-    const payBases = [
+    const payBasesAnnually = [
         '$0',
         '30k',
         '40k',
@@ -25,7 +25,20 @@ function Options() {
         '150k',
         '200k'
     ];
-    const payCeilings = [
+    const payBasesHourly = [
+        '$0',
+        '$15',
+        '$20',
+        '$25',
+        '$30',
+        '$35',
+        '$40',
+        '$50',
+        '$60',
+        '$75',
+        '$100'
+    ]
+    const payCeilingsAnnually = [
         '30k',
         '40k',
         '50k',
@@ -38,6 +51,19 @@ function Options() {
         '200k',
         '200k+'
     ];
+    const payCeilingHourly = [
+        '$15',
+        '$20',
+        '$25',
+        '$30',
+        '$35',
+        '$40',
+        '$50',
+        '$60',
+        '$75',
+        '$100',
+        '$100+'
+    ]
     const times = [
         'Any time',
         'Today',
@@ -68,8 +94,8 @@ function Options() {
             </div>
         </div>
         {selected === "workType" ? <ExpandedOption type='multi' values={workTypes} display={workType} setDisplay={setWorkType} /> : undefined}
-        {selected === "payBase" ? <ExpandedOption values={payBases} selectedSubOption={payBase} setDisplay={setPayBase}/> : undefined}
-        {selected === "payCeiling" ? <ExpandedOption values={payCeilings} selectedSubOption={payCeiling} setDisplay={setPayCeiling}/> : undefined}
+        {selected === "payBase" ? <ExpandedOption type='toggle' annually={payBasesAnnually} hourly={payBasesHourly} selectedSubOption={payBase} setDisplay={setPayBase}/> : undefined}
+        {selected === "payCeiling" ? <ExpandedOption type='toggle' annually={payCeilingsAnnually} hourly={payCeilingHourly} selectedSubOption={payCeiling} setDisplay={setPayCeiling}/> : undefined}
         {selected === "time" ? <ExpandedOption values={times} selectedSubOption={time} setDisplay={setTime}/> : undefined}
         </>
     )
@@ -106,18 +132,25 @@ function Option(props) {
 
 function ExpandedOption(props) {
 
-    const { display, setDisplay, selectedSubOption, type, values,  } = props;
+    const { annually, hourly, display, setDisplay, selectedSubOption, type, values } = props;
+    const [toggle, setToggle] = useState('annually');
 
     return (
         <div className="expanded-option flex flex-jc-c">
             <nav className="page">
                 <ul className="expanded-sub-options flex flex-row flex-jc-sb">
-                    {type ? 
+                    {type & type === 'multi' ? 
                         values.map((value,index) => { return <MultiSubOption key={index} display={display} selectedSubOption={selectedSubOption} setDisplay={setDisplay} text={value} /> })
                     : 
-                        values.map((value,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={value} /> })
+                    type === 'toggle' ?
+                        toggle === 'annually' ? annually.map((value,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={value} /> })
+                        :
+                        hourly.map((value,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={value} />})
+                    :
+                    values.map((value,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={value} /> })
                     }
                 </ul>
+                {type && type === 'toggle' && <ScaleToggle toggle={toggle} setToggle={setToggle}/>}
             </nav>
         </div>
     )
@@ -150,6 +183,18 @@ function SingleSubOption(props) {
         <li className={selectedSubOption === text ? 'selected-sub-option' :  undefined} onClick={handleClick}>
             <span>{text}</span>
         </li>        
+    )
+}
+
+function ScaleToggle(props) {
+
+    const { setToggle, toggle } = props;
+
+    return (
+        <div className="scale-toggle flex flex-jc-c">
+            <span className={toggle === 'annually' && 'selected'} onClick={() => setToggle('annually')}>Annually</span>
+            <span className={toggle === 'hourly' && 'selected'} onClick={() => setToggle('hourly')}>Hourly</span>
+        </div>
     )
 }
 
