@@ -54,7 +54,17 @@ function Search() {
                                 <input className="form-control" type="text" placeholder="Enter Keywords"></input>
                                 <div className={`classification form-control flex flex-ai-c flex-jc-sb ${visible && 'outlined'}`} onClick={() => setVisible(!visible)}>
                                     <span className="dark-grey">
-                                        {classifications.length === 0 ? 'Any classification' : classifications.length > 1 ? `${classifications.length} classifications` : classifications[0]}
+                                        {classifications.length === 0 ? 
+                                            'Any classification' 
+                                        : 
+                                            classifications.length > 1 ? 
+                                                `${classifications.length} classifications`
+                                            : 
+                                                classifications[0].length > 20 ? 
+                                                    `${classifications[0].slice(0,20)} ...`
+                                                :
+                                                    classifications[0]
+                                                    }
                                     </span>
                                     <div className={`${classifications.length > 0 && 'shrink'} list-action flex flex-ai-c`}>
                                         <span className={`${visible && 'flip'} material-icons-outlined`}>expand_more</span>

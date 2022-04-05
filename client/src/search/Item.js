@@ -12,9 +12,9 @@ function Item(props) {
 
     return (
         <li key={classification.toLowerCase()} className="flex flex-row flex-jc-sb flex-ai-c" onClick={handleClick}>
-            <div className="flex flex-ai-c">
+            <div className="item flex flex-ai-c">
                 <span className={`${checked && 'checked'} checkbox`}></span>
-                <span>{classification}</span>
+                <span className="item-text">{classification}</span>
             </div>
             <span>{jobCount}</span>
         </li>

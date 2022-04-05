@@ -23,6 +23,10 @@
     transition: 0.3s;
 }
 
+.list-action > span {
+    margin-left: 10px;
+}
+
 .shrink {
     right: 0px;
 }
