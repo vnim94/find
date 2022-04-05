@@ -9,6 +9,7 @@ function Link(props) {
 
     return (
         <li id={id} className={`${type} ${selected === id && 'selected'}`} onClick={handleClick}>
+            {id === 'career' && <img className="panda" src="/panda.png"></img>}
             <a href="/">{text}</a>
         </li>
     )
