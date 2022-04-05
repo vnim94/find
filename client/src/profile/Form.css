@@ -5,26 +5,30 @@
     height: 100vh;
 }
 
+.invalid {
+    border: 1px solid red;
+}
+
 .form {
     background-color: var(--white);
-    display: flex;
-    flex-direction: column;
-    height: 45%;
-    width: 50%;
-    max-width: 660px;
     margin-top: 10%;
+    min-width: 660px;
 }
 
 .form > form {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
     padding: 20px;
 }
 
 .form > div {
     padding: 15px;
+}
+
+.form-btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .form-btn > .btn {
@@ -36,6 +40,7 @@
     background-color: var(--light-grey);
     display: flex;
     justify-content: center;
+    align-items: baseline;
     height: 100%;
 }
 

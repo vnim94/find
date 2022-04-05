@@ -55,8 +55,16 @@
     width: 60%;
 }
 
+.what > * > .form-control {
+    border: 3px solid transparent;
+}
+
 .where {
     width: 28%;
+}
+
+.where > .form-control {
+    border: 3px solid transparent;
 }
 
 .outlined {

@@ -5,6 +5,8 @@ function Form(props) {
 
     const { type } = props;
     const [visible, setVisible] = useState(false);
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
 
     return (
         <div className="container">
@@ -15,7 +17,7 @@ function Form(props) {
                 </a>
             </header>
             <div className="form-container">
-                <div className="border form">
+                <div className="form">
                     <div className="bg-light-grey flex flex-jc-fe">
                         <a className="green" href="/">Are you an employer?</a>
                     </div>
