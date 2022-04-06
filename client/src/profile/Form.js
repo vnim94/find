@@ -23,8 +23,8 @@ function Form(props) {
             <Header />
             <div className="form-container">
                 <div className="form">
-                    <div className="bg-light-grey flex flex-jc-fe">
-                        <a className="green" href="/">Are you an employer?</a>
+                    <div className="bg-light-black flex flex-jc-fe">
+                        <a className="light-green" href="/">Are you an employer?</a>
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div>
