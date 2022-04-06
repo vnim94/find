@@ -32,7 +32,6 @@ const UserResolvers = {
     Mutation: {
         createUser: async (_, args) => {
             const errors = {
-                ...validate.user(args),
                 ...validate.email(args.email),
                 ...validate.password(args.password)
             }
@@ -50,7 +49,10 @@ const UserResolvers = {
         updateUser: async (_, args, context) => {
             if (!context.user || context.user !== args.id) throw new Error('UNAUTHORIZED');
 
-            const errors = validate.user(args);
+            const errors = {
+                ...validate.name(args.firstName, args.lastName),
+                ...validate.phone(args.phone)
+            }
             if (Object.keys(errors).length > 0) return { __typename: 'InvalidUserInput', message: 'Invalid input', errors: errors };
             
             const { id, firstName, lastName, location, phone } = args;
@@ -75,7 +77,7 @@ const UserResolvers = {
             if (!context.user || context.user !== args.id) throw new Error('UNAUTHORIZED');
 
             const error = validate.password(args.password);
-            if (error) return { __typename: 'InvalidUserInput', message: 'Invalid input', errors: errors };
+            if (error) return { __typename: 'InvalidUserInput', message: 'Invalid input', errors: error };
 
             let user = await User.findById(args.id);
             user.password = args.password;

@@ -70,10 +70,8 @@ describe('user mutations', () => {
     test('createUser', () => {
         const createUser = `
             mutation {
-                createUser(firstName: "John", lastName: "Smith", email: "jsmith@email.com", location: "Melbourne", password: "password", phone: "012345678") {
+                createUser(email: "jsmith@email.com", password: "password") {
                     ... on User {
-                        firstName
-                        lastName
                         email
                     }
                 }
@@ -241,7 +239,7 @@ describe('user resolvers', () => {
     test('createUser', async () => {
         const createUser = `
             mutation {
-                createUser(firstName: "Bob", lastName: "Brown", email: "bbrown@email.com", location: "Melbourne", password: "password", phone: "+61467662228") {
+                createUser(email: "bbrown@email.com", password: "password") {
                     ... on User {
                         firstName
                         lastName
@@ -251,14 +249,11 @@ describe('user resolvers', () => {
                 }
             }
         `
-        const result = await tester.graphql(createUser, {}, {}, {})     
+        const result = await tester.graphql(createUser, {}, {}, {})
         expect(result.data.createUser).toBeTruthy();
         
-        const { firstName, lastName, email, location } = result.data.createUser
-        expect(firstName).toBe('Bob');
-        expect(lastName).toBe('Brown');
+        const { email } = result.data.createUser
         expect(email).toBe('bbrown@email.com');
-        expect(location).toBe('Melbourne');
 
         const newUser = await User.findOne({ email: "bbrown@email.com" });
         expect(newUser).toBeTruthy();
@@ -267,16 +262,12 @@ describe('user resolvers', () => {
     test('createUser with invalid input', async () => {
         const createUser = `
             mutation {
-                createUser(firstName: "B", lastName: "B", email: "bbrownemail.com", location: "", password: "", phone: "0") {
+                createUser(email: "bbrownemail.com", password: "") {
                     ... on InvalidUserInput {
                         message
                         errors {
-                            firstName
-                            lastName
                             email
-                            location
                             password
-                            phone
                         }
                     }
                 }
@@ -290,7 +281,7 @@ describe('user resolvers', () => {
     test('createUser with existing email', async () => {
         const createUser = `
             mutation {
-                createUser(firstName: "Bob", lastName: "Brown", email: "jsmith@email.com", location: "Melbourne", password: "password", phone: "+61467662228") {
+                createUser(email: "jsmith@email.com", password: "password") {
                     ... on UserExists {
                         message
                         email
@@ -364,7 +355,7 @@ describe('user resolvers', () => {
         expect(updatedUser.phone).toBe('+61467662228')
     })
 
-    test('updateUser with invalid input', async () => {
+    test('updateUser with invalid phone', async () => {
         const updateUser = `
             mutation {
                 updateUser(id: "${user._id.toString()}", firstName: "J", lastName: "B", location: "", phone: "") {
@@ -468,7 +459,7 @@ describe('user resolvers', () => {
             }
         `
         const result = await tester.graphql(updatePassword, {}, context, {});
-        expect(result.errors).toBeTruthy();
+        expect(result.data.updatePassword.errors).toBeTruthy();
     })
 
     test('deleteUser', async () => {
