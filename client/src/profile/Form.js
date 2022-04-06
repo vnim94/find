@@ -68,9 +68,9 @@ function Form(props) {
                         </div>
                         <div>
                             {type === 'sign-in' ? 
-                                <span>Don't have an account? <a className="green" href="/">Register</a></span>
+                                <span>Don't have an account? <a className="green" href="/register">Register</a></span>
                             :
-                                <span>Already have an account? <a className="green" href="/">Sign in</a></span>
+                                <span>Already have an account? <a className="green" href="/login">Sign in</a></span>
                             }
                         </div>
                     </form>
