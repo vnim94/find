@@ -5,8 +5,8 @@ function Form(props) {
 
     const { type } = props;
     const [visible, setVisible] = useState(false);
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [email, setEmail] = useState({ value: '', updated: false });
+    const [password, setPassword] = useState({ value: '', updated: false });
 
     return (
         <div className="container">
@@ -27,15 +27,29 @@ function Form(props) {
                             <div className="form-group flex flex-col">
                                 <label>Email address</label>
                                 {type === 'register' && <span className="light-black">Please check your email address is correct. Employers will use it to contact you.</span>}
-                                <input className="form-control" type="text" required/>
+                                <input 
+                                    className={`${email.updated && email.value.length === 0 && 'invalid'} form-control`} 
+                                    type="text" value={email.value} 
+                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                    title="Must be a valid email address"
+                                    onChange={(e) => setEmail({ value: e.currentTarget.value, updated: true })} 
+                                    required
+                                />
+                                <Error field={email}/>
                             </div>
                             <div className="form-group">
                                 <div className="flex flex-jc-sb">
                                     <label>Password</label>
                                     <a className="green" href="/">Forgot password?</a>
                                 </div>
-                                <input className="form-control" type={visible ? 'text' : 'password'} minLength="5" maxLength="30" required/>
+                                <input 
+                                    className={`${password.updated && password.value.length === 0 && 'invalid'} form-control`} 
+                                    type={visible ? 'text' : 'password'} 
+                                    value={password.value}
+                                    onChange={(e) => setPassword({ value: e.currentTarget.value, updated: true })} 
+                                    required/>
                                 <span className="toggle-visibility material-icons-outlined" onClick={() => setVisible(!visible)}>{visible ? 'visibility_off' : 'visibility'}</span> 
+                                <Error field={password}/>
                             </div>
                         </div>
                         {type === 'register' && <div>
@@ -67,6 +81,16 @@ function Form(props) {
             </footer>
         </div>
     )    
+}
+
+function Error(props) {
+    return (
+        props.field.updated && props.field.value.length === 0 &&
+        <div className="error flex flex-row flex-ai-c">
+            <span className="dark-green small material-icons-outlined">error_outline</span> 
+            <span className="dark-green small">Required field</span>
+        </div>
+    )
 }
 
 export default Form;
