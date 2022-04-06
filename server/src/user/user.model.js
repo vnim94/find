@@ -5,22 +5,19 @@ const UserSchema = new mongoose.Schema({
     firstName: {
         type: String,
         minLength: 2,
-        maxLength: 25,
-        required: true
+        maxLength: 25
     },
     lastName: {
         type: String,
         minLength: 2,
-        maxLength: 25,
-        required: true
+        maxLength: 25
     },
     email: {
         type: String,
         required: true
     },
     location: {
-        type: String,
-        required: true
+        type: String
     },
     password: {
         type: String,

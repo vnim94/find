@@ -1,30 +1,20 @@
 const validator = require('validator');
 
-exports.user = (user) => {
+exports.name = (firstName, lastName) => {
     const errors = {}
-    const { firstName, lastName, location, phone } = user;
-    
-    if (validator.isEmpty(firstName)) {
-        errors['firstName'] = 'First name must be provided';
-    } else if (!validator.isLength(firstName, { min: 2, max: 25 })) {
-        errors['firstName'] = 'First name must be between 2 and 30 characters';
+    if (!validator.isEmpty(firstName) && !validator.isEmpty(lastName)) { 
+        if (!validator.isAlpha(firstName)) errors['firstName'] = 'Must only contain letters';
+        if (!validator.isLength(firstName, { min: 2, max: 30 })) errors['firstName'] = 'Must be between 2 and 30 characters';
+        if (!validator.isAlpha(lastName)) errors['lastName'] = 'Must only contain letters';
+        if (!validator.isLength(lastName, { min: 2, max: 30 })) errors['lastName'] = 'Must be between 2 and 30 characters';
     }
-
-    if (validator.isEmpty(lastName)) {
-        errors['lastName'] = 'Last name must be provided';
-    } else if (!validator.isLength(lastName, { min: 2, max: 25 })) {
-        errors['lastName'] = 'Last name must be between 2 and 30 characters';
-    }
-
-    if (validator.isEmpty(location)) {
-        errors['location'] = 'Location must be provided';
-    }
-
-    if (!validator.isEmpty(phone) && !validator.isMobilePhone(phone, 'en-AU')) {
-        errors['phone'] = 'Phone number must be a valid mobile phone number';
-    }
-
     return errors;
+}
+
+exports.phone = (phone) => {
+    if (!validator.isEmpty(phone) && !validator.isMobilePhone(phone, 'en-AU')) {
+        return { phone: 'Phone number must be a valid mobile phone number' }
+    }
 }
 
 exports.email = (email) => {
