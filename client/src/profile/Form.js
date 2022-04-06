@@ -1,8 +1,8 @@
 import './Form.css';
 import { useState } from 'react';
-import { login, register } from './user.api';
+import { login, register, checkEmail } from './user.api';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUser } from './user.slice';
 
 function Form(props) {
@@ -12,6 +12,7 @@ function Form(props) {
     const [email, setEmail] = useState({ value: '', updated: false });
     const [password, setPassword] = useState({ value: '', updated: false });
     const [error, setError] = useState();
+    const [emailTaken, setEmailTaken] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -37,7 +38,12 @@ function Form(props) {
                 navigate('/onboarding');
             }
         }
+    }
 
+    const handleChange = async (event) => {
+        setEmail({ value: event.currentTarget.value, updated: true });
+        const response = await checkEmail(event.currentTarget.value);
+        response.data.user.id ? setEmailTaken(true) : setEmailTaken(false);
     }
 
     return (
@@ -59,10 +65,15 @@ function Form(props) {
                                     type="text" value={email.value} 
                                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                                     title="Must be a valid email address"
-                                    onChange={(e) => setEmail({ value: e.currentTarget.value, updated: true })} 
+                                    onChange={type === 'register' ? handleChange : (e) => setEmail({ value: e.currentTarget.value, updated: true})} 
                                     required
                                 />
                                 <Error field={email}/>
+                                {type === 'register' && emailTaken &&
+                                    <div>
+                                        <span className="error-msg">Email address already taken. Please use a different email address.</span>
+                                    </div>
+                                }
                             </div>
                             <div className="form-group">
                                 <div className="flex flex-jc-sb">

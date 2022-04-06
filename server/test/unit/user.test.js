@@ -18,7 +18,6 @@ describe('user queries', () => {
             }
         `
         tester.test(true, query);
-        
     })
 
     test('invalid users', () => {
@@ -33,7 +32,7 @@ describe('user queries', () => {
         tester.test(false, query);
     })
 
-    test('user', () => {
+    test('user using id', () => {
         const query = `
             {
                 user(id: "user_id") {
@@ -48,6 +47,20 @@ describe('user queries', () => {
 
         tester.test(true, query);
     })  
+
+    test('user using email', () => {
+        const query = `
+            {
+                user(email: "email@email.com") {
+                    ... on User {
+                        firstName
+                        lastName
+                    }
+                }
+            }
+        `
+        tester.test(true, query);
+    })
 
     test('invalid user', () => {
         const query = `
@@ -171,7 +184,7 @@ describe('user resolvers', () => {
 
     afterAll(async () => { await database.disconnect() });
 
-    test('user', async () => {
+    test('user using id', async () => {
         const query = `
             {
                 user(id: "${user._id.toString()}") {
@@ -198,10 +211,36 @@ describe('user resolvers', () => {
         expect(email).toBe('jsmith@email.com');
     })
 
+    test('user using email', async () => {
+        const query = `
+            {
+                user(email: "${user.email}") {
+                    ... on User {
+                        firstName
+                        lastName
+                        fullName
+                        email
+                    }
+                    ... on NotFound {
+                        message
+                        id
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.data.user).toBeTruthy();
+
+        const { firstName, lastName, fullName } = result.data.user
+        expect(firstName).toBe('John');
+        expect(lastName).toBe('Smith');
+        expect(fullName).toBe('John Smith');
+    })
+
     test('user not found', async () => {
         const query = `
             {
-                user(id: "623fb7ceeb0db10460a55d43") {
+                user(email: "abc@email.com") {
                     ... on User {
                         firstName
                         lastName

@@ -43,6 +43,19 @@ const registerRequest = (email, password) => `
     }
 `
 
+const checkEmailRequest = (email) => `
+    {
+        user(email: "${email}") {
+            ... on User {
+                id
+            }
+            ... on NotFound {
+                message
+            }
+        }
+    }
+`
+
 const request = async (req) => {
     const response = await fetch(env.API, { 
         mode: 'cors',
@@ -64,4 +77,8 @@ export const login = async (email, password) => {
 
 export const register = async (email, password) => {
     return await request(registerRequest(email, password));
+}
+
+export const checkEmail = async (email) => {
+    return await request(checkEmailRequest(email));
 }

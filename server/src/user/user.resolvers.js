@@ -20,9 +20,15 @@ const UserResolvers = {
         }
     },
     Query: {
-        user: async (_, { id }) => {
-            const user = await User.findById(id);
-            if (!user) return { __typename: 'NotFound', message: 'User not found', id: id }
+        user: async (_, { id, email } ) => {
+            let user;
+            if (id) { 
+                user = await User.findById(id);
+                if (!user) return { __typename: 'NotFound', message: 'User not found', id: id }
+            } else if (email) { 
+                user = await User.findOne({ email: email });
+                if (!user) return { __typename: 'NotFound', message: 'User not found', id: email }
+            }
             return user;
         },
         users: async () => {
