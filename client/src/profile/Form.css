@@ -6,7 +6,15 @@
 }
 
 .invalid {
-    border: 1px solid red;
+    border: 3px solid var(--dark-green);
+}
+
+.error {
+    margin-top: 5px;
+}
+
+.error > span + span {
+    margin-left: 5px;
 }
 
 .form {
