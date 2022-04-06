@@ -1,6 +1,6 @@
 import env from 'react-dotenv';
 
-const loginQuery = (email, password) => `
+const loginRequest = (email, password) => `
     mutation {
         login(email: "${email}", password: "${password}") {
             ... on AuthPayload {
@@ -21,16 +21,12 @@ const loginQuery = (email, password) => `
     }
 `
 
-const registerQuery = (firstName, lastName, email, location, password, phone) => `
+const registerRequest = (email, password) => `
     mutation {
-        createUser(firstName: "${firstName}", lastName: "${lastName}", email: "${email}", location: "${location}", password: "${password}", phone: "${phone}") {
+        register(firstName: "email: "${email}", password: "${password}") {
             ... on User {
                 id
-                firstName
-                lastName
                 email
-                location
-                phone
             }
             ... on UserExists {
                 message
@@ -39,19 +35,15 @@ const registerQuery = (firstName, lastName, email, location, password, phone) =>
             ... on InvalidUserInput {
                 message
                 errors {
-                    firstName
-                    lastName
                     email
-                    location
                     password
-                    phone
                 }
             }
         }
     }
 `
 
-export const login = async (email, password) => {
+const request = async (req) => {
     const response = await fetch(env.API, { 
         mode: 'cors',
         method: 'POST',
@@ -59,9 +51,17 @@ export const login = async (email, password) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            query: loginQuery(email, password)
+            query: req
         }) 
     });
     const data = await response.json();
     return data;
+}
+
+export const login = async (email, password) => {
+    return await request(loginRequest(email, password));
+}
+
+export const register = async (email, password) => {
+    return await request(registerRequest(email, password));
 }

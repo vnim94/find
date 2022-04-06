@@ -30,7 +30,7 @@ const UserResolvers = {
         }
     },
     Mutation: {
-        createUser: async (_, args) => {
+        register: async (_, args) => {
             const errors = {
                 ...validate.email(args.email),
                 ...validate.password(args.password)

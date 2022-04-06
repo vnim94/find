@@ -49,7 +49,7 @@ function Header() {
             <div className="pages flex flex-jc-c">
                 <nav className="page">
                     <ul className="tabs flex flex-row flex-jc-sb">
-                        <ListItem id="jobs" type="tab" text="Jobs" selected={selectedPage} setSelected={setSelectedPage}/>
+                        <ListItem id="jobs" type="tab" text="Job Search" selected={selectedPage} setSelected={setSelectedPage}/>
                         <ListItem id="profile" type="tab" text="Profile" selected={selectedPage} setSelected={setSelectedPage}/>
                         <ListItem id="career" type="tab" text="Career Advice" selected={selectedPage} setSelected={setSelectedPage}/>
                         <ListItem id="reviews" type="tab" text="Company Reviews" selected={selectedPage} setSelected={setSelectedPage}/>

@@ -1,6 +1,9 @@
 import './Form.css';
 import { useState } from 'react';
-import { login } from './profile.api';
+import { login, register } from './user.api';
+
+import { useDispatch as dispatch } from 'react-redux';
+import { setUser } from './user.slice';
 
 function Form(props) {
 
@@ -12,10 +15,25 @@ function Form(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const response = await login(email, password);
-        if (response.data.login.message) {
-            setError(response.data.login.message);
+
+        if (type === 'sign-in') {
+            const response = await login(email, password);
+            if (response.data.login.message) {
+                setError(response.data.login.message);
+            } else {
+                dispatch(setUser(response.data.login.user))
+            }
         }
+
+        if (type === 'register') {
+            const response = await register(email, password);
+            if (response.data.register.message) {
+                setError(response.data.register.message);
+            } else {
+                dispatch(setUser(response.data.register.user));
+            }
+        }
+
     }
 
     return (

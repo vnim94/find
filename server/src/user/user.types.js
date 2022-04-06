@@ -47,7 +47,7 @@ const UserTypes = `
     }
 
     type Mutation {
-        createUser(email: String!, password: String!): UserResult
+        register(email: String!, password: String!): UserResult
         login(email: String!, password: String!): LoginResult
         updateUser(id: ID!, firstName: String!, lastName: String!, location: String!, phone: String): UserResult
         updateEmail(id: ID!, email: String!): UserResult
