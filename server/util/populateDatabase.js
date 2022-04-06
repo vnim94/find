@@ -12,10 +12,18 @@ const database = mongoose.connection;
 database.once('open', () => console.log('[INFO] Successfully connected to database'));
 database.on('error', console.error.bind(console, 'Error connecting to database'));
 
-let users = [];
+let locations = [
+    'Melbourne',
+    'Sydney',
+    'Brisbane',
+    'Perth',
+    'Hobart',
+    'Darwin',
+    'Adelaide'
+];
 
-function getRandomIndex(array) {
-    return Math.floor(Math.random() * array.length);
+function getRandomIndex(length) {
+    return Math.floor(Math.random() * length);
 }
 
 function createUser(firstName, lastName, email, location, password, phone, callback) {
@@ -25,7 +33,7 @@ function createUser(firstName, lastName, email, location, password, phone, callb
         lastName: lastName,
         email: email,
         location: location,
-        password: bcrypt.hashSync(password, 10),
+        password: password,
         phone: phone
     }
 
@@ -40,7 +48,6 @@ function createUser(firstName, lastName, email, location, password, phone, callb
         }
 
         console.log(`[INFO] New user created: ${user.firstName} ${user.lastName}`);
-        users.push(user);
         callback(null, user);
 
     });
@@ -52,7 +59,10 @@ function populateUsers(callback) {
     let usersToCreate = [];
 
     for (let i = 0; i < 5; i++) {
-        usersToCreate.push(function(callback) { createUser(faker.name.firstName(), faker.name.lastName(), faker.internet.email(), faker.address.city(), faker.internet.password(), faker.phone.phoneNumber(),callback) });
+        let firstName = faker.name.firstName();
+        let lastName = faker.name.lastName();
+        let email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@email.com`
+        usersToCreate.push(function(callback) { createUser(firstName, lastName, email, locations[getRandomIndex(locations.length)], 'password', faker.phone.phoneNumber(),callback) });
     }
 
     async.series(usersToCreate, callback);

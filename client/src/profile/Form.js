@@ -1,8 +1,8 @@
 import './Form.css';
 import { useState } from 'react';
 import { login, register } from './user.api';
-
-import { useDispatch as dispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from './user.slice';
 
 function Form(props) {
@@ -12,25 +12,29 @@ function Form(props) {
     const [email, setEmail] = useState({ value: '', updated: false });
     const [password, setPassword] = useState({ value: '', updated: false });
     const [error, setError] = useState();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (type === 'sign-in') {
-            const response = await login(email, password);
+            const response = await login(email.value, password.value);
             if (response.data.login.message) {
                 setError(response.data.login.message);
             } else {
-                dispatch(setUser(response.data.login.user))
+                dispatch(setUser(response.data.login.user));
+                navigate('/', { replace: true });
             }
         }
 
         if (type === 'register') {
-            const response = await register(email, password);
+            const response = await register(email.value, password.value);
             if (response.data.register.message) {
                 setError(response.data.register.message);
             } else {
                 dispatch(setUser(response.data.register.user));
+                navigate('/onboarding');
             }
         }
 

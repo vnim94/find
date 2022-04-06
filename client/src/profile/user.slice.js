@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: null,
+    initialState: { details: null },
     reducers: {
         setUser(state, action) {
-            state = action.payload;
+            state.details = action.payload;
         }
     }
 })

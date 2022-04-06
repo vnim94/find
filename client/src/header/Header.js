@@ -1,5 +1,6 @@
 import './Header.css';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 function Header() {
 
@@ -7,6 +8,8 @@ function Header() {
     const [selectedPage, setSelectedPage] = useState('jobs'); 
     const [selectedRegion, setSelectedRegion] = useState('AU');
 
+    const user = useSelector(state => state.user.details);
+    
     return (
         <header>
             <div className="sites flex flex-jc-c">
@@ -35,9 +38,18 @@ function Header() {
                     </a>
                     <nav className="flex flex-row">
                         <div className="banner-link">
-                            <a href="/login">Sign in</a>
-                            <span>or</span>
-                            <a href="/register">Register</a>
+                            {user ?
+                                <div className="flex flex-ai-c">
+                                    <span>{user.firstName}</span>
+                                    <span className="material-icons-outlined">expand_more</span>
+                                </div>
+                            :
+                                <>
+                                    <a href="/login">Sign in</a>
+                                    <span>or</span>
+                                    <a href="/register">Register</a>
+                                </>
+                            }   
                         </div>
                         <div className="divider">|</div>
                         <div className="banner-link">
