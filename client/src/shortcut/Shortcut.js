@@ -73,11 +73,11 @@ function Shortcut() {
                         <span>Classifications</span>
                     </div>
                     <div className="shortcut-links flex flex-row">
-                        <a>Accounting</a>
-                        <a>Education &amp; Training</a>
-                        <a>Government &amp; Defence</a>
-                        <a>Healthcare &amp; Medical</a>
-                        <a>Sales</a>
+                        <a href="/">Accounting</a>
+                        <a href="/">Education &amp; Training</a>
+                        <a href="/">Government &amp; Defence</a>
+                        <a href="/">Healthcare &amp; Medical</a>
+                        <a href="/">Sales</a>
                         <div className="all flex flex-ai-c" onClick={handleClick}>
                             <span>View all</span>
                             <span className={`${expanded && 'expand'} medium material-icons-outlined`}>expand_more</span>

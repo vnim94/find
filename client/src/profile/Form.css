@@ -17,6 +17,10 @@
     margin-left: 5px;
 }
 
+.error-msg {
+    color: red;
+}
+
 .form {
     background-color: var(--white);
     margin-top: 10%;

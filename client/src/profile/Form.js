@@ -1,5 +1,6 @@
 import './Form.css';
 import { useState } from 'react';
+import { login } from './profile.api';
 
 function Form(props) {
 
@@ -7,6 +8,15 @@ function Form(props) {
     const [visible, setVisible] = useState(false);
     const [email, setEmail] = useState({ value: '', updated: false });
     const [password, setPassword] = useState({ value: '', updated: false });
+    const [error, setError] = useState();
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const response = await login(email, password);
+        if (response.data.login.message) {
+            setError(response.data.login.message);
+        }
+    }
 
     return (
         <div className="container">
@@ -16,7 +26,7 @@ function Form(props) {
                     <div className="bg-light-grey flex flex-jc-fe">
                         <a className="green" href="/">Are you an employer?</a>
                     </div>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div>
                             <h1>{type === 'sign-in' ? 'Sign in' : 'Register'}</h1>
                             <div className="form-group flex flex-col">
@@ -47,11 +57,14 @@ function Form(props) {
                                 <Error field={password}/>
                             </div>
                         </div>
+                        {error && <div>
+                            <span className="error-msg">{error}. Please try again</span>
+                        </div>}
                         {type === 'register' && <div>
                             <span>By registering you agree to Find's <a className="green" href="/">Privacy Statement</a></span>
                         </div>}
                         <div className="form-btn">
-                            <button className="bg-black white btn">Sign in</button>
+                            <button className="bg-black white btn" type="submit">Sign in</button>
                         </div>
                         <div>
                             {type === 'sign-in' ? 
