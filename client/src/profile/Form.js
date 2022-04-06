@@ -10,12 +10,7 @@ function Form(props) {
 
     return (
         <div className="container">
-            <header className="form-header">
-                <a className="logo flex flex-ai-c" href="/">
-                    <img src="/magnifying-glass.png" alt="logo"></img>
-                    <span className="logo-heading">find</span>
-                </a>
-            </header>
+            <Header />
             <div className="form-container">
                 <div className="form">
                     <div className="bg-light-grey flex flex-jc-fe">
@@ -68,19 +63,36 @@ function Form(props) {
                     </form>
                 </div>
             </div>
-            <footer className="form-footer">
-                <div className="footer-links">
-                    <a className="footer-link" href="/">Privacy</a>
-                    <a className="footer-link" href="/">Terms &amp; Conditions</a>
-                    <a className="footer-link" href="/">Protect yourself online</a>
-                    <a className="footer-link" href="/">Contact</a>
-                </div>
-                <div>
-                    <span>© Find. All rights reserved</span>
-                </div>
-            </footer>
+            <Footer />
         </div>
     )    
+}
+
+function Header() {
+    return (
+        <header className="form-header">
+            <a className="logo flex flex-ai-c" href="/">
+                <img src="/magnifying-glass.png" alt="logo"></img>
+                <span className="logo-heading">find</span>
+            </a>
+        </header>
+    )
+}
+
+function Footer() {
+    return (
+        <footer className="form-footer">
+            <div className="footer-links">
+                <a className="footer-link" href="/">Privacy</a>
+                <a className="footer-link" href="/">Terms &amp; Conditions</a>
+                <a className="footer-link" href="/">Protect yourself online</a>
+                <a className="footer-link" href="/">Contact</a>
+            </div>
+            <div>
+                <span>© Find. All rights reserved</span>
+            </div>
+        </footer>
+    )
 }
 
 function Error(props) {
