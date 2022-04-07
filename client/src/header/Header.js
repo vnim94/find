@@ -1,11 +1,12 @@
 import './Header.css';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-function Header() {
+function Header(props) {
 
     const [selectedSite, setSelectedSite] = useState('jobs');
-    const [selectedPage, setSelectedPage] = useState('jobs'); 
+    const [selectedPage, setSelectedPage] = useState(props.page); 
     const [selectedRegion, setSelectedRegion] = useState('AU');
 
     const user = useSelector(state => state.user.details);
@@ -74,17 +75,18 @@ function Header() {
 
 function ListItem(props) {
 
+    const navigate = useNavigate();
     const { id, type, text, selected, setSelected } = props;
-
-    const handleClick = (event) => {
-        event.preventDefault();
-        setSelected(id)
+    
+    const handleClick = () => {
+        setSelected(id);
+        navigate(id === 'jobs' ? '/' : `/${id}`);
     }
 
     return (
         <li id={id} className={`${type} ${selected === id && 'selected'}`} onClick={handleClick}>
             {id === 'career' && <img className="panda" src="/panda.png" alt="panda"></img>}
-            <a href="/">{text}</a>
+            <span>{text}</span>
         </li>
     )
 }

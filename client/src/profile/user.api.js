@@ -23,7 +23,7 @@ const loginRequest = (email, password) => `
 
 const registerRequest = (email, password) => `
     mutation {
-        register(firstName: "email: "${email}", password: "${password}") {
+        register(email: "${email}", password: "${password}") {
             ... on User {
                 id
                 email

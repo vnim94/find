@@ -36,7 +36,7 @@ function Form(props) {
                 setError(response.data.register.message);
             } else {
                 dispatch(setUser(response.data.register.user));
-                navigate('/onboarding');
+                // navigate('/profile/onboarding');
             }
         }
     }
@@ -68,7 +68,7 @@ function Form(props) {
                                 <input 
                                     className={`${email.updated && email.value.length === 0 && 'invalid'} form-control`} 
                                     type="text" value={email.value} 
-                                    pattern={emailPattern}
+                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                                     title="Must be a valid email address"
                                     onChange={type === 'register' ? handleChange : (e) => setEmail({ value: e.currentTarget.value, updated: true})} 
                                     required
@@ -110,7 +110,7 @@ function Form(props) {
                             <span>By registering you agree to Find's <a className="green" href="/">Privacy Statement</a></span>
                         </div>}
                         <div className="form-btn">
-                            <button className="bg-black white btn" type="submit">Sign in</button>
+                            <button className="bg-black white btn" type="submit">{type === 'sign-in' ? 'Sign in' : 'Register'}</button>
                         </div>
                         <div>
                             {type === 'sign-in' ? 

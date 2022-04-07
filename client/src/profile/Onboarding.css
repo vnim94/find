@@ -1,0 +1,119 @@
+.colour-card {
+    background-color: var(--light-grey);
+    border-left: 3px solid var(--light-black); 
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.colour-card > span + span {
+    margin-left: 15px;
+}
+
+.onboarding {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.onboarding > * > form {
+    margin-top: 45px;
+    margin-bottom: 45px;
+    width: 55%;
+}
+
+.line {
+    border-top: 1px solid var(--light-grey);
+}
+
+.toggle-btn {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.exp {
+    cursor: pointer;
+    opacity: 0;
+    width: 45px;
+    height: 20px;
+}
+
+input:checked + .slider {
+    background-color: var(--dark-green);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--green);
+}
+
+.slider {
+    border-radius: 34px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--grey);
+    z-index: -1;
+}
+
+.slider:before {
+    background-color: white;
+    border: 1px solid var(--grey);
+    border-radius: 50%;
+    position: absolute;
+    content: '';
+    height: 22px;
+    width: 22px;
+    left: 0px;
+    top: -2px;
+    bottom: 0px;
+    outline: 2px solid var(--grey);
+    transition: .2s;
+}
+
+input:checked + .slider:before {
+    outline: 2px solid var(--green);
+}
+
+input:checked + .slider:after {
+    color: var(--dark-green);
+    content: "\2713";
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    right: -8.5px;
+    top: -1px;
+    font-weight: 600;
+}
+
+.current {
+    height: 25px;
+    margin-right: 10px;
+    width: 25px;
+}
+
+.date > * {
+    width: 30%;
+}
+
+.date > * + * {
+    margin-left: 15px;
+}
+
+.name > div {
+    width: 100%;
+}
+
+.name > div + div {
+    margin-left: 15px;
+    margin-bottom: 15px;
+}

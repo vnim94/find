@@ -42,9 +42,9 @@ const UserResolvers = {
                 ...validate.password(args.password)
             }
             if (Object.keys(errors).length > 0) return { __typename: 'InvalidUserInput', message: 'Invalid input', errors: errors }; 
-
+            
             if (await User.findOne({ email: args.email })) return { __typename: 'UserExists', message: 'User already exists', email: args.email };
-
+            
             return await User.create(args);
         },
         login: async (_, args) => {

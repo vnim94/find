@@ -59,14 +59,15 @@ header {
     list-style-type: none;
 }
 
-.site-link > a {
+.site-link > span {
     color: var(--grey);
     margin-left: 5px;
     margin-right: 5px;
 }
 
-.site-link > a:hover {
+.site-link > span:hover {
     color: var(--green);
+    cursor: pointer;
 }
 
 .site-links > .selected {
@@ -74,7 +75,7 @@ header {
     font-weight: 600;
 }
 
-.selected > a, .selected > a:hover {
+.selected > span, .selected > span:hover {
     color: var(--white);
     cursor: default;
 }
@@ -107,7 +108,7 @@ header {
     width: 100%;
 }
 
-.tab > a {
+.tab > span {
     color: var(--white);
     line-height: 48px;
 }
@@ -116,6 +117,6 @@ header {
     background-color: var(--light-green);
 }
 
-.tabs > .selected > a {
+.tabs > .selected > span {
     color: var(--black);
 }
