@@ -130,6 +130,10 @@ h1 {
     color: var(--dark-green)
 }
 
+.red {
+    color: red;
+}
+
 /* flexbox */
 .flex {
     display: flex;

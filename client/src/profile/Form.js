@@ -13,6 +13,7 @@ function Form(props) {
     const [password, setPassword] = useState({ value: '', updated: false });
     const [error, setError] = useState();
     const [emailTaken, setEmailTaken] = useState(false);
+    const emailPattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -42,8 +43,12 @@ function Form(props) {
 
     const handleChange = async (event) => {
         setEmail({ value: event.currentTarget.value, updated: true });
-        const response = await checkEmail(event.currentTarget.value);
-        response.data.user.id ? setEmailTaken(true) : setEmailTaken(false);
+        if (event.currentTarget.value.match(emailPattern)) {
+            const response = await checkEmail(event.currentTarget.value);
+            response.data.user.id ? setEmailTaken(true) : setEmailTaken(false);
+        } else {
+            setEmailTaken(false);
+        }
     }
 
     return (
@@ -63,16 +68,24 @@ function Form(props) {
                                 <input 
                                     className={`${email.updated && email.value.length === 0 && 'invalid'} form-control`} 
                                     type="text" value={email.value} 
-                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                    pattern={emailPattern}
                                     title="Must be a valid email address"
                                     onChange={type === 'register' ? handleChange : (e) => setEmail({ value: e.currentTarget.value, updated: true})} 
                                     required
                                 />
                                 <Error field={email}/>
-                                {type === 'register' && emailTaken &&
-                                    <div>
-                                        <span className="error-msg">Email address already taken. Please use a different email address.</span>
-                                    </div>
+                                {type === 'register' && email.value.match(emailPattern) ? 
+                                    emailTaken ?
+                                        <div className="error flex flex-row flex-ai-c">
+                                            <span className="red medium material-icons-outlined">highlight_off</span>
+                                            <span className="red small">Email address already taken. Please use a different email address.</span>
+                                        </div>
+                                    :
+                                        <div className="error flex flex-row flex-ai-c">
+                                            <span className="green medium material-icons-outlined">check_circle</span>
+                                            <span className="green small">Email address available.</span>
+                                        </div>
+                                : undefined
                                 }
                             </div>
                             <div className="form-group">
