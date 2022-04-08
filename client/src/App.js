@@ -31,6 +31,7 @@ function App() {
                 {<>
                     <Header page="profile"/>
                     <Outlet />
+                    <Footer />
                 </>}>
                     <Route path="onboarding" element={<Onboarding />}/>
                 </Route>

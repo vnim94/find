@@ -56,6 +56,7 @@
 }
 
 .what > * > .form-control {
+    background-color: var(--white);
     border: 3px solid transparent;
 }
 
@@ -64,6 +65,7 @@
 }
 
 .where > .form-control {
+    background-color: var(--white);
     border: 3px solid transparent;
 }
 

@@ -1,3 +1,12 @@
+.action > a {
+    color: var(--green);
+    margin-left: 10px;
+}
+
+.action > a:hover {
+    text-decoration: underline;
+}
+
 .colour-card {
     background-color: var(--light-grey);
     border-left: 3px solid var(--light-black); 
@@ -95,7 +104,21 @@ input:checked + .slider:after {
     font-weight: 600;
 }
 
+.left {
+    transition: 0.6s;
+    left: 0px;
+}
+
 .current {
+    background-color: var(--white);
+    transition: 0.6s;
+    position: absolute;
+    right: 52.5px;
+    /* left: 350px; */
+    bottom: 25px;
+}
+
+.current > input {
     height: 25px;
     margin-right: 10px;
     width: 25px;
@@ -106,7 +129,7 @@ input:checked + .slider:after {
 }
 
 .date > * + * {
-    margin-left: 15px;
+    margin-left: 20px;
 }
 
 .name > div {
@@ -116,4 +139,72 @@ input:checked + .slider:after {
 .name > div + div {
     margin-left: 15px;
     margin-bottom: 15px;
+}
+
+.option-dropdown {
+    background-color: var(--white);
+    position: absolute;
+    bottom: 25px;
+    right: 5px;
+    transition: 0.6s;
+    z-index: -1;
+}
+
+select:focus + .option-dropdown, select:focus + .date-dropdown {
+    transition: 0.6s;
+    transform: rotateZ(180deg);
+}
+
+.date-dropdown {
+    position: absolute;
+    bottom: 10px;
+    right: 5px;
+    transition: 0.6s;
+    z-index: -1;
+}
+
+.visibility {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.visibility + span {
+    background-color: var(--white);
+    position: absolute;
+    bottom: 20px;
+    right: 5px;
+    transition: 0.6s;
+    z-index: -1;
+}
+
+.visibility-dropdown {
+    background-color: white;
+    border: 1px solid var(--grey);
+    border-radius: 5px;
+    box-shadow: 0 0 5px var(--grey);
+    position: absolute;
+    top: 60px;
+    left: 0px;
+    width: 100%;
+    z-index: 100;
+}
+
+.visibility-option {
+    cursor: pointer;
+    display: flex; 
+    flex-direction: column;
+    list-style-type: none;
+    padding: 15px;
+}
+
+.recommend {
+    color: var(--white);
+    background-color: var(--dark-green);
+    border-radius: 5px;
+    font-size: 12px;
+    margin-left: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 7.5px;
+    padding-right: 7.5px;
 }

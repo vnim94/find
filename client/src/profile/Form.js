@@ -36,7 +36,7 @@ function Form(props) {
                 setError(response.data.register.message);
             } else {
                 dispatch(setUser(response.data.register.user));
-                // navigate('/profile/onboarding');
+                navigate('/profile/onboarding');
             }
         }
     }
@@ -154,7 +154,7 @@ function Footer() {
     )
 }
 
-function Error(props) {
+export function Error(props) {
     return (
         props.field.updated && props.field.value.length === 0 &&
         <div className="error flex flex-row flex-ai-c">
