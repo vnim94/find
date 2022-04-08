@@ -41,7 +41,7 @@ function Header(props) {
                         <div className="banner-link">
                             {user ?
                                 <div className="flex flex-ai-c">
-                                    <span>{user.firstName}</span>
+                                    <span>{user.firstName ? user.firstName : user.email.split('@')[0] }</span>
                                     <span className="material-icons-outlined">expand_more</span>
                                 </div>
                             :
