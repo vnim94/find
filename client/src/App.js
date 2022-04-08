@@ -8,6 +8,7 @@ import Shortcut from './jobs/shortcut/Shortcut';
 import Footer from './footer/Footer';
 import Form from './profile/Form';
 import Onboarding from './profile/Onboarding';
+import Profile from './profile/Profile';
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
                     <Outlet />
                     <Footer />
                 </>}>
+                    <Route path="" element={<Profile />} />
                     <Route path="onboarding" element={<Onboarding />}/>
                 </Route>
             </Routes>

@@ -47,6 +47,10 @@ select {
     position: relative;
 }
 
+.underline {
+    text-decoration: underline;
+}
+
 /* font size */
 .small {
     font-size: 13px;

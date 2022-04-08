@@ -1,0 +1,36 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.next-role > tr, .next-role > tr > td {
+    text-align: left;
+}
+
+.profile {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.profile-banner {
+    background-color: var(--light-grey);
+    padding: 25px;
+}
+
+.profile-details {
+    padding: 25px;
+    width: 65%;
+}
+
+.sidebar {
+    width: 35%;
+}
