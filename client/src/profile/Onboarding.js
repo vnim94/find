@@ -8,6 +8,23 @@ function Onboarding() {
     const [current, setCurrent] = useState(false);
     const [visibilityOptions, setVisibilityOptions] = useState(false);
 
+    const [firstName, setFirstName] = useState({ value: '', updated: false });
+    const [lastName, setLastName] = useState({ value: '', updated: false });
+
+    const [jobTitle, setJobTitle] = useState({ value: '', updated: false });
+    const [company, setCompany] = useState({ value: '', updated: false });
+
+    const [startMonth, setStartMonth] = useState({ value: '', updated: false });
+    const [startYear, setStartYear] = useState({ value: '', updated: false });
+    const [endMonth, setEndMonth] = useState({ value: '', updated: false });
+    const [endYear, setEndYear] = useState({ value: '', updated: false });
+
+    const [location, setLocation] = useState('');
+    const [classification, setClassification] = useState('');
+    const [subClassification, setSubclassification] = useState('');
+    const [subClassificationOptions, setSubClassificationOptions] = useState();
+    const [profileVisibility, setProfileVisibility] = useState('Select a profile visibility level');
+
     const months = [
         'January',
         'February',
@@ -23,22 +40,63 @@ function Onboarding() {
         'December'
     ]
     const years = Array(new Date().getFullYear() - 1970 + 1).fill().map((_, index) => 1970 + index);
+    const locations = {
+        'Australia - Major Cities': ['Sydney', 'Melbourne', 'Brisbane', 'Gold Coast', 'Perth', 'Adelaide', 'Hobart', 'Darwin', 'Canberra'],
+        'Australia - Regional': ['New South Wales', 'Victoria', 'Queensland', 'Western Australia', 'South Australia', 'Tasmania', 'Northern Territory'],
+        'New Zealand': [
+            'Auckland', 'Northland', 'Waikato', 'Bay of Plenty', 'Gisborne', 'Hawkes Bay', 'Taranaki', 'Manawatu', 'Wellington', 'Tasman',
+            'Mariborough', 'Canterbury', 'Otago', 'West Coast', 'Southland'
+        ],
+        'UK': ['London', 'Rest of the UK'],
+        'Other': ['Asia Pacific', 'Americas', 'Europe & Russia', 'Ireland', 'Middle East & Africa']
+    }
+    const locationOptions = Object.keys(locations).map((location, index) => {
+        return <optgroup key={index} label={location}>
+            {locations[location].map((o, i) => <option key={i} value={o}>{o}</option>)}
+        </optgroup>
+    })
+    const classifications = {
+        'Accounting': ['Accounts Officers/Clerks','Accounts Payable'],
+        'Administration & Office Support': [],
+        'Advertising, Arts & Media': [],
+        'Banking & Financial Services': [],
+        'Call Centre & Customer Service': [],
+        'CEO & General Management': [],
+        'Community Services & Development': [],
+        'Construction': [],
+        'Consulting & Strategy': [],
+        'Design & Architecture': [],
+        'Education & Training': [],
+        'Engineering': [],
+        'Farming, Animals & Conservation': [],
+        'Government & Defence': [],
+        'Healthcare & Medical': [],
+        'Hospitality & Tourism': [],
+        'Human Resources & Recruitment': [],
+        'Information & Communication Technology': [],
+        'Insurance & Superannuation': [],
+        'Legal': [],
+        'Manufacturing, Transport & Logistics': [],
+        'Marketing & Communications': [],
+        'Mining, Resources & Energy': [],
+        'Real Estate & Property': [],
+        'Retail & Consumer Products': [],
+        'Sales': [],
+        'Science & Technology': [],
+        'Self Employment': [],
+        'Sport & Recreation': [],
+        'Trades & Services': []
+    }
+    const classificationOptions = Object.keys(classifications).map((c, i) => {
+        return <option key={i}>{c}</option>
+    })
 
-    const [firstName, setFirstName] = useState({ value: '', updated: false });
-    const [lastName, setLastName] = useState({ value: '', updated: false });
-
-    const [jobTitle, setJobTitle] = useState({ value: '', updated: false });
-    const [company, setCompany] = useState({ value: '', updated: false });
-
-    const [startMonth, setStartMonth] = useState({ value: '', updated: false });
-    const [startYear, setStartYear] = useState({ value: '', updated: false });
-    const [endMonth, setEndMonth] = useState({ value: '', updated: false });
-    const [endYear, setEndYear] = useState({ value: '', updated: false });
-
-    const [location, setLocation] = useState({ value: '', updated: false });
-    const [classification, setClassification] = useState({ value: '', updated: false });
-    const [subClassification, setSubclassification] = useState({ value: '', updated: false });
-    const [profileVisibility, setProfileVisibility] = useState({ value: '', updated: false });
+    const handleChange = (e) => {
+        setClassification(e.target.value)
+        setSubClassificationOptions(classifications[e.target.value].map((o, i) => {
+            return <option key={i}>{o}</option>
+        }));
+    }
 
     return (
         <div className="onboarding">
@@ -91,7 +149,7 @@ function Onboarding() {
                                     </div>
                                 </div>
                                 <div className="flex form-group flex-col">
-                                    <div className={current && 'hidden'}>
+                                    <div className={current ? 'hidden': undefined}>
                                         <label>Ended</label>
                                         <div className="date flex flex-row flex-ai-c">
                                             <div className="relative">
@@ -113,8 +171,8 @@ function Onboarding() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={`${current && 'left'} current flex flex-row`}>
-                                        <input type="checkbox" onChange={() => setCurrent(!current)}/>
+                                    <div className={`${current ? 'left' : undefined} current flex flex-row`}>
+                                        <input type="checkbox" checked={current} onChange={() => setCurrent(!current)}/>
                                         <label>Still in role</label>
                                     </div>
                                 </div>
@@ -127,11 +185,17 @@ function Onboarding() {
                         }
                     </div>
                     <div className="line flex flex-col">
-                        <Select label="Lives in" placeholder="Select location..."/>
+                        <Select label="Lives in" placeholder="Select location..." value={location} onChange={(e) => setLocation(e.target.value)}>
+                            {locationOptions}
+                        </Select>
                     </div>
                     <div className="flex flex-col">
-                        <Select label="Preferred classification" placeholder="Select classification"/>
-                        <Select label="Sub-classification" placeholder="Select sub-classification"/>
+                        <Select label="Preferred classification" placeholder="Select classification" value={classification} onChange={handleChange}>
+                            {classificationOptions}
+                        </Select>
+                        <Select label="Sub-classification" placeholder="Select sub-classification" value={subClassification} onChange={(e) => setSubclassification(e.target.value)}>
+                            {subClassificationOptions}
+                        </Select>
                     </div>
                     <div className="line flex flex-col">
                         <div className="form-group flex flex-col">
@@ -139,30 +203,30 @@ function Onboarding() {
                             <span>Your profile visibility setting controls if employers can approach you with job opportunities</span>
                             <div className="relative">
                                 <div className="visibility form-control" onClick={() => setVisibilityOptions(!visibilityOptions)}>
-                                    <span>Select a profile visibility level</span>
+                                    <span>{profileVisibility}</span>
                                 </div>
                                 <span className="material-icons-outlined">expand_more</span>
                                 {visibilityOptions && <div className="visibility-dropdown">
                                     <ul>
-                                        <li className="visibility-option">
+                                        <li className="visibility-option" onClick={() => { setProfileVisibility('Standard'); setVisibilityOptions(!visibilityOptions); }}>
                                             <div className="flex flex-row flex-ai-c">
                                                 <span><b>Standard</b></span>
                                                 <span className="recommend">Recommended</span>
                                             </div>
                                             <span className="grey">Employers can view my Profile and resume and can contact me directly or via Find.</span>
                                         </li>
-                                        <li className="visibility-option">
+                                        <li className="visibility-option" onClick={() => { setProfileVisibility('Limited'); setVisibilityOptions(!visibilityOptions); }}>
                                             <span><b>Limited</b></span>
                                             <span className="grey">Employers can view my Profile, but not my resume and can only contact me via Find.</span>
                                         </li>
-                                        <li className="visibility-option">
+                                        <li className="visibility-option" onClick={() => { setProfileVisibility('Hidden'); setVisibilityOptions(!visibilityOptions); }}>
                                             <span><b>Hidden</b></span>
                                             <span className="grey">Employers cannot search for me. My Profile can only be seen by employers as part of my applications.</span>
                                         </li>
                                     </ul>
                                 </div>}
                             </div>
-                            <span className="small">For all settings, your Profile including any verified credentials will be sent to the employer with your applications.<a>Learn more about visibility.</a></span>
+                            <span className="small">For all settings, your Profile including any verified credentials will be sent to the employer with your applications. <a className="green" href="/">Learn more about visibility.</a></span>
                         </div>
                     </div>
                     <div className="action">
@@ -190,14 +254,14 @@ function Input(props) {
 
 function Select(props) {
 
-    const { label, placeholder } = props;
-    const [selected, setSelected] = useState('');
+    const { label, placeholder, value, onChange } = props;
 
     return (
         <div className="form-group flex flex-col">
             <label>{label}</label>
-            <select className="form-control" value={selected} onChange={(e) => setSelected(e.target.value)}>
-                <option value="">{placeholder}</option>
+            <select className="form-control" value={value} onChange={onChange} required>
+                <option value="" disabled>{placeholder}</option>
+                {props.children}
             </select>
             <span className="option-dropdown material-icons-outlined">expand_more</span>
         </div>

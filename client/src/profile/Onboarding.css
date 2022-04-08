@@ -105,16 +105,14 @@ input:checked + .slider:after {
 }
 
 .left {
-    transition: 0.6s;
-    left: 0px;
+    transform: translateX(-347.5px);
 }
 
 .current {
     background-color: var(--white);
     transition: 0.6s;
     position: absolute;
-    right: 52.5px;
-    /* left: 350px; */
+    right: 55px;
     bottom: 25px;
 }
 
@@ -159,7 +157,6 @@ select:focus + .option-dropdown, select:focus + .date-dropdown {
     position: absolute;
     bottom: 10px;
     right: 5px;
-    transition: 0.6s;
     z-index: -1;
 }
 
