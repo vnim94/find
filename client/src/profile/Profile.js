@@ -1,10 +1,16 @@
 import './Profile.css';
+import { useState } from 'react';
+import { VisibilityDropdown } from './Onboarding';
 
 function Profile() {
+
+    const [hidden, setHidden] = useState(false);
+    const [profileVisibility, setProfileVisibility] = useState('Standard');
+
     return  (
-        <div className="profile">
-            <div className="page flex flex-col">
-                <div className="profile-banner">
+        <div className="bg-lighter-grey profile">
+            <div className="profile-banner">
+                <div class="page">
                     <h1>Victor Nim</h1>
                     <div className="flex flex-col">
                         <span>All Melbourne</span>
@@ -12,12 +18,14 @@ function Profile() {
                     </div>
                     <button className="btn">Edit personal details</button>
                 </div>
-                <div className="flex flex-row">
+            </div>
+            <div className="page flex flex-col">
+                <div className="bg-lighter-grey flex flex-row">
                     <div className="profile-details">
-                        <div className="bg-light-grey profile-card">
+                        <div className="bg-pale-green profile-card">
                             <span className="medium">Create a new resume from your Find Profile</span>
                             <div className="flex flex-row flex-ai-c">
-                                <button className="btn">Get started</button>
+                                <button className="bg-dark-green white btn">Get started</button>
                                 <span>Or, upload your resume</span>
                             </div>
                         </div>
@@ -25,7 +33,7 @@ function Profile() {
                             <span className="medium">Personal summary</span>
                             <span>Add a personal summary to your profile as a way to introduce who you are</span>
                             <div>
-                                <button className="btn">Add summary</button>
+                                <button className="bg-white dark-green btn">Add summary</button>
                             </div>
                         </div>
                         <div className="profile-card">
@@ -34,14 +42,14 @@ function Profile() {
 
                             </div>
                             <div>
-                                <button className="btn">Add role</button>
+                                <button className="bg-white dark-green btn">Add role</button>
                             </div>
                         </div>
                         <div className="profile-card">
                             <span className="medium">Education</span>
                             <span>Tell employers about your education.</span>
                             <div>
-                                <button className="btn">Add education</button>
+                                <button className="bg-white dark-green btn">Add education</button>
                             </div>
                         </div>
                         <div className="profile-card">
@@ -64,32 +72,32 @@ function Profile() {
                                 </div>
                                 <div className="flex flex-col">
                                     <span>Building your Find Profile is now easier with skills suggested based on your roles.</span>
-                                    <span className="underline" href="/"><b>View suggested skills</b></span>
+                                    <span className="skills underline"><b>View suggested skills</b></span>
                                 </div>
                             </div>
                             <div></div>
                             <div>
-                                <button className="btn">Add skills</button>
+                                <button className="bg-white dark-green btn">Add skills</button>
                             </div>
                         </div>
                         <div className="profile-card">
                             <span className="medium">Languages</span>
                             <span>Add languages to appeal to more companies and employers.</span>
                             <div>
-                                <button className="btn">Add language</button>
+                                <button className="bg-white dark-green btn">Add language</button>
                             </div>
                         </div>
                         <div className="profile-card">
                             <span className="medium">Resume</span>
                             <div>
-                                <button className="btn">Add resume</button>
+                                <button className="bg-white dark-green btn">Add resume</button>
                             </div>
                         </div>
-                        <div className="border profile-card">
+                        <div className="profile-card">
                             <span className="medium">About your next role</span>
                             <table className="next-role">
                                 <tr>
-                                    <th className="border">Availability</th>
+                                    <th>Availability</th>
                                     <td>Not specified</td>
                                     <td>Add</td>
                                 </tr>
@@ -125,7 +133,7 @@ function Profile() {
                                 </tr>
                             </table>
                             <div>
-                                <button className="btn">Add or edit preferences</button>
+                                <button className="bg-white dark-green btn">Add or edit preferences</button>
                             </div>
                         </div>
                     </div>
@@ -134,28 +142,36 @@ function Profile() {
                             <span className="medium">Profile visibility</span>
                             <span>Your profile visibility setting controls if employers can approach you with job opportunities</span>
                             <div className="flex flex-col">
-                                <span><b>Standard</b></span>
-                                <div className="flex flex-row">
-                                    <span>Select</span>
-                                    <span className="material-icons-outlined">expand_more</span>
+                                <div className="profile-visibility relative flex flex-row flex-jc-sb">
+                                    <span><b>{profileVisibility}</b></span>
+                                    <div className="select-visibility flex flex-row" onClick={() => setHidden(!hidden)}>
+                                        <span>Select</span>
+                                        <span className={`${!hidden ? 'expand' : undefined} select-visibility-arrow material-icons-outlined`}>expand_more</span>
+                                    </div>
+                                    {!hidden && <VisibilityDropdown value={profileVisibility} setValue={setProfileVisibility} setHidden={setHidden}/>}
                                 </div>
                                 <span>For all settings, your Profile including any verified credentials will be sent to the employer with you applications.</span>
-                                <a href="/">Learn more about visibility</a>
+                                <a className="green" href="/">Learn more about visibility</a>
                             </div>
                         </div>
                         <div className="card">
                             <div>
                                 <span>Profile strength: <b>Silver</b></span>
                             </div>
-                            <hr></hr>
-                            <div>
-                                <span>Add a minimuim salary to appear in more searches by employers.</span>
-                                <button className="btn">Add salary</button>
-                                <button className="btn">Next tip</button>    
+                            <div className="flex flex-row flex-ai-c flex-jc-sb">
+                                <span className="grey material-icons-outlined">star</span>
+                                <div className="completion">
+                                    <div></div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="card">
-
+                            <hr></hr>
+                            <div className="flex flex-col">
+                                <span>Add a minimum salary to appear in more searches by employers.</span>
+                                <button className="bg-white dark-green btn">Add salary</button>
+                                <div className="flex flex-jc-c">
+                                    <span className="dark-green">Next tip</span>    
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

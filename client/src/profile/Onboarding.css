@@ -189,9 +189,13 @@ select:focus + .option-dropdown, select:focus + .date-dropdown {
 .visibility-option {
     cursor: pointer;
     display: flex; 
-    flex-direction: column;
+    flex-direction: row;
     list-style-type: none;
     padding: 15px;
+}
+
+.visibility-option:hover {
+    background-color: var(--lighter-grey);
 }
 
 .recommend {
@@ -204,4 +208,8 @@ select:focus + .option-dropdown, select:focus + .date-dropdown {
     padding-bottom: 2px;
     padding-left: 7.5px;
     padding-right: 7.5px;
+}
+
+.tick {
+    margin-right: 5px;
 }

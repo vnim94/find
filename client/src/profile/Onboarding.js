@@ -206,25 +206,7 @@ function Onboarding() {
                                     <span>{profileVisibility}</span>
                                 </div>
                                 <span className="material-icons-outlined">expand_more</span>
-                                {visibilityOptions && <div className="visibility-dropdown">
-                                    <ul>
-                                        <li className="visibility-option" onClick={() => { setProfileVisibility('Standard'); setVisibilityOptions(!visibilityOptions); }}>
-                                            <div className="flex flex-row flex-ai-c">
-                                                <span><b>Standard</b></span>
-                                                <span className="recommend">Recommended</span>
-                                            </div>
-                                            <span className="grey">Employers can view my Profile and resume and can contact me directly or via Find.</span>
-                                        </li>
-                                        <li className="visibility-option" onClick={() => { setProfileVisibility('Limited'); setVisibilityOptions(!visibilityOptions); }}>
-                                            <span><b>Limited</b></span>
-                                            <span className="grey">Employers can view my Profile, but not my resume and can only contact me via Find.</span>
-                                        </li>
-                                        <li className="visibility-option" onClick={() => { setProfileVisibility('Hidden'); setVisibilityOptions(!visibilityOptions); }}>
-                                            <span><b>Hidden</b></span>
-                                            <span className="grey">Employers cannot search for me. My Profile can only be seen by employers as part of my applications.</span>
-                                        </li>
-                                    </ul>
-                                </div>}
+                                {visibilityOptions && <VisibilityDropdown value={profileVisibility} setValue={setProfileVisibility} setHidden={setVisibilityOptions}/>}
                             </div>
                             <span className="small">For all settings, your Profile including any verified credentials will be sent to the employer with your applications. <a className="green" href="/">Learn more about visibility.</a></span>
                         </div>
@@ -264,6 +246,48 @@ function Select(props) {
                 {props.children}
             </select>
             <span className="option-dropdown material-icons-outlined">expand_more</span>
+        </div>
+    )
+}
+
+export function VisibilityDropdown(props) {
+
+    const { value, setValue, setHidden } = props;
+
+    return (
+        <div className="visibility-dropdown">
+            <ul>
+                <li className="visibility-option" onClick={() => { setValue('Standard'); setHidden(true); }}>
+                    <div className="tick">
+                        <span className={`${value !== 'Standard' && 'hidden'} material-icons-outlined`}>check</span>
+                    </div>
+                    <div className="flex flex-col">
+                        <div className="flex flex-row flex-ai-c">
+                            <span><b>Standard</b></span>
+                            <span className="recommend">Recommended</span>
+                        </div>
+                        <span className="grey">Employers can view my Profile and resume and can contact me directly or via Find.</span>
+                    </div>
+                </li>
+                <li className="visibility-option" onClick={() => { setValue('Limited'); setHidden(true); }}>
+                    <div className="tick">
+                        <span className={`${value !== 'Limited' && 'hidden'} material-icons-outlined`}>check</span>
+                    </div>
+                    <div className="flex flex-col">
+                        <span><b>Limited</b></span>
+                        <span className="grey">Employers can view my Profile, but not my resume and can only contact me via Find.</span>
+                    </div>
+                </li>
+                <li className="visibility-option" onClick={() => { setValue('Hidden'); setHidden(true); }}>
+                    <div className="tick">
+                        <span className={`${value !== 'Hidden' && 'hidden'} material-icons-outlined`}>check</span>
+                    </div>
+                    <div className="flex flex-col">
+                        <span><b>Hidden</b></span>
+                        <span className="grey">Employers cannot search for me. My Profile can only be seen by employers as part of my applications.</span>
+                    </div>
+                </li>
+            </ul>
         </div>
     )
 }

@@ -1,36 +1,114 @@
 .card {
+    background-color: var(--white);
     display: flex;
     flex-direction: column;
+    margin-top: 25px;
+    margin-right: 25px;
+    margin-bottom: 15px;
     padding: 15px;
+}
+
+.card > * + *, .card > * > * {
+    margin-top: 10px;
+}
+
+.card > * > .btn  {
+    border: 2px solid var(--dark-green);
+}
+
+.next-role {
+    margin-bottom: 10px;
 }
 
 .next-role > tr, .next-role > tr > td {
     text-align: left;
+    padding: 5px;
 }
 
 .profile {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .profile-card {
+    background-color: var(--white);
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
-    margin-top: 15px;
+    margin: 25px;
+    padding: 15px;
+}
+
+.profile-card > span {
     margin-bottom: 15px;
 }
 
+.profile-card > * > .btn {
+    border: 2px solid var(--dark-green);
+    margin-right: 15px;
+}
+
 .profile-banner {
-    background-color: var(--light-grey);
+    display: flex;
+    justify-content: center;
+    background-color: var(--light-green);
+    width: 100%;
+}
+
+.profile-banner > .page {
     padding: 25px;
+}
+
+.profile-banner > * > .btn {
+    background-color: transparent;
+    border: 2px solid var(--light-black);
+    color: var(--light-black);
+    font-weight: 600;
+}
+
+.profile-banner > * > div {
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 .profile-details {
-    padding: 25px;
-    width: 65%;
+    width: 70%;
 }
 
 .sidebar {
-    width: 35%;
+    width: 30%;
+}
+
+.colour-card > div {
+    padding: 5px;
+}
+
+.skills:hover {
+    cursor: pointer;
+}
+
+.profile-visibility > .visibility-dropdown {
+    top: 27.5px;
+}
+
+.select-visibility {
+    cursor: pointer;
+}
+
+.select-visibility-arrow {
+    transition: 0.6s;
+}
+
+.completion {
+    background-color: var(--lighter-grey);
+    border-radius: 15px;
+    height: 12.5px;
+    width: 80%;
+}
+
+.completion > div {
+    background-color: var(--grey);
+    border-radius: 15px;
+    height: 12.5px;
+    width: 50%;
 }

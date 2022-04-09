@@ -27,19 +27,22 @@ select {
 
 :root {
     --white: #ffffff;
+    --lighter-grey: #f6f7f3;
     --light-grey: #e5e8e1;
     --grey: #acaca7;
     --dark-grey: #848484;
     --light-black: #3c3c3c;
     --black: #2c2c2c;
+    --pale-green: #ecfad4;
     --light-green: #a4d454;
     --green: #80b24b;
+    --darker-green: #539142;
     --dark-green: #4c843c;
 }
 
 .page {
     position: relative;
-    min-width: 740px;
+    min-width: 940px;
     width: 940px;
 }
 
@@ -58,6 +61,7 @@ select {
 
 .medium {
     font-size: 18px;
+    font-weight: 500;
 }
 
 .large {
@@ -76,6 +80,14 @@ select {
 
 .white {
     color: var(--white);
+}
+
+.bg-lighter-grey {
+    background-color: var(--lighter-grey);
+}
+
+.lighter-grey {
+    background-color: var(--lighter-grey);
 }
 
 .bg-light-grey {
@@ -116,6 +128,10 @@ select {
 
 .black {
     color: var(--black);
+}
+
+.bg-pale-green {
+    background-color: var(--pale-green);
 }
 
 .bg-light-green {
@@ -245,10 +261,25 @@ label {
     text-decoration: none;
 }
 
+.btn:active {
+    transition: 0.5s;
+    transform: scale(0.95);
+}
+
 .btn[class~="bg-black"]:hover {
     background-color: var(--light-black);
 }
 
 .btn[class~="bg-light-grey"]:hover {
     background-color: var(--white);
+}
+
+.btn[class~="bg-dark-green"]:hover {
+    background-color: var(--darker-green);
+    border-color: var(--darker-green);
+}
+
+.btn[class~="bg-white"]:hover {
+    background-color: var(--dark-green);
+    color: var(--white);
 }
