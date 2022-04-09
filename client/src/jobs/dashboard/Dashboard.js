@@ -1,8 +1,9 @@
 import './Dashboard.css';
+import { useSelector } from 'react-redux';
 
 function Dashboard() {
 
-    const signedIn = true;
+    const user = useSelector(state => state.user.details);
     const recommended = [{
         title: 'Web Developer',
         company: 'Company'
@@ -22,8 +23,8 @@ function Dashboard() {
     }];
 
     return (
-        <div className={`${signedIn && 'signed-in'} dashboard flex flex-jc-c`}>
-            {!signedIn && 
+        <div className={`${user && 'signed-in'} dashboard flex flex-jc-c flex-ai-c`}>
+            {!user && 
             <div className="page flex flex-row flex-jc-c flex-ai-c">
                 <span className="material-icons-outlined">person_outlined</span>
                 <div className="medium">
@@ -32,7 +33,7 @@ function Dashboard() {
                     </span>
                 </div>
             </div>}
-            {signedIn && 
+            {user && 
             <div className="page flex flex-row flex-jc-sb">
                 <div className="tile">
                     <div className="tile-heading flex">

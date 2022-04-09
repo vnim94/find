@@ -1,19 +1,12 @@
 .dashboard {
-    height: 78px;
+    height: 125px;
     width: 100%;
 }
 
 .dashboard > .page {
-    border-left: 1px solid var(--light-grey);
-    border-right: 1px solid var(--light-grey);
     height: 85%;
     margin-top: 20px;
     margin-bottom: 20px;
-}
-
-.dashboard[class~="signed-in"] > .page {
-    border-left: 1px solid transparent;
-    border-right: 1px solid transparent;
 }
 
 .signed-in {
