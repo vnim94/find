@@ -26,6 +26,7 @@ function Form(props) {
                 setError(response.data.login.message);
             } else {
                 dispatch(setUser(response.data.login.user));
+                localStorage.setItem('token', response.data.login.token);
                 navigate('/', { replace: true });
             }
         }

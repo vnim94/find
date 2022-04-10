@@ -1,4 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from './profile/user.slice';
+import { getUser } from './profile/user.api';
+
 import Header from './header/Header';
 import Search from './jobs/search/Search';
 import Recent from './jobs/recent/Recent';
@@ -11,6 +16,19 @@ import Onboarding from './profile/Onboarding';
 import Profile from './profile/Profile';
 
 function App() {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        async function fetchUser() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const response = await getUser(token);
+                if (response.data.user.email) dispatch(setUser(response.data.user.user));
+            }
+        }
+        fetchUser();
+    }, [])
 
     return (
         <Router>
