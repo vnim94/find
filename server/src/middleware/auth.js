@@ -22,3 +22,7 @@ exports.authenticateToken = (req, res, next) => {
     });
     next();
 }
+
+exports.decodeToken = (token) => {
+    return jwt.decode(token);
+}

@@ -1,5 +1,5 @@
 const User = require('./user.model');
-const { authenticateUser } = require('../middleware/auth');
+const { authenticateUser, decodeToken } = require('../middleware/auth');
 const validate = require('../middleware/validator');
 
 const UserResolvers = {
@@ -20,7 +20,7 @@ const UserResolvers = {
         }
     },
     Query: {
-        user: async (_, { id, email } ) => {
+        user: async (_, { id, email, token } ) => {
             let user;
             if (id) { 
                 user = await User.findById(id);
@@ -28,6 +28,9 @@ const UserResolvers = {
             } else if (email) { 
                 user = await User.findOne({ email: email });
                 if (!user) return { __typename: 'NotFound', message: 'User not found', id: email }
+            } else if (token) {
+                user = await User.findById(decodeToken(token));
+                if (!user) return { __typename: 'NotFound', message: 'User not found', id: id }
             }
             return user;
         },

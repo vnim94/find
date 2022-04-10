@@ -42,7 +42,7 @@ const UserTypes = `
     union LoginResult = AuthPayload | InvalidCredentials
 
     type Query {
-        user(id: ID, email: String): UserResult
+        user(id: ID, email: String, token: String): UserResult
         users: [User]!
     }
 

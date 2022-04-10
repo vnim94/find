@@ -62,6 +62,20 @@ describe('user queries', () => {
         tester.test(true, query);
     })
 
+    test('user using token', () => {
+        const query = `
+            {
+                user(token: "abcd") {
+                    ... on User {
+                        firstName
+                        lastName
+                    }
+                }
+            }
+        `
+        tester.test(true, query);
+    })
+
     test('invalid user', () => {
         const query = `
             {
@@ -172,14 +186,17 @@ describe('user resolvers', () => {
     const database = require('../../util/memoryDatabase');
     const User = require('../../src/user/user.model');
     const bcrypt = require('bcryptjs');
+    const { createToken } = require('../../src/middleware/auth');
     let context;
     let user;
+    let token; 
 
     beforeAll(async () => {
         await database.connect();
         await database.seed();
         user = await User.findOne();
         context = { user: user._id.toString() };
+        token = createToken(user.id.toString());
     });
 
     afterAll(async () => { await database.disconnect() });
@@ -216,6 +233,33 @@ describe('user resolvers', () => {
             {
                 user(email: "${user.email}") {
                     ... on User {
+                        firstName
+                        lastName
+                        fullName
+                        email
+                    }
+                    ... on NotFound {
+                        message
+                        id
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.data.user).toBeTruthy();
+
+        const { firstName, lastName, fullName } = result.data.user
+        expect(firstName).toBe('John');
+        expect(lastName).toBe('Smith');
+        expect(fullName).toBe('John Smith');
+    })
+
+    test('user using token', async () => {
+        const query = `
+            {
+                user(token: "${token}") {
+                    ... on User {
+                        id
                         firstName
                         lastName
                         fullName
