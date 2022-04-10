@@ -10,7 +10,7 @@ function Header(props) {
     const [selectedRegion, setSelectedRegion] = useState('AU');
 
     const user = useSelector(state => state.user.details);
-    
+
     return (
         <header>
             <div className="sites flex flex-jc-c">

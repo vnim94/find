@@ -24,7 +24,7 @@ function App() {
             const token = localStorage.getItem('token');
             if (token) {
                 const response = await getUser(token);
-                if (response.data.user.email) dispatch(setUser(response.data.user.user));
+                if (response.data.user.email) dispatch(setUser(response.data.user));
             }
         }
         fetchUser();
