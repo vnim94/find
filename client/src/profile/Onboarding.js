@@ -110,7 +110,8 @@ function Onboarding() {
                         <Input label="First name" value={firstName} onChange={setFirstName}/>
                         <Input label="Last name" value={lastName} onChange={setLastName}/>
                     </div>
-                    <div className="line">
+                    <hr></hr>
+                    <div>
                         <span className="medium">Recent experience</span>
                         <div className="form-group flex flex-ai-c">
                             <div className="toggle-btn flex flex-ai-c">
@@ -178,13 +179,13 @@ function Onboarding() {
                                 </div>
                             </>
                         :
-                            <div className="colour-card flex flex-row flex-ai-c">
-                                <span className="material-icons-outlined">auto_awesome</span>
+                            <Callout icon="auto_awesome">
                                 <span>New to the industry? That's fine. You can always add your work experience later in your Profile.</span>
-                            </div>
+                            </Callout>
                         }
                     </div>
-                    <div className="line flex flex-col">
+                    <hr></hr>
+                    <div className="flex flex-col">
                         <Select label="Lives in" placeholder="Select location..." value={location} onChange={(e) => setLocation(e.target.value)}>
                             {locationOptions}
                         </Select>
@@ -197,7 +198,8 @@ function Onboarding() {
                             {subClassificationOptions}
                         </Select>
                     </div>
-                    <div className="line flex flex-col">
+                    <hr></hr>
+                    <div className="flex flex-col">
                         <div className="form-group flex flex-col">
                             <label>Profile visibility</label>
                             <span>Your profile visibility setting controls if employers can approach you with job opportunities</span>
@@ -221,7 +223,7 @@ function Onboarding() {
     )
 }
 
-function Input(props) {
+export function Input(props) {
 
     const { label, value, onChange } = props;
 
@@ -234,7 +236,7 @@ function Input(props) {
     )
 }
 
-function Select(props) {
+export function Select(props) {
 
     const { label, placeholder, value, onChange } = props;
 
@@ -246,6 +248,22 @@ function Select(props) {
                 {props.children}
             </select>
             <span className="option-dropdown material-icons-outlined">expand_more</span>
+        </div>
+    )
+}
+
+export function Callout(props) {
+
+    const { children, icon } = props;
+
+    return (
+        <div className="callout flex flex-row">
+            <div>
+                <span className="material-icons-outlined">{icon}</span>
+            </div>
+            <div className="flex flex-col">
+                {children}
+            </div>
         </div>
     )
 }

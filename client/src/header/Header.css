@@ -17,10 +17,6 @@
     text-decoration: underline;
 }
 
-header {
-    width: 100%;
-}
-
 .region {
     position: absolute;
     right: 0;

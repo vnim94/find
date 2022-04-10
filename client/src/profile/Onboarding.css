@@ -7,7 +7,7 @@
     text-decoration: underline;
 }
 
-.colour-card {
+.callout {
     background-color: var(--light-grey);
     border-left: 3px solid var(--light-black); 
     border-radius: 5px;
@@ -16,7 +16,7 @@
     width: 100%;
 }
 
-.colour-card > span + span {
+.callout > span + span {
     margin-left: 15px;
 }
 
@@ -29,11 +29,8 @@
 .onboarding > * > form {
     margin-top: 45px;
     margin-bottom: 45px;
+    padding: 15px;
     width: 55%;
-}
-
-.line {
-    border-top: 1px solid var(--light-grey);
 }
 
 .toggle-btn {
@@ -46,9 +43,10 @@
 
 .exp {
     cursor: pointer;
-    opacity: 0;
+    opacity: 00;
     width: 45px;
     height: 20px;
+    z-index: 0;
 }
 
 input:checked + .slider {
@@ -105,14 +103,14 @@ input:checked + .slider:after {
 }
 
 .left {
-    transform: translateX(-347.5px);
+    transform: translateX(-330px);
 }
 
 .current {
     background-color: var(--white);
     transition: 0.6s;
     position: absolute;
-    right: 55px;
+    right: 45px;
     bottom: 25px;
 }
 
@@ -132,11 +130,6 @@ input:checked + .slider:after {
 
 .name > div {
     width: 100%;
-}
-
-.name > div + div {
-    margin-left: 15px;
-    margin-bottom: 15px;
 }
 
 .option-dropdown {
@@ -171,7 +164,7 @@ select:focus + .option-dropdown, select:focus + .date-dropdown {
     bottom: 20px;
     right: 5px;
     transition: 0.6s;
-    z-index: -1;
+    z-index: 0;
 }
 
 .visibility-dropdown {
@@ -183,7 +176,7 @@ select:focus + .option-dropdown, select:focus + .date-dropdown {
     top: 60px;
     left: 0px;
     width: 100%;
-    z-index: 100;
+    z-index: 1;
 }
 
 .visibility-option {
@@ -191,7 +184,10 @@ select:focus + .option-dropdown, select:focus + .date-dropdown {
     display: flex; 
     flex-direction: row;
     list-style-type: none;
-    padding: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 7.5px;
+    padding-right: 7.5px
 }
 
 .visibility-option:hover {

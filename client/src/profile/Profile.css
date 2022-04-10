@@ -12,17 +12,36 @@
     margin-top: 10px;
 }
 
-.card > * > .btn  {
-    border: 2px solid var(--dark-green);
-}
-
 .next-role {
     margin-bottom: 10px;
 }
 
-.next-role > tr, .next-role > tr > td {
+.next-role > tbody > tr, .next-role > tbody > tr > td {
     text-align: left;
     padding: 5px;
+}
+
+.country-code {
+    position: absolute;
+    top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-right: 1px solid var(--grey);
+}
+
+.phone {
+    padding-top: 10px;
+    width: 100%;
+}
+
+.phone > * > .form-group {
+    padding-top: 0;
+}
+
+.phone-number {
+    margin-left: 10px;
+    position: relative;
+    width: 100%;
 }
 
 .profile {
@@ -44,7 +63,6 @@
 }
 
 .profile-card > * > .btn {
-    border: 2px solid var(--dark-green);
     margin-right: 15px;
 }
 
@@ -57,13 +75,6 @@
 
 .profile-banner > .page {
     padding: 25px;
-}
-
-.profile-banner > * > .btn {
-    background-color: transparent;
-    border: 2px solid var(--light-black);
-    color: var(--light-black);
-    font-weight: 600;
 }
 
 .profile-banner > * > div {
@@ -79,7 +90,7 @@
     width: 30%;
 }
 
-.colour-card > div {
+.callout > div {
     padding: 5px;
 }
 
@@ -100,7 +111,7 @@
 }
 
 .completion {
-    background-color: var(--lighter-grey);
+    background-color: var(--pale-grey);
     border-radius: 15px;
     height: 12.5px;
     width: 80%;
