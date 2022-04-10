@@ -1,7 +1,8 @@
 import './Header.css';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setUser } from '../profile/user.slice';
 
 function Header(props) {
 
@@ -10,6 +11,7 @@ function Header(props) {
     const [selectedRegion, setSelectedRegion] = useState('AU');
 
     const user = useSelector(state => state.user.details);
+    const [visible, setVisible] = useState(false);
 
     return (
         <header>
@@ -40,9 +42,10 @@ function Header(props) {
                     <nav className="flex flex-row">
                         <div className="banner-link">
                             {user ?
-                                <div className="flex flex-ai-c">
+                                <div className="user flex flex-ai-c" onClick={() => setVisible(!visible)}>
                                     <span>{user.firstName ? user.firstName : user.email.split('@')[0] }</span>
-                                    <span className="material-icons-outlined">expand_more</span>
+                                    <span className={`${visible && 'expand'} material-icons-outlined`}>expand_more</span>
+                                    {visible && <Profile />}
                                 </div>
                             :
                                 <>
@@ -88,6 +91,53 @@ function ListItem(props) {
             {id === 'career' && <img className="panda" src="/panda.png" alt="panda"></img>}
             <span>{text}</span>
         </li>
+    )
+}
+
+function Profile() {
+
+    const dispatch = useDispatch();
+    const logout = () => {
+        dispatch(setUser(null));
+        localStorage.removeItem('token');
+    }
+
+    return  (
+        <div className="profile-dropdown">
+            <ul>
+                <li>
+                    <a href="/profile">
+                        <span>Profile</span>
+                        <span className="green material-icons-outlined">person_outline</span>
+                    </a>
+                </li>
+                <li>
+                    <span>Saved Searches</span>
+                    <span className="green material-icons-outlined">favorite_border</span>
+                </li>
+                <li>
+                    <span>Saved Jobs</span>
+                    <span className="green material-icons-outlined">star_border</span>
+                </li>
+                <li>
+                    <span>Applied Jobs</span>
+                    <span className="green material-icons-outlined">check_circle</span>
+                </li>
+                <li>
+                    <span>Recommended Jobs</span>
+                    <span className="green material-icons-outlined">thumb_up</span>
+                </li>
+            </ul>
+            <hr></hr>
+            <ul>
+                <li>
+                    <span>Settings</span>
+                </li>
+                <li onClick={logout}>
+                    <span>Sign out</span>
+                </li>
+            </ul>
+        </div>
     )
 }
 
