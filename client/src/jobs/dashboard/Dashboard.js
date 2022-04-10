@@ -29,7 +29,7 @@ function Dashboard() {
                 <span className="material-icons-outlined">person_outlined</span>
                 <div className="medium">
                     <span>
-                        <a className="green banner-link" href="/">Sign in</a> or <a className="green banner-link" href="/">Register</a> to see your saved searches and saved jobs on all your devices
+                        <a className="green banner-link" href="/login">Sign in</a> or <a className="green banner-link" href="/register">Register</a> to see your saved searches and saved jobs on all your devices
                     </span>
                 </div>
             </div>}
