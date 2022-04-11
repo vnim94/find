@@ -1,11 +1,10 @@
 .company-search {
     background-color: var(--white);
     position: absolute;
-    top: 415px;
-    left: 130px;
-    width: 1000px;
+    top: -125px;
     padding: 30px;
     padding-left: 100px;
+    width: 100%;
 }
 
 .company-search-bar {

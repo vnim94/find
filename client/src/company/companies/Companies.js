@@ -1,9 +1,11 @@
 import './Companies.css';
+import CompanySearch from './CompanySearch';
 
 function Companies() {
     return (
         <div className="bg-light-grey companies">
             <div className="page">
+                <CompanySearch />
                 <div className="review-heading flex flex-row flex-jc-sb">
                     <span className="large">Popular employers</span>
                     <button className="bg-dark-green white btn">Write a Review</button>

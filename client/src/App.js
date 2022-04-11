@@ -16,7 +16,6 @@ import Onboarding from './profile/Onboarding';
 import Profile from './profile/Profile';
 import Directory from './company/directory/Directory';
 import Background from './company/background/Background';
-import CompanySearch from './company/search/CompanySearch';
 import Companies from './company/companies/Companies';
 
 function App() {
@@ -70,7 +69,6 @@ function App() {
                     <Route path="" element={<>
                         <Directory />
                         <Background />
-                        <CompanySearch />
                         <Companies />
                     </>} />
                 </Route>
