@@ -46,7 +46,7 @@ function Search() {
         <>
         <section className="search flex flex-jc-c">
             <div className="page flex flex-col flex-jc-sb flex-ai-c">
-                <div className="search-bar">
+                <div className="search-container">
                     <form className="flex flex-row flex-jc-sb">
                         <div className="what flex flex-col">
                             <label>What</label>

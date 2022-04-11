@@ -70,6 +70,7 @@ function App() {
                     <Route path="" element={<>
                         <Directory />
                         <Background />
+                        <CompanySearch />
                         <Companies />
                     </>} />
                 </Route>

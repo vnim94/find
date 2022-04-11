@@ -40,13 +40,13 @@
     width: 100%;
 }
 
-.search-bar {
+.search-container {
     padding-top: 50px;
     padding-bottom: 50px;
     width: 100%;
 }
 
-.search-bar > form {
+.search-container > form {
     margin-bottom: 5px;
     width: 100%;
 }
