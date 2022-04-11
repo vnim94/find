@@ -1,0 +1,72 @@
+.companies {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    width: 100%;
+}
+
+.company-logo {
+    height: 100px;
+    width: 125px;
+}
+
+.company-details > * {
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.tag-div {
+    width: 100%;
+}
+
+.tag {
+    background-color: var(--dark-green);
+    color: var(--white);
+    border-radius: 5px;
+    font-size: 14px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.tiles {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.tile {
+    background-color: var(--white);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    width: 220px;
+}
+
+.tile {
+    margin-bottom: 20px;
+}
+
+.tile:not(:nth-child(4n + 0)) {
+    margin-right: 20px;
+}
+
+.review-heading {
+    padding-top: 25px;
+    padding-bottom: 50px;
+}

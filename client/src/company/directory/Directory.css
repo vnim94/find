@@ -1,0 +1,14 @@
+.directory {
+    background-color: var(--light-green);
+    display: flex;
+    justify-content: center;
+}
+
+.directory > .page {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.directory-link {
+    color: var(--white);
+}

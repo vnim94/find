@@ -68,7 +68,7 @@ function Header(props) {
                         <ListItem id="jobs" type="tab" text="Job Search" selected={selectedPage} setSelected={setSelectedPage}/>
                         <ListItem id="profile" type="tab" text="Profile" selected={selectedPage} setSelected={setSelectedPage}/>
                         <ListItem id="career" type="tab" text="Career Advice" selected={selectedPage} setSelected={setSelectedPage}/>
-                        <ListItem id="reviews" type="tab" text="Company Reviews" selected={selectedPage} setSelected={setSelectedPage}/>
+                        <ListItem id="companies" type="tab" text="Company Reviews" selected={selectedPage} setSelected={setSelectedPage}/>
                     </ul>
                 </nav>
             </div>

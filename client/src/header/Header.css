@@ -73,7 +73,6 @@
 
 .selected > span, .selected > span:hover {
     color: var(--white);
-    cursor: default;
 }
 
 .pages {

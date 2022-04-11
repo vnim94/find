@@ -1,6 +1,7 @@
 .footer {
     display: flex;
     justify-content: center;
+    padding-top: 50px;
 }
 
 .column {
@@ -35,7 +36,7 @@
 }
 
 .terms {
-    padding-top: 50px;
+    padding-top: 35px;
     padding-bottom: 50px;
 }
 
