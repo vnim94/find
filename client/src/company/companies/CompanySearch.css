@@ -3,12 +3,11 @@
     position: absolute;
     top: -125px;
     padding: 30px;
-    padding-left: 100px;
     width: 100%;
 }
 
 .company-search-bar {
-    width: 60%;
+    width: 80%;
 }
 
 .company-search-bar > label {

@@ -1,4 +1,5 @@
 .footer {
+    background-color: var(--light-black);
     display: flex;
     justify-content: center;
     padding-top: 50px;
@@ -11,6 +12,7 @@
 }
 
 .column > span {
+    color: var(--light-grey);
     margin-bottom: 10px;
 }
 
@@ -51,4 +53,8 @@
 .terms > a, .terms > span {
     font-size: 15px;
     margin-right: 15px;
+}
+
+.terms > span {
+    color: var(--light-grey);
 }

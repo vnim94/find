@@ -2,7 +2,7 @@ import './Content.css';
 
 function Content() {
     return (
-        <div className="content">
+        <div className="bg-light-grey content">
             <div className="page flex flex-row flex-jc-sb">
                 <div className="bg-black light-grey jumbo-card">
                     <div className="flex flex-col">

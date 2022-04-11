@@ -17,6 +17,8 @@ import Profile from './profile/Profile';
 import Directory from './company/directory/Directory';
 import Background from './company/background/Background';
 import Companies from './company/companies/Companies';
+import CompanyContent from './company/content/Content';
+import CompanyShortcut from './company/shortcut/Shortcut';
 
 function App() {
 
@@ -70,6 +72,8 @@ function App() {
                         <Directory />
                         <Background />
                         <Companies />
+                        <CompanyContent />
+                        <CompanyShortcut />
                     </>} />
                 </Route>
             </Routes>
