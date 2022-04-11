@@ -14,7 +14,7 @@ import Footer from './footer/Footer';
 import Form from './profile/Form';
 import Onboarding from './profile/Onboarding';
 import Profile from './profile/Profile';
-import Directory from './company/directory/Directory';
+import Directory, { BrowseDirectory } from './company/directory/Directory';
 import Background from './company/background/Background';
 import Companies from './company/companies/Companies';
 import CompanyContent from './company/content/Content';
@@ -78,10 +78,15 @@ function App() {
                     </>} />
                     <Route path="browse-reviews" element={<>
                         <Directory search={true} />
-                        <Background />
-                        <Companies />
+                        <Background heading="Popular employers" subHeading="Learn what others are saying about the most popular companies in Australia"/>
+                        <Companies reviews={true} />
                         <Disclaimer />
                     </>} />
+                    <Route path="browse" element={<>
+                        <Directory search={true} bold={true}/>
+                        <Background heading="Company Directory Listing" />
+                        <BrowseDirectory />
+                    </>}/>
                 </Route>
             </Routes>
         </Router>

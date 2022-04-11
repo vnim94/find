@@ -2,3 +2,17 @@
     height: 325px;
     width: 100%;
 }
+
+.bg-img {
+    z-index: -1;
+}
+
+.smaller {
+    height: 225px;
+}
+
+.text-overlay {
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+}
