@@ -31,4 +31,15 @@ function Card(props) {
 
 }
 
+export function Disclaimer() {
+    return (
+        <div className="disclaimer bg-light-grey">
+            <div className="page">
+                <span className="grey">Company Reviews published on our site are the views and opinions of their authors and do not represent the views and opinions of Seek.com.au or its personnel. Seek.com.au does not verify the truth or accuracy of any reviews and does not adopt or endorse any of the comments posted. Seek.com.au posts reviews for what they are worth and for information purposes only to assist candidates to find employment.</span>
+            </div>
+        </div>
+    )
+}
+
+
 export default CompanyContent;

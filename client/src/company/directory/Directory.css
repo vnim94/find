@@ -4,11 +4,12 @@
     justify-content: center;
 }
 
-.directory > .page {
-    padding-top: 15px;
-    padding-bottom: 15px;
+.directory > * > .search-bar {
+    width: 1000px;
 }
 
 .directory-link {
     color: var(--white);
+    padding-top: 17.5px;
+    padding-bottom: 17.5px;
 }

@@ -19,6 +19,7 @@ import Background from './company/background/Background';
 import Companies from './company/companies/Companies';
 import CompanyContent from './company/content/Content';
 import CompanyShortcut from './company/shortcut/Shortcut';
+import { Disclaimer } from './company/content/Content';
 
 function App() {
 
@@ -74,6 +75,12 @@ function App() {
                         <Companies />
                         <CompanyContent />
                         <CompanyShortcut />
+                    </>} />
+                    <Route path="browse-reviews" element={<>
+                        <Directory search={true} />
+                        <Background />
+                        <Companies />
+                        <Disclaimer />
                     </>} />
                 </Route>
             </Routes>

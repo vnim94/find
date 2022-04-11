@@ -1,17 +1,17 @@
 import './Shortcut.css';
-import { SearchBar } from '../companies/CompanySearch';
+import { Search } from '../companies/CompanySearch';
 
 function CompanyShortcut() {
     return (
         <div className="bg-light-grey shortcuts">
             <div className="page flex flex-row">
                 <div className="shortcuts-search-bar">
-                    <SearchBar />
+                    <Search />
                 </div>
                 <div className="company-shortcut-links flex flex-col flex-jc-c">
-                    <a href="/">See all companies</a>
-                    <a href="/">Community guidelines</a>
-                    <a href="/">Information for employers</a>
+                    <a className="green" href="/">See all companies</a>
+                    <a className="green" href="/">Community guidelines</a>
+                    <a className="green" href="/">Information for employers</a>
                 </div>
             </div>
         </div>
