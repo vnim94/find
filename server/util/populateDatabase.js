@@ -3,7 +3,6 @@ require('dotenv').config();
 const { faker } = require('@faker-js/faker');
 const mongoose = require('mongoose');
 const async = require('async');
-const bcrypt = require('bcryptjs');
 
 const User = require('../src/user/user.model');
 
@@ -12,7 +11,7 @@ const database = mongoose.connection;
 database.once('open', () => console.log('[INFO] Successfully connected to database'));
 database.on('error', console.error.bind(console, 'Error connecting to database'));
 
-let locations = [
+const cities = [
     'Melbourne',
     'Sydney',
     'Brisbane',
@@ -22,9 +21,69 @@ let locations = [
     'Adelaide'
 ];
 
-function getRandomIndex(length) {
-    return Math.floor(Math.random() * length);
-}
+const suburbs = ['CBD', 'Inner Suburbs', 'Outer Suburbs']
+
+const companies = [
+    'Apple',
+    'SEEK Limited',
+    'Microsoft',
+    'Google',
+    'Netflix',
+    'Meta',
+    'Airbnb',
+    'Spotify',
+    'Reddit',
+]
+
+const workTypes = [
+    'Full time',
+    'Part time',
+    'Contract/Temp',
+    'Casual/Vacation'
+];
+
+const industries = [
+    'Accounting',
+    'Administration & Office Support',
+    'Advertising, Arts & Media',
+    'Banking & Financial Services',
+    'Call Centre & Customer Service',
+    'CEO & General Management',
+    'Community Services & Development',
+    'Construction',
+    'Consulting & Strategy',
+    'Design & Architecture',
+    'Education & Training',
+    'Engineering',
+    'Farming, Animals & Conservation',
+    'Government & Defence',
+    'Healthcare & Medical',
+    'Hospitality & Tourism',
+    'Human Resources & Recruitment',
+    'Information & Communication Technology',
+    'Insurance & Superannuation',
+    'Legal',
+    'Manufacturing, Transport & Logistics',
+    'Marketing & Communications',
+    'Mining, Resources & Energy',
+    'Real Estate & Property',
+    'Retail & Consumer Products',
+    'Sales',
+    'Science & Technology',
+    'Self Employment',
+    'Sport & Recreation',
+    'Trades & Services'
+];
+
+const professions = {
+    'Architects': ['Software Architect'],
+    'Business/System Analysts': ['Business Analyst'],
+    'Developers/Programmers': ['Software Developer', 'Software Engineer', 'Web Developer', 'Tech Lead'],
+    'Testing & Quality Assurance': ['QA Analyst', 'Test Engineer', 'Test Automation Lead'],
+    'Product Management & Development': ['Product Manager'],
+    'Network & Systems Administration': ['Network Engineer', 'System Administrator'],
+    'Database Development & Administration': ['Database Consultant', 'Database Administrator']
+};
 
 function createUser(firstName, lastName, email, location, password, phone, callback) {
 
@@ -54,6 +113,14 @@ function createUser(firstName, lastName, email, location, password, phone, callb
 
 }
   
+function createCompany(name, headquarters) {
+
+}
+
+function createJob() {
+
+}
+
 function populateUsers(callback) {
 
     let usersToCreate = [];
@@ -67,6 +134,18 @@ function populateUsers(callback) {
 
     async.series(usersToCreate, callback);
 
+}
+
+function populateCompanies(callback) {
+
+}
+
+function populateJobs(callback) {
+
+}
+
+function getRandomIndex(length) {
+    return Math.floor(Math.random() * length);
 }
 
 console.log('[INFO] Populating database...');
