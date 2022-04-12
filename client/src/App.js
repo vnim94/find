@@ -5,26 +5,34 @@ import { setUser } from './profile/user.slice';
 import { getUser } from './profile/user.api';
 
 import Header from './header/Header';
-import Search from './jobs/search/Search';
-import Recent from './jobs/recent/Recent';
-import Dashboard from './jobs/dashboard/Dashboard';
-import Content from './jobs/content/Content';
-import Shortcut from './jobs/shortcut/Shortcut';
+import Search from './jobSearch/search/Search';
+import Recent from './jobSearch/recent/Recent';
+import Dashboard from './jobSearch/dashboard/Dashboard';
+import Content from './jobSearch/content/Content';
+import Shortcut from './jobSearch/shortcut/Shortcut';
 import Footer from './footer/Footer';
 import Form from './profile/Form';
 import Onboarding from './profile/Onboarding';
 import Profile from './profile/Profile';
-import Directory, { BrowseDirectory } from './company/directory/Directory';
-import Background from './company/background/Background';
-import Companies from './company/companies/Companies';
-import CompanyContent from './company/content/Content';
-import CompanyShortcut from './company/shortcut/Shortcut';
-import { Disclaimer } from './company/content/Content';
+import Directory, { BrowseDirectory } from './companyReviews/directory/Directory';
+import Background from './companyReviews/background/Background';
+import Companies from './companyReviews/companies/Companies';
+import CompanyContent from './companyReviews/content/Content';
+import CompanyShortcut from './companyReviews/shortcut/Shortcut';
+import { Disclaimer } from './companyReviews/content/Content';
+import Jobs from './jobSearch/jobs/Jobs';
 
 function App() {
 
     const dispatch = useDispatch();
-    const jobs = 
+    const jobs =
+    <>
+        <Header page="jobs"/>
+        <Search expanded={true}/>
+        <Jobs />
+        <Footer />
+    </>
+    const landing = 
     <>
         <Header page="jobs"/>
         <Search />
@@ -63,7 +71,7 @@ function App() {
             <Routes>
                 <Route path="login" element={<Form type="sign-in"/>} />
                 <Route path="register" element={<Form type="register"/>} />
-                <Route exact path="/" element={jobs}/>
+                <Route exact path="/" element={landing}/>
                 <Route path="profile" element={profile}>
                     <Route path="" element={<Profile />} />
                     <Route path="onboarding" element={<Onboarding />}/>
@@ -88,6 +96,7 @@ function App() {
                         <BrowseDirectory />
                     </>}/>
                 </Route>
+                <Route path="/*" element={jobs}/>
             </Routes>
         </Router>
     )

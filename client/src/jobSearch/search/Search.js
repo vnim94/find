@@ -3,10 +3,10 @@ import Dropdown from './Dropdown';
 import Options from './Options';
 import { useState } from 'react';
 
-function Search() {
+function Search(props) {
 
     const [visible, setVisible] = useState(false);
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(props.expanded);
     const [classifications, setClassifications] = useState([]);
 
     const data = [

@@ -1,0 +1,44 @@
+.jobs {
+    display: flex;
+    justify-content: center;
+}
+
+.job-feed {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.job-card {
+    border: 1px solid var(--light-grey);
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.job-card > div {
+    margin-top: 10px;
+    margin-bottom: 10px;;
+}
+
+.job-search-result {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+.sort > span {
+    margin-right: 5px;
+}
+
+.sort-option {
+    cursor: pointer;
+}
+
+.sort-option > span {
+    transition: 0.6s;
+}
