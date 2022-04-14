@@ -1,16 +1,27 @@
 import './Jobs.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getJobs } from '../job.api';
+import getTimeElapsed from '../../helpers/getTimeElapsed';
 
 function Jobs() {
 
     const [sort, setSort] = useState(false);
+    const [jobs, setJobs] = useState();
+
+    useEffect(() => {
+        async function fetchJobs() {
+            const response = await getJobs();
+            setJobs(response.data.jobs);
+        }
+        fetchJobs();
+    }, [])
 
     return (
         <div className="jobs">
             <div className="page flex flex-row">
                 <div className="job-feed">
                     <div className="job-search-result">
-                        <span>114,525 jobs found</span>
+                        <span>{jobs && jobs.length} jobs found</span>
                         <div className="sort flex flex-row flex-ai-c">
                             <span>Sorted by</span>
                             <div className="sort-option flex flex-ai-c" onClick={() => setSort(!sort)}>
@@ -20,15 +31,11 @@ function Jobs() {
                         </div>
                     </div>
                     <div className="job-listings">
-                        <JobCard 
-                            role="Developer" 
-                            company="SEEK" 
-                            date="22h ago" 
-                            location={{ city: 'Melbourne', suburb: 'CBD & Inner Suburbs' }}
-                            classification={{ main: 'Information & Communication Technology', sub: 'Developers/Progammers' }} 
-                            description="Supportive of flexible working"
-                            headliner="Working in one of our cross-functional squads, you will make a significant technical contribution to the delivery of the various business priorities"
-                        />
+                        {jobs && jobs.map((job, index) => {
+                            let details = job;
+                            details.company = job.company.name;
+                            return <JobCard key={index} job={details} />
+                        })}
                     </div>
                 </div>
                 <div className="sidebar">
@@ -48,33 +55,43 @@ function Jobs() {
 
 function JobCard(props) {
 
-    const { role, company, date, location, classification, description, headliner, logo } = props;
+    const { title, headliner, summary, company, city, suburb, industry, profession, workType, added, logo } = props.job;
 
     return (
         <div className="job-card">
             <div className="flex flex-row flex-jc-sb">
                 <div className="flex flex-col">
-                    <a className="medium" href="/">{role}</a>
+                    <a className="medium" href="/">{title}</a>
                     <span>{company}</span>
                 </div>
-                <span>{date}</span>
+                <span>{getTimeElapsed(added, Date.now())}</span>
             </div>
             <div>
                 <div className="flex flex-row">
-                    <b>{location.city}</b>
-                    <span className="material-icons-outlined">navigate_next</span>
-                    <span>{location.suburb}</span>
+                    <b>{city}</b>
+                    {suburb && <>
+                        <span className="material-icons-outlined">navigate_next</span>
+                        <span>{suburb}</span>
+                    </>
+                    }
+                </div>
+                <div>
+                    <span>{workType}</span>
                 </div>
                 <div className="flex flex-row">
-                    <b>{classification.main}</b>
+                    <b>{industry}</b>
                     <span className="material-icons-outlined">navigate_next</span>
-                    <span>{classification.sub}</span>
+                    <span>{profession}</span>
                 </div>
             </div>
-            <div className="description">
-                {description}
-            </div>
-            <div className="headliner">
+            {summary && <div>
+                <ul className="summary">
+                {summary.split('\n').map((line, index) => {
+                    return <li>{line}</li>
+                })}
+                </ul>
+            </div>}
+            <div className="grey">
                 <span>{headliner}</span>
             </div>
             <div className="flex flex-row flex-jc-sb">

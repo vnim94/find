@@ -74,7 +74,7 @@ const getUserRequest = (token) => `
     }
 `
 
-const request = async (req) => {
+export const request = async (req) => {
     const response = await fetch(env.API, { 
         mode: 'cors',
         method: 'POST',
