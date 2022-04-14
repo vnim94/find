@@ -188,12 +188,15 @@ function populateJobs(callback) {
         let profession = Object.keys(professions)[getRandomIndex(Object.keys(professions).length)];
 
         let details = {
-            description: faker.lorem.sentence(),
+            title: professions[profession][getRandomIndex(professions[profession].length)],
+            headliner: faker.lorem.sentence(),
+            summary: faker.lorem.lines(3),
+            description: faker.lorem.paragraphs(3),
             company: companies[getRandomIndex(companies.length)],
             city: cities[getRandomIndex(cities.length)],
+            suburb: suburbs[getRandomIndex(suburbs.length)],
             industry: 'Information & Communication Technology',
             profession: profession,
-            title: professions[profession][getRandomIndex(professions[profession].length)],
             workType: workTypes[getRandomIndex(workTypes.length)]
         }
         jobsToCreate.push(function(callback) { createJob(details, callback) });
