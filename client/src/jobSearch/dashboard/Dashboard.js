@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 function Dashboard() {
 
-    const user = useSelector(state => state.user.details);
+    const user = {} //useSelector(state => state.user.details);
     const recommended = [{
         title: 'Web Developer',
         company: 'Company'
@@ -35,40 +35,40 @@ function Dashboard() {
             </div>}
             {user && 
             <div className="page flex flex-row flex-jc-sb">
-                <div className="tile">
-                    <div className="tile-heading flex">
+                <div className="dashboard-tile">
+                    <div className="dashboard-tile-heading flex">
                         <span className="dark-green material-icons-outlined">thumb_up</span>
                         <span className="medium dark-green">50</span>
                         <span className="medium">Recommended jobs</span>
                     </div>
                     {recommended.map((job,index) => { 
-                        return <div key={index} className="tile-item flex flex-col">
+                        return <div key={index} className="dashboard-tile-item flex flex-col">
                             <a href="/">{job.title}</a>
                             <span>{job.company}</span>
                         </div>
                     })}
                 </div>
-                <div className="tile">
-                    <div className="tile-heading flex">
+                <div className="dashboard-tile">
+                    <div className="dashboard-tile-heading flex">
                         <span className="green material-icons-outlined">star_outline</span>
                         <span className="medium green">1</span>
                         <span className="medium">Saved job</span>
                     </div>
                     {saved.map((job,index) => { 
-                        return <div key={index} className="tile-item flex flex-col">
+                        return <div key={index} className="dashboard-tile-item flex flex-col">
                             <a href="/">{job.title}</a>
                             <span>{job.company}</span>
                         </div>
                     })}
                 </div>
-                <div className="tile">
-                    <div className="tile-heading flex">
+                <div className="dashboard-tile">
+                    <div className="dashboard-tile-heading flex">
                         <span className="light-green material-icons-outlined">favorite_border</span>
                         <span className="medium green">0</span>
                         <span className="medium">Saved search</span>
                     </div>
                     {searches.map((search,index) => { 
-                        return <div key={index} className="tile-item flex flex-row flex-jc-sa">
+                        return <div key={index} className="dashboard-tile-item flex flex-row flex-jc-sa">
                             <span>{search.new} new</span>
                             <a href="/">{search.what} in {search.where}</a>
                         </div>

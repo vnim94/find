@@ -2,7 +2,7 @@ const CompanyTypes = `
     type Company {
         id: ID!
         name: String!
-        headquarters: String!
+        headquarters: String
         overview: String
         averageRating: Float
         size: String
