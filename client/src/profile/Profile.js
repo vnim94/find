@@ -1,9 +1,12 @@
 import './Profile.css';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { VisibilityDropdown, Input, Select, Callout } from './Onboarding';
 import { Error } from './Form';
 
 function Profile() {
+
+    const user = useSelector(state => state.user.details);
 
     const newValue = (value='') => {
         return {
@@ -37,10 +40,10 @@ function Profile() {
         <div className="bg-pale-grey profile">
             <div className="profile-banner">
                 <div className="page">
-                    <h1>Victor Nim</h1>
+                    <h1>{user.firstName ? user.fullName : user.email.split('@')[0]}</h1>
                     <div className="flex flex-col">
-                        <span>All Melbourne</span>
-                        <span>victor.nim01@gmail.com</span>
+                        <span>{user.location}</span>
+                        <span>{user.email}</span>
                     </div>
                     <button className="bg-light-green black btn-outline btn" onClick={() => setEditPersonalDetails(true)}>Edit personal details</button>
                 </div>

@@ -63,6 +63,7 @@ const getUserRequest = (token) => `
                 id
                 firstName
                 lastName
+                fullName
                 email
                 location
                 phone
