@@ -38,7 +38,7 @@ const UserTypes = `
         message: String!
     }
 
-    union UserResult = User | NotFound | UserExists | InvalidUserInput
+    union UserResult = User | NotFound | UserExists | InvalidUserInput | AuthPayload
     union LoginResult = AuthPayload | InvalidCredentials
 
     type Query {

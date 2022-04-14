@@ -1,5 +1,5 @@
 const User = require('./user.model');
-const { authenticateUser, decodeToken } = require('../middleware/auth');
+const { authenticateUser, createToken, decodeToken } = require('../middleware/auth');
 const validate = require('../middleware/validator');
 
 const UserResolvers = {
@@ -9,6 +9,7 @@ const UserResolvers = {
             if (_.__typename === 'InvalidUserInput') return 'InvalidUserInput';
             if (_.__typename === 'NotFound') return 'NotFound';
             if (_.__typename === 'UserExists') return 'UserExists';
+            if (_.__typename === 'AuthPayload') return 'AuthPayload';
             return null;
         }
     },
@@ -48,7 +49,8 @@ const UserResolvers = {
             
             if (await User.findOne({ email: args.email })) return { __typename: 'UserExists', message: 'User already exists', email: args.email };
             
-            return await User.create(args);
+            const newUser = await User.create(args);
+            return { __typename: 'AuthPayload', token: createToken(newUser._id.toString()), user: newUser }
         },
         login: async (_, args) => {
             const authPayload = await authenticateUser(args.email, args.password);

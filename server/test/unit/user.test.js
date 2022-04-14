@@ -323,20 +323,21 @@ describe('user resolvers', () => {
         const register = `
             mutation {
                 register(email: "bbrown@email.com", password: "password") {
-                    ... on User {
-                        firstName
-                        lastName
-                        email
-                        location
+                    ... on AuthPayload {
+                        token
+                        user {
+                            firstName
+                            lastName
+                            email
+                            location
+                        }
                     }
                 }
             }
         `
         const result = await tester.graphql(register, {}, {}, {})
-        expect(result.data.register).toBeTruthy();
-        
-        const { email } = result.data.register
-        expect(email).toBe('bbrown@email.com');
+        expect(result.data.register.token).toBeTruthy();
+        expect(result.data.register.user.email).toBe('bbrown@email.com');
 
         const newUser = await User.findOne({ email: "bbrown@email.com" });
         expect(newUser).toBeTruthy();
