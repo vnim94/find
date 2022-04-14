@@ -13,33 +13,33 @@
     height: 308px;
 }
 
-.tile {
+.dashboard-tile {
     width: 100%;
 }
 
-.tile + .tile {
+.dashboard-tile + .dashboard-tile {
     border-left: 1px solid var(--light-grey);
     padding-left: 15px;
 }
 
-.tile-heading {
+.dashboard-tile-heading {
     padding-bottom: 15px;
 }
 
-.tile-heading > span {
+.dashboard-tile-heading > span {
     margin-right: 5px;
 }
 
-.tile-item {
+.dashboard-tile-item {
     font-size: 14px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-.tile-item > a {
+.dashboard-tile-item > a {
     color: var(--green);
 }
 
-.tile-item > a:hover {
+.dashboard-tile-item > a:hover {
     text-decoration: underline;
 }
