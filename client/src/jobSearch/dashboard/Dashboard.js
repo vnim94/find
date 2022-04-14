@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 function Dashboard() {
 
-    const user = {} //useSelector(state => state.user.details);
+    const user = useSelector(state => state.user.details);
     const recommended = [{
         title: 'Web Developer',
         company: 'Company'
