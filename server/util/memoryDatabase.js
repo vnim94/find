@@ -39,9 +39,12 @@ exports.seed = async () => {
 
     await Job.create({
         title: 'burger flipper',
+        headliner: 'great opportunity to flip stuff',
+        summary: 'this is a job for flipping burgers',
         description: 'flip stuff',
         company: company._id,
         city: 'Melbourne',
+        suburb: 'CBD',
         industry: 'Fast Food',
         profession: 'Burger Flipper',
         workType: 'Full time'

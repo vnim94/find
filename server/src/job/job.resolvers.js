@@ -34,11 +34,14 @@ const JobResolvers = {
             const errors = validator.job(args);
             if (Object.keys(errors).length > 0) return { __typename: 'InvalidJobInput', message: 'Invalid input', errors: errors }
 
-            const { id, title, description, city, industry, profession, workType } = args;
+            const { id, title, headliner, summary, description, city, suburb, industry, profession, workType } = args;
             return await Job.findByIdAndUpdate(id, {
                 title: title,
+                headliner: headliner,
+                summary: summary,
                 description: description,
                 city: city,
+                suburb: suburb,
                 industry: industry,
                 profession: profession,
                 workType: workType

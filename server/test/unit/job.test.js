@@ -39,6 +39,7 @@ describe('job query resolvers', () => {
                 job(id: "${job._id.toString()}") {
                     ... on Job {
                         title
+                        headliner
                         description
                         company {
                             name
@@ -49,6 +50,7 @@ describe('job query resolvers', () => {
         `
         const result = await tester.graphql(query, {}, {}, {});
         expect(result.data.job.title).toBe('burger flipper');
+        expect(result.data.job.headliner).toBe('great opportunity to flip stuff');
         expect(result.data.job.description).toBe('flip stuff');
         expect(result.data.job.company.name).toBe('McDonalds');
     })
@@ -92,10 +94,11 @@ describe('job mutation resolvers', () => {
     test('createJob', async () => {
         const createJob = `
             mutation {
-                createJob(title: "manager", description: "manage stuff", company: "${company._id.toString()}", city: "Melbourne", industry: "Fast Food", profession: "Management", workType: "Full time") {
+                createJob(title: "manager", headliner: "great chance to manage", description: "manage stuff", company: "${company._id.toString()}", city: "Melbourne", industry: "Fast Food", profession: "Management", workType: "Full time") {
                     ... on Job {
                         id
                         title
+                        headliner
                         description
                         company {
                             name
@@ -115,11 +118,12 @@ describe('job mutation resolvers', () => {
     test('createJob input errors', async () => {
         const createJob = `
             mutation {
-                createJob(title: "", description: "", company: "${company._id.toString()}", city: "", industry: "", profession: "", workType: "") {
+                createJob(title: "", headliner: "", description: "", company: "${company._id.toString()}", city: "", industry: "", profession: "", workType: "") {
                     ... on InvalidJobInput {
                         message
                         errors {
                             title
+                            headliner
                             description
                             city
                             industry
@@ -131,7 +135,6 @@ describe('job mutation resolvers', () => {
             }
         `
         const result = await tester.graphql(createJob, {}, context, {});
-        console.log(result.data.createJob.errors);
         expect(result.data.createJob.message).toBe('Invalid input');
         expect(result.data.createJob.errors).toBeTruthy();
     })
@@ -139,9 +142,10 @@ describe('job mutation resolvers', () => {
     test('updateJob', async () => {
         const updateJob = `
             mutation {
-                updateJob(id: "${job._id.toString()}", title: "updated", description: "updated", city: "Sydney", industry: "FMCG", profession: "Executive", workType: "Part time") {
+                updateJob(id: "${job._id.toString()}", title: "updated", headliner: "updated" description: "updated", city: "Sydney", industry: "FMCG", profession: "Executive", workType: "Part time") {
                     ... on Job {
                         title
+                        headliner
                         description
                         city
                         industry

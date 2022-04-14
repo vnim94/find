@@ -23,6 +23,8 @@ const cities = [
     'Adelaide'
 ];
 
+const suburbs = ['CBD', 'Inner Suburbs', 'Inner West Suburbs', 'Inner East Suburbs', 'Western Suburbs', 'Eastern Suburbs', 'Southern Suburbs', 'Northern Suburbs']
+
 const companyNames = [
     'Apple',
     'SEEK Limited',

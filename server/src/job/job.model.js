@@ -7,6 +7,17 @@ const JobSchema = Schema({
         maxLength: 30,
         required: true
     },
+    headliner: {
+        type: String,
+        minLength: 5,
+        maxLength: 100,
+        required: true
+    },
+    summary: {
+        type: String,
+        minLength: 5,
+        maxLength: 250
+    },
     description: {
         type: String,
         minLength: 5,
@@ -21,6 +32,9 @@ const JobSchema = Schema({
     city: {
         type: String,
         required: true
+    },
+    suburb: {
+        type: String
     },
     industry: {
         type: String,

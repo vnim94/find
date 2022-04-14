@@ -52,12 +52,18 @@ exports.company = (company) => {
 
 exports.job = (job) => {
     const errors = {}
-    const { title, description, city, industry, profession, workType } = job;
+    const { title, headliner, description, city, industry, profession, workType } = job;
    
     if (validator.isEmpty(title)) {
         errors['title'] = 'Title must be provided';
     } else if (!validator.isLength(title, { min: 5, max: 30 })) {
         errors['title'] = 'Title must be between 5 and 30 characters';
+    }
+
+    if (validator.isEmpty(headliner)) {
+        errors['headliner'] = 'Headliner must be provided';
+    } else if (!validator.isLength(description, { min: 5, max: 100 })) {
+        errors['headliner'] = 'Headliner must between 5 and 100 characters';
     }
 
     if (validator.isEmpty(description)) {

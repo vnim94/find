@@ -2,9 +2,12 @@ const JobTypes = `
     type Job {
         id: ID!
         title: String!
+        headliner: String!
+        summary: String
         description: String!
         company: Company!
         city: String!
+        suburb: String
         industry: String!
         profession: String!
         workType: String!
@@ -15,9 +18,12 @@ const JobTypes = `
 
     type JobInputErrors {
         title: String
+        headliner: String
+        summary: String
         description: String
         company: String
         city: String
+        suburb: String
         industry: String
         profession: String
         workType: String
@@ -36,8 +42,8 @@ const JobTypes = `
     }
 
     type Mutation {
-        createJob(title: String!, description: String!, company: ID!, city: String!, industry: String!, profession: String!, workType: String!): JobResult
-        updateJob(id: ID!, title: String, description: String, city: String, industry: String, profession: String, workType: String): JobResult
+        createJob(title: String!, headliner: String!, summary: String, description: String!, company: ID!, city: String!, suburb: String, industry: String!, profession: String!, workType: String!): JobResult
+        updateJob(id: ID!, title: String, headliner: String, summary: String, description: String, city: String, suburb: String, industry: String, profession: String, workType: String): JobResult
         closeJob(id: ID!): JobResult
         deleteJob(id: ID!): JobResult
     }
