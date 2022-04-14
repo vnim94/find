@@ -64,7 +64,7 @@ function App() {
             }
         }
         fetchUser();
-    }, [])
+    }, [dispatch])
 
     return (
         <Router>

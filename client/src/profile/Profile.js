@@ -32,8 +32,6 @@ function Profile() {
     const [phone, setPhone] = useState(newValue());
 
     const [jobTitle, setJobTitle] = useState(newValue());
-    const [company, setCompany] = useState(newValue());
-    const [started, setStarted] = useState(newValue());
 
     return  (
         <div className="bg-pale-grey profile">

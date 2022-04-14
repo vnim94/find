@@ -39,7 +39,7 @@ function Tile() {
                 <span className="tag">hiring</span>
             </div>
             <div>
-                <img className="company-logo" src="/mcdonalds.jpg"></img>
+                <img className="company-logo" src="/mcdonalds.jpg" alt="company-logo"></img>
             </div>
             <div className="company-details">
                 <span><b>McDonald's</b></span>

@@ -23,7 +23,7 @@ function Card(props) {
 
     return (
         <div className="content-card">
-            <img src={img}></img>
+            <img src={img} alt="content-img"></img>
             <span><b>{heading}</b></span>
             <span className="center-text">{text}</span>
         </div>

@@ -84,7 +84,7 @@ function JobCard(props) {
                         <span>Save</span>
                     </div>
                 </div>
-                <img className="company-logo" src="/mcdonalds.jpg"></img>
+                <img className="company-logo" src={logo} alt="company-logo"></img>
             </div>
         </div>
     )
