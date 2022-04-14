@@ -37,6 +37,7 @@ function Form(props) {
                 setError(response.data.register.message);
             } else {
                 dispatch(setUser(response.data.register.user));
+                localStorage.setItem('token', response.data.register.token);
                 navigate('/profile/onboarding');
             }
         }
@@ -105,7 +106,7 @@ function Form(props) {
                             </div>
                         </div>
                         {error && <div>
-                            <span className="error-msg">{error}. Please try again</span>
+                            <span className="red small">{error}. Please try again</span>
                         </div>}
                         {type === 'register' && <div>
                             <span>By registering you agree to Find's <a className="green" href="/">Privacy Statement</a></span>
