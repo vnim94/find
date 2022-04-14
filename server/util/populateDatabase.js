@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const async = require('async');
 
 const User = require('../src/user/user.model');
+const Company = require('../src/company/company.model');
+const Job = require('../src/job/job.model');
 
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true });
 const database = mongoose.connection;
@@ -21,9 +23,7 @@ const cities = [
     'Adelaide'
 ];
 
-const suburbs = ['CBD', 'Inner Suburbs', 'Outer Suburbs']
-
-const companies = [
+const companyNames = [
     'Apple',
     'SEEK Limited',
     'Microsoft',
@@ -34,6 +34,8 @@ const companies = [
     'Spotify',
     'Reddit',
 ]
+
+let companies = [];
 
 const workTypes = [
     'Full time',
@@ -113,11 +115,38 @@ function createUser(firstName, lastName, email, location, password, phone, callb
 
 }
   
-function createCompany(name, headquarters) {
+function createCompany(name, callback) {
+
+    let company = new Company({ name: name });
+
+    company.save((err) => {
+        if (err) {
+            console.log(`[ERROR] Error creating company: ${company.name} - ${err}`);
+            callback(err, null);
+            return;
+        }
+
+        console.log(`[INFO] New company created: ${company.name}`);
+        companies.push(company);
+        callback(null, company);
+    })
 
 }
 
-function createJob() {
+function createJob(details, callback) {
+
+    let job = new Job(details);
+
+    job.save((err) => {
+        if (err) {
+            console.log(`[ERROR] Error creating job: ${job.title}-${job.company.name} - ${err}`);
+            callback(err, null);
+            return;
+        }
+
+        console.log(`[INFO] New job created: ${job.title}-${job.company.name}`);
+        callback(null, job);
+    })
 
 }
 
@@ -129,7 +158,7 @@ function populateUsers(callback) {
         let firstName = faker.name.firstName();
         let lastName = faker.name.lastName();
         let email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@email.com`
-        usersToCreate.push(function(callback) { createUser(firstName, lastName, email, locations[getRandomIndex(locations.length)], 'password', faker.phone.phoneNumber(),callback) });
+        usersToCreate.push(function(callback) { createUser(firstName, lastName, email, cities[getRandomIndex(cities.length)], 'password', faker.phone.phoneNumber(), callback) });
     }
 
     async.series(usersToCreate, callback);
@@ -138,9 +167,37 @@ function populateUsers(callback) {
 
 function populateCompanies(callback) {
 
+    let companiesToCreate = [];
+
+    companyNames.forEach(company => {
+        companiesToCreate.push(function(callback) { createCompany(company, callback) });
+    })
+
+    async.series(companiesToCreate, callback);
+
 }
 
 function populateJobs(callback) {
+
+    let jobsToCreate = [];
+
+    for (let i = 0; i < 15; i++) {
+
+        let profession = Object.keys(professions)[getRandomIndex(Object.keys(professions).length)];
+
+        let details = {
+            description: faker.lorem.sentence(),
+            company: companies[getRandomIndex(companies.length)],
+            city: cities[getRandomIndex(cities.length)],
+            industry: 'Information & Communication Technology',
+            profession: profession,
+            title: professions[profession][getRandomIndex(professions[profession].length)],
+            workType: workTypes[getRandomIndex(workTypes.length)]
+        }
+        jobsToCreate.push(function(callback) { createJob(details, callback) });
+    }
+
+    async.series(jobsToCreate, callback);
 
 }
 
@@ -150,7 +207,7 @@ function getRandomIndex(length) {
 
 console.log('[INFO] Populating database...');
 
-async.series([populateUsers], (err) => {
+async.series([populateUsers, populateCompanies, populateJobs], (err) => {
 
     if (err) {
         console.log(`[ERROR] ${err}`);

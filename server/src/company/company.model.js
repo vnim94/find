@@ -9,7 +9,6 @@ const CompanySchema = Schema({
     },
     headquarters: {
         type: String,
-        required: true
     },
     overview: {
         type: String
