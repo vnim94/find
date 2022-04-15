@@ -14,7 +14,7 @@
     height: 24px;
     width: 24px;
     position: absolute;
-    left: 25px;
+    left: 20px;
 }
 
 .dropdown {
@@ -23,7 +23,7 @@
     border-radius: 5px;
     box-shadow: 0 0 5px var(--grey);
     position: absolute;
-    top: 125px;
+    top: 130px;
     left: 280px;
     height: 385px;
     width: 420px;
@@ -39,10 +39,26 @@
 }
 
 .item {
+    position: relative;
+    width: 100%;
+}
+
+.item-container {
     width: 100%;
 }
 
 .item-text {
     width: 80%;
     overflow-wrap: break-word;
+}
+
+.sub-items {
+    width: 100%;
+    padding-left: 30px;
+}
+
+.sub-item-divider {
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

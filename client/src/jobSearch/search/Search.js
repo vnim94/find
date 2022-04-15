@@ -7,40 +7,130 @@ function Search(props) {
 
     const [visible, setVisible] = useState(false);
     const [expanded, setExpanded] = useState(props.expanded);
-    const [classifications, setClassifications] = useState([]);
+    const [industries, setIndustries] = useState([]);
 
-    const data = [
-        { classification: 'Accounting', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Administration & Office Support', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Advertising, Arts & Media', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Banking & Financial Services', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Call Centre & Customer Service', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'CEO & General Management', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Community Services & Development', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Construction', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Consulting & Strategy', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Design & Architecture', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Education & Training', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Engineering', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Farming, Animals & Conservation', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Government & Defence', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Healthcare & Medical', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Hospitality & Tourism', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Human Resources & Recruitment', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Information & Communication Technology', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Insurance & Superannuation', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Legal', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Manufacturing, Transport & Logistics', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Marketing & Communications', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Mining, Resources & Energy', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Real Estate & Property', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Retail & Consumer Products', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Sales', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Science & Technology', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Self Employment', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Sport & Recreation', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) },
-        { classification: 'Trades & Services', jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }) }
-    ];
+    const data = { 
+        'Accounting': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Accounts Officers/Clerks', 'Accounts Payable']
+        }, 
+        'Administration & Office Support': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Administrative Assistant', 'Client & Sales Administration'] 
+        },
+        'Advertising, Arts & Media': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Agency Account Management', 'Art Direction'] 
+        },
+        'Banking & Financial Services': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Account & Relationship Management', 'Analysis & Reporting'] 
+        },
+        'Call Centre & Customer Service': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Collections', 'Customer Service - Call Center'] 
+        },
+        'CEO & General Management': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Board Appointments', 'CEO'] 
+        },
+       'Community Services & Development': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Aged & Disability Support', 'Child Welfare, Youth & Family Services'] 
+        },
+        'Construction': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Contracts Management', 'Estimating'] 
+        },
+        'Consulting & Strategy': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Analysts', 'Corporate Development'] 
+        },
+        'Design & Architecture': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Architectural Drafting', 'Architecture'] 
+        },
+        'Education & Training': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Childcare & Outside School Hours Care', 'Library Services & Information Management'] 
+        },
+        'Engineering': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Aerospace Engineering', 'Automative Engineering'] 
+        },
+        'Farming, Animals & Conservation': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Agronomy & Farm Services', 'Conservation, Parks & Wildlife'] 
+        },
+        'Government & Defence': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Air Force', 'Army'] 
+        },
+        'Healthcare & Medical': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Ambulance/Paramedics', 'Chiropractic & Osteopathic'] 
+        },
+        'Hospitality & Tourism': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Airlines', 'Bar & Beverage Staff'] 
+        },
+        'Human Resources & Recruitment': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Consulting & Generalist HR', 'Industrial & Employee Relations'] 
+        },
+        'Information & Communication Technology': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Architects', 'Business/System Analysts'] 
+        },
+        'Insurance & Superannuation': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Actuarial', 'Assessment'] 
+        },
+        'Legal': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Banking & Finance Law', 'Construction Law'] 
+        },
+        'Manufacturing, Transport & Logistics': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Analysis & Reporting', 'Assembly & Process Work'] 
+        },
+        'Marketing & Communications': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Brand Management', 'Digital & Search Marketing'] 
+        },
+        'Mining, Resources & Energy': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Analysis & Reporting', 'Health, Safety & Environment'] 
+        },
+        'Real Estate & Property': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Administration', 'Analysts'] 
+        },
+        'Retail & Consumer Products': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Buying', 'Management - Area/Multi-site'] 
+        },
+        'Sales': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Account & Relationship Management', 'Analysis & Reporting'] 
+        },
+        'Science & Technology': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Biological & Biomedical Sciences', 'Self Employment'] 
+        },
+        'Self Employment': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: [] 
+        },
+        'Sport & Recreation': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Coaching & Instruction', 'Fitness & personal Training'] 
+        },
+        'Trades & Services': {
+            jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
+            professions: ['Air Conditioning & Refigeration', 'Automotive Trades'] 
+        }
+    };
 
     return (
         <>
@@ -54,26 +144,26 @@ function Search(props) {
                                 <input className="form-control" type="text" placeholder="Enter Keywords"></input>
                                 <div className={`classification form-control flex flex-ai-c flex-jc-sb ${visible && 'outlined'}`} onClick={() => setVisible(!visible)}>
                                     <span className="dark-grey">
-                                        {classifications.length === 0 ? 
+                                        {industries.length === 0 ? 
                                             'Any classification' 
                                         : 
-                                            classifications.length > 1 ? 
-                                                `${classifications.length} classifications`
+                                            industries.length > 1 ? 
+                                                `${industries.length} classifications`
                                             : 
-                                                classifications[0].length > 20 ? 
-                                                    `${classifications[0].slice(0,20)} ...`
+                                                industries[0].length > 20 ? 
+                                                    `${industries[0].slice(0,20)} ...`
                                                 :
-                                                    classifications[0]
-                                                    }
+                                                    industries[0]
+                                        }
                                     </span>
-                                    <div className={`${classifications.length > 0 && 'shrink'} list-action flex flex-ai-c`}>
+                                    <div className={`${industries.length > 0 && 'shrink'} list-action flex flex-ai-c`}>
                                         <span className={`${visible && 'flip'} material-icons-outlined`}>expand_more</span>
-                                        <div className={`${classifications.length === 0 && 'hidden'} clear flex flex-ai-c`} onClick={() => setClassifications([])}>
+                                        <div className={`${industries.length === 0 && 'hidden'} clear flex flex-ai-c`} onClick={() => setIndustries([])}>
                                             <span className="medium material-icons-outlined">clear</span>
                                         </div>
                                     </div>
                                 </div>
-                                {visible && <Dropdown classifications={classifications} setClassifications={setClassifications} data={data}/>}
+                                {visible && <Dropdown industries={industries} setIndustries={setIndustries} data={data}/>}
                             </div>
                         </div>
                         <div className="where flex flex-col">
