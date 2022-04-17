@@ -13,8 +13,14 @@ const getJobsRequest = () => `
             }
             city
             suburb
-            industry
-            profession
+            industry {
+                name
+                code
+            }
+            profession {
+                name
+                code
+            }
             workType
             added
         }

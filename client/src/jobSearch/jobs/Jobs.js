@@ -34,6 +34,8 @@ function Jobs() {
                         {jobs && jobs.map((job, index) => {
                             let details = job;
                             details.company = job.company.name;
+                            details.industry = details.industry.name;
+                            details.profession = details.profession.name;
                             return <JobCard key={index} job={details} />
                         })}
                     </div>
