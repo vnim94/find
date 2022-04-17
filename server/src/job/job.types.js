@@ -16,11 +16,13 @@ const JobTypes = `
     }
 
     type Industry {
+        id: ID!
         name: String!
         code: String!
     }
 
     type Profession {
+        id: ID!
         name: String!
         industry: Industry!
         code: String!

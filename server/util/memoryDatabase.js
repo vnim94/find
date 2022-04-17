@@ -47,20 +47,25 @@ exports.seed = async () => {
         size: 'More than 10,001'
     })
 
-    const industry = await Industry.create({
+    const industryA = await Industry.create({
         name: 'Hospitality & Tourism',
         code: '0000'
     })
 
+    const industryB = await Industry.create({
+        name: 'Retail & Consumer Products',
+        code: '0001'
+    })
+
     const professionA = await Profession.create({
         name: 'Chefs/Cooks',
-        industry: industry._id,
+        industry: industryA._id,
         code: '0000'
     })
 
     const professionB = await Profession.create({
         name: 'Manager',
-        industry: industry._id,
+        industry: industryB._id,
         code: '0001'
     })
 
@@ -72,7 +77,7 @@ exports.seed = async () => {
         company: companyA._id,
         city: 'Melbourne',
         suburb: 'CBD',
-        industry: industry._id,
+        industry: industryA._id,
         profession: professionA._id,
         workType: 'Full time'
     })
@@ -85,7 +90,7 @@ exports.seed = async () => {
         company: companyB._id,
         city: 'Melbourne',
         suburb: 'CBD', 
-        industry: industry._id,
+        industry: industryB._id,
         profession: professionB._id,
         workType: 'Full time'
     })

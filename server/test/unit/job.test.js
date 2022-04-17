@@ -10,12 +10,16 @@ const tester = new EasyGraphQLTester(typeDefs, resolvers);
 let context;
 let company;
 let job;
+let industry;
+let profession;
 
 beforeAll(async () => {
     await database.connect();
     await database.seed();
     company = await Company.findOne();
     job = await Job.findOne();
+    industry = await Industry.findOne({ code: '0001' });
+    profession = await Profession.findOne({ code: '0001' })
     context = { user: 'abc' };
 });
 
@@ -150,7 +154,7 @@ describe('job mutation resolvers', () => {
     test('createJob', async () => {
         const createJob = `
             mutation {
-                createJob(title: "manager", headliner: "great chance to manage", description: "manage stuff", company: "${company._id.toString()}", city: "Melbourne", industry: "Fast Food", profession: "Management", workType: "Full time") {
+                createJob(title: "manager", headliner: "great chance to manage", description: "manage stuff", company: "${company._id.toString()}", city: "Melbourne", industry: "${job.industry._id}", profession: "${job.profession._id}", workType: "Full time") {
                     ... on Job {
                         id
                         title
@@ -164,6 +168,7 @@ describe('job mutation resolvers', () => {
             }
         `
         const result = await tester.graphql(createJob, {}, context, {});
+        console.log(result);
         expect(result.data.createJob.title).toBe('manager');
         expect(result.data.createJob.company.name).toBe('McDonalds');
 
@@ -198,14 +203,18 @@ describe('job mutation resolvers', () => {
     test('updateJob', async () => {
         const updateJob = `
             mutation {
-                updateJob(id: "${job._id.toString()}", title: "updated", headliner: "updated" description: "updated", city: "Sydney", industry: "FMCG", profession: "Executive", workType: "Part time") {
+                updateJob(id: "${job._id.toString()}", title: "updated", headliner: "updated" description: "updated", city: "Sydney", industry: "${industry._id}", profession: "${profession._id}", workType: "Part time") {
                     ... on Job {
                         title
                         headliner
                         description
                         city
-                        industry
-                        profession
+                        industry {
+                            name
+                        }
+                        profession {
+                            name
+                        }
                         workType
                     }
                 }
@@ -214,6 +223,8 @@ describe('job mutation resolvers', () => {
         const result = await tester.graphql(updateJob, {}, context, {});
         expect(result.data.updateJob.title).toBe('updated');
         expect(result.data.updateJob.description).toBe('updated');
+        expect(result.data.updateJob.industry.name).toBe('Retail & Consumer Products');
+        expect(result.data.updateJob.profession.name).toBe('Manager');
 
         const updatedJob = await Job.findById(job._id.toString());
         expect(updatedJob.title).toBe('updated');
@@ -229,17 +240,17 @@ describe('job mutation resolvers', () => {
                 closeJob(id: "${job._id.toString()}") {
                     ... on Job {
                         id
-                        expired
+                        closing
                     }
                 }
             }
         `
         const result = await tester.graphql(closeJob, {}, context, {});
         expect(result.data.closeJob.id).toBe(job._id.toString());
-        expect(result.data.closeJob.expired).toBe(true);
+        expect(result.data.closeJob.closing).toBeLessThan(Date.now());
 
         const closedJob = await Job.findById(job._id.toString());
-        expect(closedJob.expired).toBe(true);
+        expect(closedJob.closing.getTime()).toBeLessThan(job.closing.getTime());
     })
 
     test('closeJob not found', async () => {

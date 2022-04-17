@@ -48,11 +48,11 @@ const JobResolvers = {
                 industry: industry,
                 profession: profession,
                 workType: workType
-            }, { new: true })
+            }, { new: true }).populate('industry').populate('profession');
         },
         closeJob: async (_, { id }, context) => {
             if (!context.user) throw new Error('UNAUTHORISED');
-            const closedJob = await Job.findByIdAndUpdate(id, { expired: true }, { new: true });
+            const closedJob = await Job.findByIdAndUpdate(id, { closing: Date.now() }, { new: true });
             if (!closedJob) return { __typename: 'NotFound', message: 'Job not found', id: id }
             return closedJob
         },
