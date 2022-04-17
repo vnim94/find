@@ -37,11 +37,13 @@ const JobSchema = Schema({
         type: String
     },
     industry: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Industry',
         required: true
     },
     profession: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Profession',
         required: true
     },
     workType: {
@@ -56,10 +58,6 @@ const JobSchema = Schema({
     closing: {
         type: Date,
         default: () => Date.now() + (30 * 24 * 60 * 60 * 1000)
-    },
-    expired: {
-        type: Boolean,
-        default: false
     }
 })
 

@@ -8,12 +8,22 @@ const JobTypes = `
         company: Company!
         city: String!
         suburb: String
-        industry: String!
-        profession: String!
+        industry: Industry!
+        profession: Profession!
         workType: String!
         added: Date!
         closing: Date!
-        expired: Boolean!
+    }
+
+    type Industry {
+        name: String!
+        code: String!
+    }
+
+    type Profession {
+        name: String!
+        industry: Industry!
+        code: String!
     }
 
     type JobInputErrors {
@@ -38,12 +48,12 @@ const JobTypes = `
 
     type Query {
         job(id: ID!): JobResult!
-        jobs: [Job]!
+        jobs(company: ID, industry: String, profession: String, workType: String): [Job]!
     }
 
     type Mutation {
-        createJob(title: String!, headliner: String!, summary: String, description: String!, company: ID!, city: String!, suburb: String, industry: String!, profession: String!, workType: String!): JobResult
-        updateJob(id: ID!, title: String, headliner: String, summary: String, description: String, city: String, suburb: String, industry: String, profession: String, workType: String): JobResult
+        createJob(title: String!, headliner: String!, summary: String, description: String!, company: ID!, city: String!, suburb: String, industry: ID!, profession: ID!, workType: String!): JobResult
+        updateJob(id: ID!, title: String, headliner: String, summary: String, description: String, city: String, suburb: String, industry: ID, profession: ID, workType: String): JobResult
         closeJob(id: ID!): JobResult
         deleteJob(id: ID!): JobResult
     }

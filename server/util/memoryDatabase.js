@@ -5,6 +5,8 @@ let database;
 const User = require('../src/user/user.model');
 const Company = require('../src/company/company.model');
 const Job = require('../src/job/job.model');
+const Industry = require('../src/job/industry.model');
+const Profession = require('../src/job/profession.model');
 
 exports.connect = async () => {
     database = await MongoMemoryServer.create();
@@ -29,7 +31,7 @@ exports.seed = async () => {
         phone: '01234567890'
     })    
 
-    const company = await Company.create({
+    const companyA = await Company.create({
         name: "McDonalds",
         headquarters: '123 ABC Street',
         overview: "overview",
@@ -37,16 +39,54 @@ exports.seed = async () => {
         size: 'More than 10,001'
     })
 
+    const companyB = await Company.create({
+        name: "Hungry Jacks",
+        headquarters: '987 XYZ Street',
+        overview: "overview",
+        averageRating: 3.4,
+        size: 'More than 10,001'
+    })
+
+    const industry = await Industry.create({
+        name: 'Hospitality & Tourism',
+        code: '0000'
+    })
+
+    const professionA = await Profession.create({
+        name: 'Chefs/Cooks',
+        industry: industry._id,
+        code: '0000'
+    })
+
+    const professionB = await Profession.create({
+        name: 'Manager',
+        industry: industry._id,
+        code: '0001'
+    })
+
     await Job.create({
         title: 'burger flipper',
         headliner: 'great opportunity to flip stuff',
         summary: 'this is a job for flipping burgers',
         description: 'flip stuff',
-        company: company._id,
+        company: companyA._id,
         city: 'Melbourne',
         suburb: 'CBD',
-        industry: 'Fast Food',
-        profession: 'Burger Flipper',
+        industry: industry._id,
+        profession: professionA._id,
+        workType: 'Full time'
+    })
+
+    await Job.create({
+        title: 'manager',
+        headliner: 'manage stuff',
+        summary: 'this is a job to manage things',
+        description: 'manage things',
+        company: companyB._id,
+        city: 'Melbourne',
+        suburb: 'CBD', 
+        industry: industry._id,
+        profession: professionB._id,
         workType: 'Full time'
     })
 

@@ -9,6 +9,10 @@ function Search(props) {
     const [expanded, setExpanded] = useState(props.expanded);
     const [industries, setIndustries] = useState([]);
 
+    const handleSubmit = () => {
+        
+    }
+
     const data = { 
         'Accounting': {
             jobCount: (Math.random() * 10000).toLocaleString(undefined, { maximumFractionDigits: 0 }),
@@ -137,7 +141,7 @@ function Search(props) {
         <section className="search flex flex-jc-c">
             <div className="page flex flex-col flex-jc-sb flex-ai-c">
                 <div className="search-container">
-                    <form className="flex flex-row flex-jc-sb">
+                    <form className="flex flex-row flex-jc-sb" onSubmit={handleSubmit}>
                         <div className="what flex flex-col">
                             <label>What</label>
                             <div className="flex flex-row">
@@ -171,7 +175,7 @@ function Search(props) {
                             <input className="form-control" type="search" placeholder="Enter suburb, city, or region"></input>
                         </div>
                         <div className="find flex flex-ai-fe">
-                            <button className="bg-black white btn">Find</button>
+                            <button className="bg-black white btn" type="submit">Find</button>
                         </div>
                     </form>
                     {!expanded && <div className="flex flex-jc-fe">

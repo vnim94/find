@@ -7,6 +7,8 @@ const async = require('async');
 const User = require('../src/user/user.model');
 const Company = require('../src/company/company.model');
 const Job = require('../src/job/job.model');
+const Industry = require('../src/job/industry.model');
+const Profession = require('../src/job/profession.model');
 
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true });
 const database = mongoose.connection;
@@ -23,7 +25,18 @@ const cities = [
     'Adelaide'
 ];
 
-const suburbs = ['CBD', 'Inner Suburbs', 'Inner West Suburbs', 'Inner East Suburbs', 'Western Suburbs', 'Eastern Suburbs', 'Southern Suburbs', 'Northern Suburbs']
+const suburbs = [
+    'CBD', 
+    'Inner Suburbs', 
+    'Inner West Suburbs', 
+    'Inner East Suburbs',
+    'Inner North Suburbs',
+    'Inner South Suburbs', 
+    'Western Suburbs', 
+    'Eastern Suburbs', 
+    'Southern Suburbs', 
+    'Northern Suburbs'
+]
 
 const companyNames = [
     'Apple',
@@ -37,8 +50,6 @@ const companyNames = [
     'Reddit',
 ]
 
-let companies = [];
-
 const workTypes = [
     'Full time',
     'Part time',
@@ -46,40 +57,40 @@ const workTypes = [
     'Casual/Vacation'
 ];
 
-const industries = [
-    'Accounting',
-    'Administration & Office Support',
-    'Advertising, Arts & Media',
-    'Banking & Financial Services',
-    'Call Centre & Customer Service',
-    'CEO & General Management',
-    'Community Services & Development',
-    'Construction',
-    'Consulting & Strategy',
-    'Design & Architecture',
-    'Education & Training',
-    'Engineering',
-    'Farming, Animals & Conservation',
-    'Government & Defence',
-    'Healthcare & Medical',
-    'Hospitality & Tourism',
-    'Human Resources & Recruitment',
-    'Information & Communication Technology',
-    'Insurance & Superannuation',
-    'Legal',
-    'Manufacturing, Transport & Logistics',
-    'Marketing & Communications',
-    'Mining, Resources & Energy',
-    'Real Estate & Property',
-    'Retail & Consumer Products',
-    'Sales',
-    'Science & Technology',
-    'Self Employment',
-    'Sport & Recreation',
-    'Trades & Services'
-];
+const industryTypes = {
+    '0000': 'Accounting',
+    '0001': 'Administration & Office Support',
+    '0002': 'Advertising, Arts & Media',
+    '0003': 'Banking & Financial Services',
+    '0004': 'Call Centre & Customer Service',
+    '0005': 'CEO & General Management',
+    '0006': 'Community Services & Development',
+    '0007': 'Construction',
+    '0008': 'Consulting & Strategy',
+    '0009': 'Design & Architecture',
+    '0010': 'Education & Training',
+    '0011': 'Engineering',
+    '0012': 'Farming, Animals & Conservation',
+    '0013': 'Government & Defence',
+    '0014': 'Healthcare & Medical',
+    '0015': 'Hospitality & Tourism',
+    '0016': 'Human Resources & Recruitment',
+    '0017': 'Information & Communication Technology',
+    '0018': 'Insurance & Superannuation',
+    '0019': 'Legal',
+    '0020': 'Manufacturing, Transport & Logistics',
+    '0021': 'Marketing & Communications',
+    '0022': 'Mining, Resources & Energy',
+    '0023': 'Real Estate & Property',
+    '0024': 'Retail & Consumer Products',
+    '0025': 'Sales',
+    '0026': 'Science & Technology',
+    '0027': 'Self Employment',
+    '0028': 'Sport & Recreation',
+    '0029': 'Trades & Services'
+}
 
-const professions = {
+const professionTypes = {
     'Architects': ['Software Architect'],
     'Business/System Analysts': ['Business Analyst'],
     'Developers/Programmers': ['Software Developer', 'Software Engineer', 'Web Developer', 'Tech Lead'],
@@ -88,6 +99,11 @@ const professions = {
     'Network & Systems Administration': ['Network Engineer', 'System Administrator'],
     'Database Development & Administration': ['Database Consultant', 'Database Administrator']
 };
+
+let companies = [];
+let industries = [];
+let professions = [];
+
 
 function createUser(firstName, lastName, email, location, password, phone, callback) {
 
@@ -135,18 +151,57 @@ function createCompany(name, callback) {
 
 }
 
+function createIndustry(name, code, callback) {
+    let industry = new Industry({
+        name: name,
+        code: code
+    })
+
+    industry.save((err) => {
+        if (err) {
+            console.log(`[ERROR] Error creating industry: ${industry.name} - ${err}`);
+            callback(err, null);
+            return;
+        }
+
+        console.log(`[INFO] New industry created: ${industry.name}`);
+        industries.push(industry);
+        callback(null, industry);
+    })
+}
+
+function createProfession(name, industry, code, callback) {
+    let profession = new Profession({
+        name: name,
+        industry: industry,
+        code: code
+    })
+
+    profession.save((err) => {
+        if (err) {
+            console.log(`[ERROR] Error creating profession: ${profession.name} - ${err}`);
+            callback(err, null);
+            return;
+        }
+
+        console.log(`[INFO] New profession created: ${profession.name}`);
+        professions.push(profession);
+        callback(null, profession);
+    })
+}
+
 function createJob(details, callback) {
 
     let job = new Job(details);
 
     job.save((err) => {
         if (err) {
-            console.log(`[ERROR] Error creating job: ${job.title}-${job.company.name} - ${err}`);
+            console.log(`[ERROR] Error creating job: ${job.title} - ${job.company.name} - ${err}`);
             callback(err, null);
             return;
         }
 
-        console.log(`[INFO] New job created: ${job.title}-${job.company.name}`);
+        console.log(`[INFO] New job created: ${job.title} - ${job.company.name}`);
         callback(null, job);
     })
 
@@ -168,7 +223,6 @@ function populateUsers(callback) {
 }
 
 function populateCompanies(callback) {
-
     let companiesToCreate = [];
 
     companyNames.forEach(company => {
@@ -176,27 +230,43 @@ function populateCompanies(callback) {
     })
 
     async.series(companiesToCreate, callback);
+}
 
+function populateIndustries(callback) {
+    let industriesToCreate = [];
+    Object.keys(industryTypes).forEach(code => {
+        industriesToCreate.push(function(callback) { createIndustry(industryTypes[code], code, callback) });
+    })
+    async.series(industriesToCreate, callback);
+}
+
+function populateProfessions(callback) {
+    let professionsToCreate = [];
+    const industry = industries.find(industry => industry.code === '0017');
+    Object.keys(professionTypes).forEach((profession, index) => {
+        professionsToCreate.push(function(callback) { createProfession(profession, industry._id, String(index).padStart(4,0), callback) });
+    })
+    async.series(professionsToCreate, callback);
 }
 
 function populateJobs(callback) {
 
     let jobsToCreate = [];
-
+    const industry = industries.find(industry => industry.code === '0017');
     for (let i = 0; i < 15; i++) {
 
-        let profession = Object.keys(professions)[getRandomIndex(Object.keys(professions).length)];
+        let profession = professions[getRandomIndex(professions.length)]
 
         let details = {
-            title: professions[profession][getRandomIndex(professions[profession].length)],
+            title: professionTypes[profession.name][getRandomIndex(professionTypes[profession.name].length)],
             headliner: faker.lorem.sentence(),
             summary: faker.lorem.lines(3),
             description: faker.lorem.paragraphs(3),
             company: companies[getRandomIndex(companies.length)],
             city: cities[getRandomIndex(cities.length)],
             suburb: suburbs[getRandomIndex(suburbs.length)],
-            industry: 'Information & Communication Technology',
-            profession: profession,
+            industry: industry._id,
+            profession: profession._id,
             workType: workTypes[getRandomIndex(workTypes.length)]
         }
         jobsToCreate.push(function(callback) { createJob(details, callback) });
@@ -212,7 +282,7 @@ function getRandomIndex(length) {
 
 console.log('[INFO] Populating database...');
 
-async.series([populateUsers, populateCompanies, populateJobs], (err) => {
+async.series([populateUsers, populateCompanies, populateIndustries, populateProfessions, populateJobs], (err) => {
 
     if (err) {
         console.log(`[ERROR] ${err}`);

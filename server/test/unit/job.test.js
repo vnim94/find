@@ -1,4 +1,6 @@
 const Job = require('../../src/job/job.model');
+const Industry = require('../../src/job/industry.model');
+const Profession = require('../../src/job/profession.model');
 const database = require('../../util/memoryDatabase');
 const Company = require('../../src/company/company.model');
 const { typeDefs, resolvers } = require('../../src/api/schema');
@@ -19,16 +21,38 @@ beforeAll(async () => {
 
 afterAll(async () => { await database.disconnect() });
 
-describe('job model', () => {
-    test('added should be current date', () => {
+describe('models', () => {
+    test('job model - added should be current date', () => {
         expect(job.added.toDateString()).toBe(new Date().toDateString());
     })
 
-    test('closing should be current date + 30 days', () => {
+    test('job model - closing should be current date + 30 days', () => {
         const today = new Date();
         const expiry = new Date();
         expiry.setDate(today.getDate() + 30)
         expect(job.closing.toDateString()).toBe(expiry.toDateString())
+    })
+
+    test('industry model - code must be 4-digits', () => {
+        const industry = new Industry({
+            name: 'Accounting',
+            code: '000'
+        })
+        industry.validate((err) => {
+            expect(err).toBeTruthy();
+            expect(err.errors['code'].message).toBe('Must be a 4-digit code');
+        })
+    })
+
+    test('profession model - code must be 4-digits', () => {
+        const profession = new Profession({
+            name: 'Account Clerk',
+            code: '000'
+        })
+        profession.validate((err) => {
+            expect(err).toBeTruthy();
+            expect(err.errors['code'].message).toBe('Must be a 4-digit code');
+        })
     })
 })
 
@@ -87,6 +111,38 @@ describe('job query resolvers', () => {
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs[0].title).toBe('burger flipper');
         expect(result.data.jobs[0].company.name).toBe('McDonalds');
+    })
+
+    test('jobs with parameters', async () => {
+        const query = `
+            {
+                jobs(company: "${company._id.toString()}") {
+                    title
+                    description
+                    company {
+                        name
+                    }
+                    city
+                    suburb
+                    industry {
+                        name
+                        code
+                    }
+                    profession {
+                        name
+                        code
+                    }
+                    workType
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs[0].title).toBe('burger flipper');
+        expect(result.data.jobs[0].company.name).toBe('McDonalds');
+        expect(result.data.jobs[0].industry.name).toBe('Hospitality & Tourism');
+        expect(result.data.jobs[0].industry.code).toBe('0000');
+        expect(result.data.jobs[0].profession.name).toBe('Chefs/Cooks');
     })
 })
 

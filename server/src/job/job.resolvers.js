@@ -17,7 +17,10 @@ const JobResolvers = {
             return job
         },
         jobs: async () => {
-            return await Job.find({}).populate('company');
+            return await Job.find({})
+                .populate('company')
+                .populate('industry')
+                .populate('profession');
         }
     },
     Mutation: {
