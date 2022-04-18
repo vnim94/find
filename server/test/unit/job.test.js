@@ -11,6 +11,7 @@ let context;
 let company;
 let job;
 let industry;
+let industryB;
 let profession;
 
 beforeAll(async () => {
@@ -19,6 +20,13 @@ beforeAll(async () => {
     company = await Company.findOne();
     job = await Job.findOne();
     industry = await Industry.findOne({ code: '0001' })
+        .populate('jobs')
+        .populate('jobCount')
+        .populate({
+            path: 'professions',
+            populate: { path: 'jobCount' }
+        });
+    industryB = await Industry.findOne({ code: '0000' })
         .populate('jobs')
         .populate('jobCount')
         .populate({
@@ -210,10 +218,11 @@ describe('job query resolvers', () => {
         expect(result.data.allIndustries[0].professions[0].jobCount).toBe(1);
     })
 
-    test('industryJobs returns jobs for one or more industries', async () => {
+    test.only('industryJobs returns jobs for one or more industries', async () => {
+        const industries = [`"${industry._id.toString()}"`, `"${industryB._id.toString()}"`];
         const query = `
             {
-                industryJobs(ids: ["${industry._id.toString()}"]) {
+                industryJobs(ids: [${industries}]) {
                     title
                     headliner
                     company {
@@ -231,9 +240,9 @@ describe('job query resolvers', () => {
             }
         `
         const result = await tester.graphql(query, {}, {} ,{});
+        console.log(result);
         expect(result.data.industryJobs).toBeTruthy();
-        expect(result.data.industryJobs.length).toBe(1);
-        expect(result.data.industryJobs[0].title).toBe('manager');
+        expect(result.data.industryJobs.length).toBe(2);
     })
 
     test('allProfessions returns all professions', async () => {
