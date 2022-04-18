@@ -170,10 +170,10 @@ describe('job query resolvers', () => {
         expect(result.data.jobs[0].company.name).toBe('McDonalds');
     })
 
-    test('jobs with parameters', async () => {
+    test('jobs with multiple parameters', async () => {
         const query = `
-            {
-                jobs(company: "${company._id.toString()}") {
+            query jobs($company: ID) {
+                jobs(company: $company) {
                     title
                     description
                     company {
@@ -193,7 +193,9 @@ describe('job query resolvers', () => {
                 }
             }
         `
-        const result = await tester.graphql(query, {}, {}, {});
+        const result = await tester.graphql(query, {}, {}, {
+            company: `${company._id.toString()}`,
+        });
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs[0].title).toBe('burger flipper');
         expect(result.data.jobs[0].company.name).toBe('McDonalds');
