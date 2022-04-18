@@ -75,7 +75,7 @@ const getUserRequest = (token) => `
     }
 `
 
-export const request = async (req) => {
+export const request = async (query, variables={}) => {
     const response = await fetch(env.API, { 
         mode: 'cors',
         method: 'POST',
@@ -83,7 +83,8 @@ export const request = async (req) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            query: req
+            query,
+            variables
         }) 
     });
     const data = await response.json();
