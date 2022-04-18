@@ -114,6 +114,34 @@ describe('models', () => {
 })
 
 describe('job query resolvers', () => {
+
+    const jobsQuery = `
+            query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: String, $payBase: Int, $payCeiling: Int) {
+                jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling) {
+                    id
+                    title
+                    headliner
+                    summary
+                    description
+                    company {
+                        name
+                    }
+                    city
+                    suburb
+                    industry {
+                        name
+                        code
+                    }
+                    profession {
+                        name
+                        code
+                    }
+                    workType
+                    added
+                }
+            }
+        `
+
     test('job', async () => {
         const query = `
             {
@@ -171,30 +199,9 @@ describe('job query resolvers', () => {
     })
 
     test('jobs with multiple parameters', async () => {
-        const query = `
-            query jobs($company: ID) {
-                jobs(company: $company) {
-                    title
-                    description
-                    company {
-                        name
-                    }
-                    city
-                    suburb
-                    industry {
-                        name
-                        code
-                    }
-                    profession {
-                        name
-                        code
-                    }
-                    workType
-                }
-            }
-        `
-        const result = await tester.graphql(query, {}, {}, {
+        const result = await tester.graphql(jobsQuery, {}, {}, {
             company: `${company._id.toString()}`,
+            industry: `${industryB._id.toString()}`
         });
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs[0].title).toBe('burger flipper');
@@ -205,52 +212,17 @@ describe('job query resolvers', () => {
     })
 
     test('jobs query for multiple industries returns jobs for those industries', async () => {
-        const industries = [`"${industry._id.toString()}"`, `"${industryB._id.toString()}"`];
-        const query = `
-            {
-                jobs(industry: [${industries}]) {
-                    title
-                    headliner
-                    company {
-                        name
-                    }
-                    city
-                    industry {
-                        name
-                    }
-                    profession {
-                        name
-                    }
-                    workType
-                }
-            }
-        `
-        const result = await tester.graphql(query, {}, {} ,{});
+        const result = await tester.graphql(jobsQuery, {}, {} ,{
+            industry: [`${industry._id.toString()}`,`${industryB._id.toString()}`]    
+        });
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs.length).toBe(2);
     })
 
     test('jobs query for multiple professions for those professions', async () => {
-        const query = `
-            {
-                jobs(profession: ["${profession._id.toString()}"]) {
-                    title
-                    headliner
-                    company {
-                        name
-                    }
-                    city
-                    industry {
-                        name
-                    }
-                    profession {
-                        name
-                    }
-                    workType
-                }
-            }
-        `
-        const result = await tester.graphql(query, {}, {} ,{});
+        const result = await tester.graphql(jobsQuery, {}, {} ,{
+            profession: `${profession._id.toString()}`
+        });
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs.length).toBe(1);
         expect(result.data.jobs[0].title).toBe('manager');
