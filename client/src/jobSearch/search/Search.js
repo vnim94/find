@@ -11,7 +11,6 @@ function Search(props) {
     const [industries, setIndustries] = useState([]);
 
     const handleSubmit = () => {
-        
     }
 
     return (
