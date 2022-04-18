@@ -1,6 +1,6 @@
 import './Jobs.css'
 import { useEffect, useState } from 'react';
-import { getJobs } from '../job.api';
+import { getAllJobs } from '../job.api';
 import getTimeElapsed from '../../helpers/getTimeElapsed';
 
 function Jobs() {
@@ -10,7 +10,7 @@ function Jobs() {
 
     useEffect(() => {
         async function fetchJobs() {
-            const response = await getJobs();
+            const response = await getAllJobs();
             setJobs(response.data.jobs);
         }
         fetchJobs();

@@ -1,6 +1,6 @@
 import { request } from '../profile/user.api';
 
-const getJobsRequest = () => `
+const getAllJobsRequest = `
     {
         jobs {
             id
@@ -27,6 +27,27 @@ const getJobsRequest = () => `
     }
 `
 
-export const getJobs = async () => {
-    return await request(getJobsRequest());
+const getAllIndustriesRequest = `
+    {
+        allIndustries {
+            id
+            name
+            code
+            jobCount
+            professions {
+                id
+                name 
+                code
+                jobCount
+            }
+        }
+    }
+`
+
+export const getAllJobs = async () => {
+    return await request(getAllJobsRequest);
+}
+
+export const getAllIndustries = async () => {
+    return await request(getAllIndustriesRequest);
 }

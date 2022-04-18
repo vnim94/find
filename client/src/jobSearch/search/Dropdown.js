@@ -1,21 +1,31 @@
 import './Dropdown.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getAllIndustries } from '../job.api';
 
 function Dropdown(props) {
 
-    const { industries, setIndustries, data } = props;
+    const { industries, setIndustries } = props;
+    const [allIndustries, setAllIndustries] = useState();
+
+    useEffect(() => {
+        async function fetchAllIndustries() {
+            const response = await getAllIndustries();
+            setAllIndustries(response.data.allIndustries);
+        }
+        fetchAllIndustries();
+    },[getAllIndustries])
 
     return (
         <div className="dropdown">
             <ul className="dropdown-list">
-                {Object.keys(data).map((industry,index) => { 
+                {allIndustries && allIndustries.map((industry,index) => { 
                     return <Classification 
                         key={index} 
-                        industry={industry} 
+                        industry={industry.name} 
                         industries={industries} 
                         setIndustries={setIndustries} 
-                        jobCount={data[industry].jobCount}
-                        professions={data[industry].professions}
+                        jobCount={industry.jobCount}
+                        professions={industry.professions}
                     />
                 })}
             </ul>
