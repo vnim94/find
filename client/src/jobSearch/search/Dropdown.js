@@ -77,7 +77,15 @@ function SubClassification(props) {
             </div>
             <hr className="sub-item-divider"></hr>
             {professions && professions.map((profession, index) => {
-                return <Item key={index} allChecked={allChecked} setAllChecked={setAllChecked} selectedProfessions={selectedProfessions} setSelectedProfessions={setSelectedProfessions} profession={profession} jobCount={0}/>
+                return <Item 
+                    key={index} 
+                    allChecked={allChecked} 
+                    setAllChecked={setAllChecked} 
+                    selectedProfessions={selectedProfessions} 
+                    setSelectedProfessions={setSelectedProfessions} 
+                    profession={profession.name} 
+                    jobCount={profession.jobCount}
+                />
             })}
         </div>
     )
