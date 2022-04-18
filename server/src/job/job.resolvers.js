@@ -18,8 +18,10 @@ const JobResolvers = {
             if (!job) return { __typename: 'NotFound', message: 'Job not found', id: id }
             return job
         },
-        jobs: async () => {
-            return await Job.find({})
+        jobs: async (_, query) => {
+            if (query.industry) query.industry = { $in: query.industry }
+            if (query.profession) query.profession = { $in: query.profession }
+            return await Job.find(query)
                 .populate('company')
                 .populate('industry')
                 .populate('profession');
@@ -32,22 +34,10 @@ const JobResolvers = {
                     populate: { path: 'jobCount' }
                 });
         },
-        industryJobs: async (_, { ids }) => {
-            return await Job.find({ industry: { $in: [...ids] } })
-                .populate('company')
-                .populate('industry')
-                .populate('profession');
-        },
         allProfessions: async () => {
             return await Profession.find({})
                 .populate('industry')
                 .populate('jobCount');
-        },
-        professionJobs: async (_, { ids }) => {
-            return await Job.find({ profession: { $in: [...ids] } })
-                .populate('company')
-                .populate('industry')
-                .populate('profession');
         }
     },
     Mutation: {

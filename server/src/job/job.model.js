@@ -51,6 +51,14 @@ const JobSchema = Schema({
         enum: ['Full time', 'Part time', 'Contract/Temp', 'Casual/Vacation'],
         required: true
     },
+    payBase: {
+        type: Number,
+        min: 0
+    },
+    payCeiling: {
+        type: Number,
+        default: function() { if (this.payBase) return this.payBase }
+    },
     added: {
         type: Date,
         default: Date.now

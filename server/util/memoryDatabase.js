@@ -79,7 +79,8 @@ exports.seed = async () => {
         suburb: 'CBD',
         industry: industryA._id,
         profession: professionA._id,
-        workType: 'Full time'
+        workType: 'Full time',
+        payBase: 35000
     })
 
     await Job.create({
@@ -92,7 +93,9 @@ exports.seed = async () => {
         suburb: 'CBD', 
         industry: industryB._id,
         profession: professionB._id,
-        workType: 'Full time'
+        workType: 'Full time',
+        payBase: 70000,
+        payCeiling: 85000
     })
 
 }

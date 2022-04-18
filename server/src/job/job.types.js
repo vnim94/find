@@ -11,6 +11,8 @@ const JobTypes = `
         industry: Industry!
         profession: Profession!
         workType: String!
+        payBase: Int!
+        payCeiling: Int!
         added: Date!
         closing: Date!
     }
@@ -55,11 +57,9 @@ const JobTypes = `
 
     type Query {
         job(id: ID!): JobResult!
-        jobs: [Job]!
+        jobs(title: String, company: ID, city: String, suburb: String, industry: [ID], profession: [ID], workType: String, payBase: Int, payCeiling: Int): [Job]!
         allIndustries: [Industry]!
-        industryJobs(ids: [ID]!): [Job]!
         allProfessions: [Profession]!
-        professionJobs(ids: [ID]!): [Job]!
     }
 
     type Mutation {

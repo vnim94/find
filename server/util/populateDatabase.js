@@ -100,6 +100,8 @@ const professionTypes = {
     'Database Development & Administration': ['Database Consultant', 'Database Administrator']
 };
 
+const payBases = Array(21).fill().map((value, index) => 10000 * index);
+
 let companies = [];
 let industries = [];
 let professions = [];
@@ -256,6 +258,7 @@ function populateJobs(callback) {
     for (let i = 0; i < 15; i++) {
 
         let profession = professions[getRandomIndex(professions.length)]
+        let payBase = getRandomIndex(payBases.length)
 
         let details = {
             title: professionTypes[profession.name][getRandomIndex(professionTypes[profession.name].length)],
@@ -267,7 +270,9 @@ function populateJobs(callback) {
             suburb: suburbs[getRandomIndex(suburbs.length)],
             industry: industry._id,
             profession: profession._id,
-            workType: workTypes[getRandomIndex(workTypes.length)]
+            workType: workTypes[getRandomIndex(workTypes.length)],
+            payBase: payBases[payBase],
+            payCeiling: payBases[getRandomIndex(payBases.length - payBase) + payBase]
         }
         jobsToCreate.push(function(callback) { createJob(details, callback) });
     }

@@ -18,7 +18,7 @@ beforeAll(async () => {
     await database.connect();
     await database.seed();
     company = await Company.findOne();
-    job = await Job.findOne();
+    job = await Job.findOne({ title: 'burger flipper' });
     industry = await Industry.findOne({ code: '0001' })
         .populate('jobs')
         .populate('jobCount')
@@ -53,6 +53,11 @@ describe('models', () => {
             const expiry = new Date();
             expiry.setDate(today.getDate() + 30)
             expect(job.closing.toDateString()).toBe(expiry.toDateString())
+        })
+        
+        test('payCeiling should be payBase if not provided', () => {
+            expect(job.payBase).toBe(35000);
+            expect(job.payCeiling).toBe(job.payBase);
         })
     })
    
@@ -197,6 +202,58 @@ describe('job query resolvers', () => {
         expect(result.data.jobs[0].profession.name).toBe('Chefs/Cooks');
     })
 
+    test('jobs query for multiple industries returns jobs for those industries', async () => {
+        const industries = [`"${industry._id.toString()}"`, `"${industryB._id.toString()}"`];
+        const query = `
+            {
+                jobs(industry: [${industries}]) {
+                    title
+                    headliner
+                    company {
+                        name
+                    }
+                    city
+                    industry {
+                        name
+                    }
+                    profession {
+                        name
+                    }
+                    workType
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {} ,{});
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs.length).toBe(2);
+    })
+
+    test('jobs query for multiple professions for those professions', async () => {
+        const query = `
+            {
+                jobs(profession: ["${profession._id.toString()}"]) {
+                    title
+                    headliner
+                    company {
+                        name
+                    }
+                    city
+                    industry {
+                        name
+                    }
+                    profession {
+                        name
+                    }
+                    workType
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {} ,{});
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs.length).toBe(1);
+        expect(result.data.jobs[0].title).toBe('manager');
+    })
+
     test('allIndustries return all industries and their professions', async () => {
         const query = `
             {
@@ -218,33 +275,6 @@ describe('job query resolvers', () => {
         expect(result.data.allIndustries[0].professions[0].jobCount).toBe(1);
     })
 
-    test.only('industryJobs returns jobs for one or more industries', async () => {
-        const industries = [`"${industry._id.toString()}"`, `"${industryB._id.toString()}"`];
-        const query = `
-            {
-                industryJobs(ids: [${industries}]) {
-                    title
-                    headliner
-                    company {
-                        name
-                    }
-                    city
-                    industry {
-                        name
-                    }
-                    profession {
-                        name
-                    }
-                    workType
-                }
-            }
-        `
-        const result = await tester.graphql(query, {}, {} ,{});
-        console.log(result);
-        expect(result.data.industryJobs).toBeTruthy();
-        expect(result.data.industryJobs.length).toBe(2);
-    })
-
     test('allProfessions returns all professions', async () => {
         const query = `
             {
@@ -263,32 +293,6 @@ describe('job query resolvers', () => {
         expect(result.data.allProfessions).toBeTruthy();
         expect(result.data.allProfessions.length).toBe(2);
         expect(result.data.allProfessions[0].jobCount).toBe(1);
-    })
-
-    test('professionJobs returns jobs for one or more professions', async () => {
-        const query = `
-            {
-                professionJobs(ids: ["${profession._id.toString()}"]) {
-                    title
-                    headliner
-                    company {
-                        name
-                    }
-                    city
-                    industry {
-                        name
-                    }
-                    profession {
-                        name
-                    }
-                    workType
-                }
-            }
-        `
-        const result = await tester.graphql(query, {}, {} ,{});
-        expect(result.data.professionJobs).toBeTruthy();
-        expect(result.data.professionJobs.length).toBe(1);
-        expect(result.data.professionJobs[0].title).toBe('manager');
     })
 
 })
