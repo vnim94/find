@@ -19,6 +19,9 @@ const JobTypes = `
         id: ID!
         name: String!
         code: String!
+        jobs: [Job]!
+        jobCount: Int!
+        professions: [Profession]!
     }
 
     type Profession {
@@ -26,6 +29,8 @@ const JobTypes = `
         name: String!
         industry: Industry!
         code: String!
+        jobs: [Job]!
+        jobCount: Int!
     }
 
     type JobInputErrors {
@@ -50,7 +55,11 @@ const JobTypes = `
 
     type Query {
         job(id: ID!): JobResult!
-        jobs(company: ID, industry: String, profession: String, workType: String): [Job]!
+        jobs(company: ID, industry: ID, profession: ID, workType: String): [Job]!
+        allIndustries: [Industry]!
+        industryJobs(ids: [ID]!): [Job]!
+        allProfessions: [Profession]!
+        professionJobs(ids: [ID]!): [Job]!
     }
 
     type Mutation {

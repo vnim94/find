@@ -1,4 +1,6 @@
 const Job = require('./job.model');
+const Industry = require('./industry.model');
+const Profession = require('./profession.model');
 const validator = require('../middleware/validator');
 
 const JobResolvers = {
@@ -18,6 +20,31 @@ const JobResolvers = {
         },
         jobs: async () => {
             return await Job.find({})
+                .populate('company')
+                .populate('industry')
+                .populate('profession');
+        },
+        allIndustries: async () => {
+            return await Industry.find({})
+                .populate('jobCount')
+                .populate({
+                    path: 'professions',
+                    populate: { path: 'jobCount' }
+                });
+        },
+        industryJobs: async (_, { ids }) => {
+            return await Job.find({ industry: { $in: [...ids] } })
+                .populate('company')
+                .populate('industry')
+                .populate('profession');
+        },
+        allProfessions: async () => {
+            return await Profession.find({})
+                .populate('industry')
+                .populate('jobCount');
+        },
+        professionJobs: async (_, { ids }) => {
+            return await Job.find({ profession: { $in: [...ids] } })
                 .populate('company')
                 .populate('industry')
                 .populate('profession');

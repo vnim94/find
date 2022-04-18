@@ -74,7 +74,6 @@ describe('company resolvers', () => {
             }
         `
         const result = await tester.graphql(companyQuery, {}, {}, {});
-        console.log(result)
         expect(result.data.company.message).toBe('Company not found');
         expect(result.data.company.id).toBeTruthy();
     })

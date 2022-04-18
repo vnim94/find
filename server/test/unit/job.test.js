@@ -18,46 +18,86 @@ beforeAll(async () => {
     await database.seed();
     company = await Company.findOne();
     job = await Job.findOne();
-    industry = await Industry.findOne({ code: '0001' });
+    industry = await Industry.findOne({ code: '0001' })
+        .populate('jobs')
+        .populate('jobCount')
+        .populate({
+            path: 'professions',
+            populate: { path: 'jobCount' }
+        });
     profession = await Profession.findOne({ code: '0001' })
+        .populate('jobs')
+        .populate('jobCount');
     context = { user: 'abc' };
 });
 
 afterAll(async () => { await database.disconnect() });
 
 describe('models', () => {
-    test('job model - added should be current date', () => {
-        expect(job.added.toDateString()).toBe(new Date().toDateString());
+
+    describe('job model', () => {
+        test('added should be current date', () => {
+            expect(job.added.toDateString()).toBe(new Date().toDateString());
+        })
+    
+        test('closing should be current date + 30 days', () => {
+            const today = new Date();
+            const expiry = new Date();
+            expiry.setDate(today.getDate() + 30)
+            expect(job.closing.toDateString()).toBe(expiry.toDateString())
+        })
+    })
+   
+    describe('industry model', () => {
+        test('code must be 4-digits', () => {
+            const industry = new Industry({
+                name: 'Accounting',
+                code: '000'
+            })
+            industry.validate((err) => {
+                expect(err).toBeTruthy();
+                expect(err.errors['code'].message).toBe('Must be a 4-digit code');
+            })
+        })
+
+        test('jobs returns all jobs for the industry', () => {
+            expect(industry.jobs).toBeTruthy();
+            expect(industry.jobs.length).toBe(1);
+        })
+    
+        test('jobCount returns number of jobs for the industry', () => {
+            expect(industry.jobCount).toBe(1);
+        })
+    
+        test('professions returns all professions for the industry', () => {
+            expect(industry.professions).toBeTruthy();
+            expect(industry.professions.length).toBe(1);
+            expect(industry.professions[0].jobCount).toBe(1);
+        })
     })
 
-    test('job model - closing should be current date + 30 days', () => {
-        const today = new Date();
-        const expiry = new Date();
-        expiry.setDate(today.getDate() + 30)
-        expect(job.closing.toDateString()).toBe(expiry.toDateString())
-    })
+    describe('profession model', () => {
+        test('code must be 4-digits', () => {
+            const profession = new Profession({
+                name: 'Account Clerk',
+                code: '000'
+            })
+            profession.validate((err) => {
+                expect(err).toBeTruthy();
+                expect(err.errors['code'].message).toBe('Must be a 4-digit code');
+            })
+        })
 
-    test('industry model - code must be 4-digits', () => {
-        const industry = new Industry({
-            name: 'Accounting',
-            code: '000'
+        test('jobs return all jobs for the profession', () => {
+            expect(profession.jobs).toBeTruthy();
+            expect(profession.jobs.length).toBe(1);
         })
-        industry.validate((err) => {
-            expect(err).toBeTruthy();
-            expect(err.errors['code'].message).toBe('Must be a 4-digit code');
-        })
-    })
 
-    test('profession model - code must be 4-digits', () => {
-        const profession = new Profession({
-            name: 'Account Clerk',
-            code: '000'
-        })
-        profession.validate((err) => {
-            expect(err).toBeTruthy();
-            expect(err.errors['code'].message).toBe('Must be a 4-digit code');
+        test('jobCount returns number of jobs for the profession', () => {
+            expect(profession.jobCount).toBe(1);
         })
     })
+   
 })
 
 describe('job query resolvers', () => {
@@ -148,6 +188,100 @@ describe('job query resolvers', () => {
         expect(result.data.jobs[0].industry.code).toBe('0000');
         expect(result.data.jobs[0].profession.name).toBe('Chefs/Cooks');
     })
+
+    test('allIndustries return all industries and their professions', async () => {
+        const query = `
+            {
+                allIndustries {
+                    name
+                    code
+                    jobCount
+                    professions {
+                        name
+                        jobCount
+                    }
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.data.allIndustries).toBeTruthy();
+        expect(result.data.allIndustries.length).toBe(2);
+        expect(result.data.allIndustries[0].jobCount).toBe(1);
+        expect(result.data.allIndustries[0].professions[0].jobCount).toBe(1);
+    })
+
+    test('industryJobs returns jobs for one or more industries', async () => {
+        const query = `
+            {
+                industryJobs(ids: ["${industry._id.toString()}"]) {
+                    title
+                    headliner
+                    company {
+                        name
+                    }
+                    city
+                    industry {
+                        name
+                    }
+                    profession {
+                        name
+                    }
+                    workType
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {} ,{});
+        expect(result.data.industryJobs).toBeTruthy();
+        expect(result.data.industryJobs.length).toBe(1);
+        expect(result.data.industryJobs[0].title).toBe('manager');
+    })
+
+    test('allProfessions returns all professions', async () => {
+        const query = `
+            {
+                allProfessions {
+                    name
+                    code
+                    industry {
+                        name
+                    }
+                    jobCount
+                }
+            }
+        
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.data.allProfessions).toBeTruthy();
+        expect(result.data.allProfessions.length).toBe(2);
+        expect(result.data.allProfessions[0].jobCount).toBe(1);
+    })
+
+    test('professionJobs returns jobs for one or more professions', async () => {
+        const query = `
+            {
+                professionJobs(ids: ["${profession._id.toString()}"]) {
+                    title
+                    headliner
+                    company {
+                        name
+                    }
+                    city
+                    industry {
+                        name
+                    }
+                    profession {
+                        name
+                    }
+                    workType
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {} ,{});
+        expect(result.data.professionJobs).toBeTruthy();
+        expect(result.data.professionJobs.length).toBe(1);
+        expect(result.data.professionJobs[0].title).toBe('manager');
+    })
+
 })
 
 describe('job mutation resolvers', () => {
@@ -168,7 +302,6 @@ describe('job mutation resolvers', () => {
             }
         `
         const result = await tester.graphql(createJob, {}, context, {});
-        console.log(result);
         expect(result.data.createJob.title).toBe('manager');
         expect(result.data.createJob.company.name).toBe('McDonalds');
 

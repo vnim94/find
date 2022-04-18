@@ -13,6 +13,27 @@ const IndustrySchema = Schema({
         },
         required: true
     }
+},{
+    toJSON: { virtuals: true }
+})
+
+IndustrySchema.virtual('jobs', {
+    ref: 'Job',
+    localField: '_id',
+    foreignField: 'industry'
+})
+
+IndustrySchema.virtual('jobCount', {
+    ref: 'Job',
+    localField: '_id',
+    foreignField: 'industry',
+    count: true
+})
+
+IndustrySchema.virtual('professions', {
+    ref: 'Profession',
+    localField: '_id',
+    foreignField: 'industry'
 })
 
 module.exports = model('Industry', IndustrySchema);

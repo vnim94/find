@@ -18,6 +18,21 @@ const ProfessionSchema = Schema({
         },
         required: true
     }
+},{
+    toJSON: { virtuals: true }
+})
+
+ProfessionSchema.virtual('jobs', {
+    ref: 'Job',
+    localField: '_id',
+    foreignField: 'profession'
+})
+
+ProfessionSchema.virtual('jobCount', {
+    ref: 'Job',
+    localField: '_id',
+    foreignField: 'profession',
+    count: true
 })
 
 module.exports = model('Profession', ProfessionSchema);
