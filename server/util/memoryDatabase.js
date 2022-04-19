@@ -93,7 +93,7 @@ exports.seed = async () => {
         suburb: 'CBD', 
         industry: industryB._id,
         profession: professionB._id,
-        workType: 'Full time',
+        workType: 'Part time',
         payBase: 70000,
         payCeiling: 85000
     })

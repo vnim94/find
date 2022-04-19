@@ -19,6 +19,7 @@ beforeAll(async () => {
     await database.seed();
     company = await Company.findOne();
     job = await Job.findOne({ title: 'burger flipper' });
+    jobB = await Job.findOne({ title: 'manager' });
     industry = await Industry.findOne({ code: '0001' })
         .populate('jobs')
         .populate('jobCount')
@@ -34,6 +35,9 @@ beforeAll(async () => {
             populate: { path: 'jobCount' }
         });
     profession = await Profession.findOne({ code: '0001' })
+        .populate('jobs')
+        .populate('jobCount');
+    professionB = await Profession.findOne({ code: '0000' })
         .populate('jobs')
         .populate('jobCount');
     context = { user: 'abc' };
@@ -116,31 +120,31 @@ describe('models', () => {
 describe('job query resolvers', () => {
 
     const jobsQuery = `
-            query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: String, $payBase: Int, $payCeiling: Int) {
-                jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling) {
-                    id
-                    title
-                    headliner
-                    summary
-                    description
-                    company {
-                        name
-                    }
-                    city
-                    suburb
-                    industry {
-                        name
-                        code
-                    }
-                    profession {
-                        name
-                        code
-                    }
-                    workType
-                    added
+        query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int) {
+            jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling) {
+                id
+                title
+                headliner
+                summary
+                description
+                company {
+                    name
                 }
+                city
+                suburb
+                industry {
+                    name
+                    code
+                }
+                profession {
+                    name
+                    code
+                }
+                workType
+                added
             }
-        `
+        }
+    `
 
     test('job', async () => {
         const query = `
@@ -219,13 +223,20 @@ describe('job query resolvers', () => {
         expect(result.data.jobs.length).toBe(2);
     })
 
-    test('jobs query for multiple professions for those professions', async () => {
+    test('jobs query for multiple professions returns jobs for those professions', async () => {
         const result = await tester.graphql(jobsQuery, {}, {} ,{
-            profession: `${profession._id.toString()}`
+            profession: [`${profession._id.toString()}`, `${professionB._id.toString()}`]
         });
         expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(1);
-        expect(result.data.jobs[0].title).toBe('manager');
+        expect(result.data.jobs.length).toBe(2);
+    })
+
+    test('jobs query for mutliple work types returns jobs for those professions', async () => {
+        const result = await tester.graphql(jobsQuery, {}, {}, {
+            workTypes: ['Full time', 'Part time']
+        });
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs.length).toBe(2);
     })
 
     test('allIndustries return all industries and their professions', async () => {
