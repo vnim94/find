@@ -3,18 +3,10 @@ import { useEffect, useState } from 'react';
 import { getJobs } from '../job.api';
 import getTimeElapsed from '../../helpers/getTimeElapsed';
 
-function Jobs() {
+function Jobs(props) {
 
+    const { jobs } = props;
     const [sort, setSort] = useState(false);
-    const [jobs, setJobs] = useState();
-
-    useEffect(() => {
-        async function fetchJobs() {
-            const response = await getJobs();
-            setJobs(response.data.jobs);
-        }
-        fetchJobs();
-    }, [])
 
     return (
         <div className="jobs">

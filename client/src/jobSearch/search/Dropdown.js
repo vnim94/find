@@ -1,10 +1,11 @@
 import './Dropdown.css';
 import { useEffect, useState } from 'react';
 import { getAllIndustries } from '../job.api';
+import { useDispatch, useSelector } from 'react-redux';
+import { addIndustry, removeIndustry, addProfession, removeProfession } from '../job.slice';
 
-function Dropdown(props) {
+function Dropdown() {
 
-    const { industries, setIndustries } = props;
     const [allIndustries, setAllIndustries] = useState();
 
     useEffect(() => {
@@ -22,8 +23,6 @@ function Dropdown(props) {
                     return <Classification 
                         key={index} 
                         industry={industry.name} 
-                        industries={industries} 
-                        setIndustries={setIndustries} 
                         jobCount={industry.jobCount}
                         professions={industry.professions}
                     />
@@ -35,15 +34,15 @@ function Dropdown(props) {
 
 function Classification(props) {
 
-    const { industry, industries, setIndustries, jobCount, professions } = props;
+    const dispatch = useDispatch();
+    const industries = useSelector(state => state.jobSearch.industries);
+
+    const { industry, jobCount, professions } = props;
     const [checked, setChecked] = useState(industries.indexOf(industry) > -1);
 
     const handleClick = () => {
         setChecked(!checked);
-        industries.indexOf(industry) > -1 ? 
-            setIndustries(industries.filter(c => c !== industry)) 
-        : 
-            setIndustries([ ...industries, industry]);
+        industries.indexOf(industry) > -1 ? dispatch(removeIndustry(industry)) : dispatch(addIndustry(industry));
     }
 
     return (
@@ -61,10 +60,9 @@ function Classification(props) {
 }
 
 function SubClassification(props) {
-
+    
     const { industry, jobCount, professions } = props;
     const [allChecked, setAllChecked] = useState(true);
-    const [selectedProfessions, setSelectedProfessions] = useState([]);
 
     return (
         <div className="sub-items">
@@ -81,8 +79,6 @@ function SubClassification(props) {
                     key={index} 
                     allChecked={allChecked} 
                     setAllChecked={setAllChecked} 
-                    selectedProfessions={selectedProfessions} 
-                    setSelectedProfessions={setSelectedProfessions} 
                     profession={profession.name} 
                     jobCount={profession.jobCount}
                 />
@@ -93,12 +89,15 @@ function SubClassification(props) {
 
 function Item(props) {
 
-    const { allChecked, setAllChecked, selectedProfessions, setSelectedProfessions, profession, jobCount } = props;
+    const dispatch = useDispatch();
+    const selectedProfessions = useSelector(state => state.jobSearch.professions);
+    const { allChecked, setAllChecked, profession, jobCount } = props;
     const [checked, setChecked] = useState(false);
 
     const handleClick = () => {
         setAllChecked(false);
         setChecked(!checked);
+        selectedProfessions.indexOf(profession) > -1 ? dispatch(removeProfession(profession)) : dispatch(addProfession(profession));
     }
 
     return (

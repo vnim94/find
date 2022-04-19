@@ -2,7 +2,7 @@ import { request } from '../profile/user.api';
 
 const getJobsRequest = `
     query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: String, $payBase: Int, $payCeiling: Int) {
-        jobs(title: $title, company: $company, city: $city, suburb: $String, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling) {
+        jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling) {
             id
             title
             headliner
@@ -44,7 +44,7 @@ const getAllIndustriesRequest = `
     }
 `
 
-export const getAllJobs = async (vars) => {
+export const getJobs = async (vars) => {
     return await request(getJobsRequest, vars);
 }
 

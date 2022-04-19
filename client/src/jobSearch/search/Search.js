@@ -2,16 +2,33 @@ import './Search.css';
 import Dropdown from './Dropdown';
 import Options from './Options';
 import { useState } from 'react';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getJobs } from '../job.api';
+import { setJobs } from '../job.slice';
 
 function Search(props) {
 
+    const dispatch = useDispatch();
     const [visible, setVisible] = useState(false);
     const [expanded, setExpanded] = useState(props.expanded);
-    const [industries, setIndustries] = useState([]);
+
+    const selectedIndustries = useSelector(state => state.jobSearch.industries);
+    const selectedProfessions = useSelector(state => state.jobSearch.professions);
 
     const handleSubmit = () => {
-        
+        const vars = {
+            // title: $title, 
+            // company: $company, 
+            // city: $city, 
+            // suburb: $suburb, 
+            industry: selectedIndustries, 
+            profession: selectedProfessions, 
+            workType: $workType, 
+            payBase: $payBase, 
+            payCeiling: $payCeiling
+        }
+        const response = await getJobs(vars);
+        if (response.data.jobs) dispatch(setJobs(response.data.jobs));
     }
 
     return (
@@ -26,16 +43,16 @@ function Search(props) {
                                 <input className="form-control" type="text" placeholder="Enter Keywords"></input>
                                 <div className={`classification form-control flex flex-ai-c flex-jc-sb ${visible && 'outlined'}`} onClick={() => setVisible(!visible)}>
                                     <span className="dark-grey">
-                                        {industries.length === 0 ? 
+                                        {selectedIndustries.length === 0 ? 
                                             'Any classification' 
                                         : 
-                                            industries.length > 1 ? 
-                                                `${industries.length} classifications`
+                                            selectedIndustries.length > 1 ? 
+                                                `${selectedIndustries.length} classifications`
                                             : 
-                                                industries[0].length > 20 ? 
-                                                    `${industries[0].slice(0,20)} ...`
+                                                selectedIndustries[0].length > 20 ? 
+                                                    `${selectedIndustries[0].slice(0,20)} ...`
                                                 :
-                                                    industries[0]
+                                                    selectedIndustries[0]
                                         }
                                     </span>
                                     <div className={`${industries.length > 0 && 'shrink'} list-action flex flex-ai-c`}>
@@ -45,7 +62,7 @@ function Search(props) {
                                         </div>
                                     </div>
                                 </div>
-                                {visible && <Dropdown industries={industries} setIndustries={setIndustries} />}
+                                {visible && <Dropdown />}
                             </div>
                         </div>
                         <div className="where flex flex-col">

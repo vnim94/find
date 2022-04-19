@@ -2,8 +2,18 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const jobSlice = createSlice({
     name: 'jobSearch',
-    initialState: { industries: [], professions: [] },
+    initialState: { 
+        jobs: [], 
+        industries: [], 
+        professions: [],
+        workTypes: [],
+        payBase: null,
+        payCeiling: null 
+    },
     reducers: {
+        setJobs(state, action) {
+            state.jobs = action.payload
+        },
         addIndustry(state, action) {
             state.industries.push(action.payload);
         },
@@ -15,10 +25,22 @@ const jobSlice = createSlice({
         },
         removeProfession(state, action) {
             state.professions = state.professions.filter(profession => profession !== action.payload);
+        },
+        addWorkType(state, action) {
+            state.workTypes.push(action.payload);
+        },
+        removeWorkType(state, action) {
+            state.workTypes = state.workTypes.filter(workType => workType !== action.payload);
+        },
+        setPayBase(state, action) {
+            state.payBase = action.payload
+        },
+        setPayCeiling(state, action) {
+            state.payCeiling = action.payload;
         }
     }
 })
 
-export const { addIndustry, removeIndustry, addProfession, removeProfession } = jobSlice.actions;
+export const { addIndustry, removeIndustry, addProfession, removeProfession, setJobs } = jobSlice.actions;
 
 export default jobSlice.reducer;
