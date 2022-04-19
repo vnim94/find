@@ -1,11 +1,11 @@
 import './Jobs.css'
-import { useEffect, useState } from 'react';
-import { getJobs } from '../job.api';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import getTimeElapsed from '../../helpers/getTimeElapsed';
 
-function Jobs(props) {
+function Jobs() {
 
-    const { jobs } = props;
+    const jobs = useSelector(state => state.jobSearch.jobs);
     const [sort, setSort] = useState(false);
 
     return (
@@ -24,11 +24,7 @@ function Jobs(props) {
                     </div>
                     <div className="job-listings">
                         {jobs && jobs.map((job, index) => {
-                            let details = job;
-                            details.company = job.company.name;
-                            details.industry = details.industry.name;
-                            details.profession = details.profession.name;
-                            return <JobCard key={index} job={details} />
+                            return <JobCard key={index} job={job} />
                         })}
                     </div>
                 </div>
@@ -56,7 +52,7 @@ function JobCard(props) {
             <div className="flex flex-row flex-jc-sb">
                 <div className="flex flex-col">
                     <a className="medium" href="/">{title}</a>
-                    <span>{company}</span>
+                    <span>{company.name}</span>
                 </div>
                 <span>{getTimeElapsed(added, Date.now())}</span>
             </div>
@@ -73,15 +69,15 @@ function JobCard(props) {
                     <span>{workType}</span>
                 </div>
                 <div className="flex flex-row">
-                    <b>{industry}</b>
+                    <b>{industry.name}</b>
                     <span className="material-icons-outlined">navigate_next</span>
-                    <span>{profession}</span>
+                    <span>{profession.name}</span>
                 </div>
             </div>
             {summary && <div>
                 <ul className="summary">
                 {summary.split('\n').map((line, index) => {
-                    return <li>{line}</li>
+                    return <li key={index}>{line}</li>
                 })}
                 </ul>
             </div>}

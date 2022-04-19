@@ -11,10 +11,10 @@ function Dropdown() {
     useEffect(() => {
         async function fetchAllIndustries() {
             const response = await getAllIndustries();
-            setAllIndustries(response.data.allIndustries);
+            if (response.data.allIndustries) setAllIndustries(response.data.allIndustries);
         }
         fetchAllIndustries();
-    },[getAllIndustries])
+    },[])
 
     return (
         <div className="dropdown">
@@ -22,7 +22,7 @@ function Dropdown() {
                 {allIndustries && allIndustries.map((industry,index) => { 
                     return <Classification 
                         key={index} 
-                        industry={industry.name} 
+                        industry={industry} 
                         jobCount={industry.jobCount}
                         professions={industry.professions}
                     />
@@ -35,14 +35,14 @@ function Dropdown() {
 function Classification(props) {
 
     const dispatch = useDispatch();
-    const industries = useSelector(state => state.jobSearch.industries);
+    const selectedIndustries = useSelector(state => state.jobSearch.industries);
 
     const { industry, jobCount, professions } = props;
-    const [checked, setChecked] = useState(industries.indexOf(industry) > -1);
+    const [checked, setChecked] = useState(selectedIndustries.some(i => i.code === industry.code));
 
     const handleClick = () => {
         setChecked(!checked);
-        industries.indexOf(industry) > -1 ? dispatch(removeIndustry(industry)) : dispatch(addIndustry(industry));
+        selectedIndustries.some(i => i.code === industry.code) ? dispatch(removeIndustry(industry)) : dispatch(addIndustry(industry));
     }
 
     return (
@@ -50,11 +50,11 @@ function Classification(props) {
             <div className="item-container flex flex-row flex-jc-sb flex-ai-c" onClick={handleClick}>
                 <div className="item flex flex-ai-c">
                     <span className={`${checked && 'checked'} checkbox`}></span>
-                    <span className="item-text">{industry}</span>
+                    <span className="item-text">{industry.name}</span>
                 </div>
                 {!checked && <span>{jobCount}</span>}
             </div>
-            {checked && <SubClassification industry={industry} jobCount={jobCount} professions={professions} />}
+            {checked && <SubClassification industry={industry.name} jobCount={jobCount} professions={professions} />}
         </li>
     )
 }
@@ -79,8 +79,7 @@ function SubClassification(props) {
                     key={index} 
                     allChecked={allChecked} 
                     setAllChecked={setAllChecked} 
-                    profession={profession.name} 
-                    jobCount={profession.jobCount}
+                    profession={profession} 
                 />
             })}
         </div>
@@ -91,22 +90,22 @@ function Item(props) {
 
     const dispatch = useDispatch();
     const selectedProfessions = useSelector(state => state.jobSearch.professions);
-    const { allChecked, setAllChecked, profession, jobCount } = props;
-    const [checked, setChecked] = useState(false);
+    const { allChecked, setAllChecked, profession } = props;
+    const [checked, setChecked] = useState(selectedProfessions.some(p => p.code === profession.code));
 
     const handleClick = () => {
         setAllChecked(false);
         setChecked(!checked);
-        selectedProfessions.indexOf(profession) > -1 ? dispatch(removeProfession(profession)) : dispatch(addProfession(profession));
+        selectedProfessions.some(p => p.code === profession.code) ? dispatch(removeProfession(profession)) : dispatch(addProfession(profession));
     }
 
     return (
         <div className="item-container flex flex-row flex-jc-sb flex-ai-c" onClick={handleClick}>
             <div className="item flex flex-ai-c">
                 <span className={`${checked && 'checked'} checkbox`}></span>
-                <span className="item-text">{profession}</span>
+                <span className="item-text">{profession.name}</span>
             </div>
-            <span>{jobCount}</span>
+            <span>{profession.jobCount}</span>
         </div>
     )
 }

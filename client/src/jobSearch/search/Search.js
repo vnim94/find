@@ -2,33 +2,44 @@ import './Search.css';
 import Dropdown from './Dropdown';
 import Options from './Options';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import { setJobs } from '../job.slice';
+import { setJobs, clearIndustries } from '../job.slice';
 
 function Search(props) {
 
+    const navigate  = useNavigate();
     const dispatch = useDispatch();
     const [visible, setVisible] = useState(false);
     const [expanded, setExpanded] = useState(props.expanded);
 
     const selectedIndustries = useSelector(state => state.jobSearch.industries);
     const selectedProfessions = useSelector(state => state.jobSearch.professions);
+    const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
+    const selectedPayBase = useSelector(state => state.jobSearch.payBase);
+    const selectedPayCeiling = useSelector(state => state.jobSearch.payCeiling);
 
-    const handleSubmit = () => {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         const vars = {
             // title: $title, 
             // company: $company, 
             // city: $city, 
             // suburb: $suburb, 
-            industry: selectedIndustries, 
-            profession: selectedProfessions, 
-            workType: $workType, 
-            payBase: $payBase, 
-            payCeiling: $payCeiling
+            industry: selectedIndustries.map(industry => industry.id), 
+            profession: selectedProfessions.map(profession => profession.id),
+            workType: selectedWorkTypes, 
+            payBase: selectedPayBase, 
+            payCeiling: selectedPayCeiling
         }
         const response = await getJobs(vars);
-        if (response.data.jobs) dispatch(setJobs(response.data.jobs));
+        if (response.data.jobs) {
+            console.log(response.data.jobs); 
+            dispatch(setJobs(response.data.jobs));
+            setVisible(false);
+            navigate(`/jobs`);
+        }
     }
 
     return (
@@ -49,15 +60,15 @@ function Search(props) {
                                             selectedIndustries.length > 1 ? 
                                                 `${selectedIndustries.length} classifications`
                                             : 
-                                                selectedIndustries[0].length > 20 ? 
-                                                    `${selectedIndustries[0].slice(0,20)} ...`
+                                                selectedIndustries[0].name.length > 20 ? 
+                                                    `${selectedIndustries[0].name.slice(0,20)} ...`
                                                 :
-                                                    selectedIndustries[0]
+                                                    selectedIndustries[0].name
                                         }
                                     </span>
-                                    <div className={`${industries.length > 0 && 'shrink'} list-action flex flex-ai-c`}>
+                                    <div className={`${selectedIndustries.length > 0 && 'shrink'} list-action flex flex-ai-c`}>
                                         <span className={`${visible && 'flip'} material-icons-outlined`}>expand_more</span>
-                                        <div className={`${industries.length === 0 && 'hidden'} clear flex flex-ai-c`} onClick={() => setIndustries([])}>
+                                        <div className={`${selectedIndustries.length === 0 && 'hidden'} clear flex flex-ai-c`} onClick={() => dispatch(clearIndustries())}>
                                             <span className="medium material-icons-outlined">clear</span>
                                         </div>
                                     </div>

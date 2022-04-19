@@ -1,18 +1,24 @@
 const app = require('../../app');
 const request = require('supertest')(app);
-
 const database = require('../../util/memoryDatabase');
+
+const Industry = require('../../src/job/industry.model');
+
+let industryA;
+let industryB;
 
 beforeAll(async () => {
     await database.connect();
     await database.seed();
+    industryA = await Industry.findOne({ code: '0001' });
+    industryB = await Industry.findOne({ code: '0000' });
 });
 
 afterAll(async () => { await database.disconnect() });
 
 describe('job queries', () => {
     const jobsQuery = `
-        query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: String, $payBase: Int, $payCeiling: Int) {
+        query jobsQuery($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int) {
             jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling) {
                 id
                 title
@@ -20,15 +26,18 @@ describe('job queries', () => {
                 summary
                 description
                 company {
+                    id
                     name
                 }
                 city
                 suburb
                 industry {
+                    id
                     name
                     code
                 }
                 profession {
+                    id
                     name
                     code
                 }
@@ -47,5 +56,19 @@ describe('job queries', () => {
             })
 
         expect(response.body.data.jobs).toBeTruthy();
+        expect(response.body.data.jobs.length).toBe(2);
+    })
+
+    test('jobs query with multiple parameters', async () => {
+        const variables = {
+            industry: [industryA._id.toString()],
+        }
+        const response = await request.post('/api')
+            .send({
+                query: jobsQuery,
+                variables: variables
+            })
+        expect(response.body.data.jobs).toBeTruthy();
+        expect(response.body.data.jobs.length).toBe(1);
     })
 })

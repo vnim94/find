@@ -20,6 +20,9 @@ const jobSlice = createSlice({
         removeIndustry(state, action) {
             state.industries = state.industries.filter(industry => industry !== action.payload);
         },
+        clearIndustries(state) {
+            state.industries = []
+        },
         addProfession(state, action) {
             state.professions.push(action.payload);
         },
@@ -41,6 +44,17 @@ const jobSlice = createSlice({
     }
 })
 
-export const { addIndustry, removeIndustry, addProfession, removeProfession, setJobs } = jobSlice.actions;
+export const { 
+    addIndustry, 
+    removeIndustry, 
+    clearIndustries,
+    addProfession, 
+    removeProfession, 
+    setJobs,
+    addWorkType,
+    removeWorkType,
+    setPayBase,
+    setPayCeiling
+} = jobSlice.actions;
 
 export default jobSlice.reducer;

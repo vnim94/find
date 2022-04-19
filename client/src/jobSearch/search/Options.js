@@ -1,8 +1,10 @@
 import './Options.css';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 function Options() {
 
+    const dispatch = useDispatch();
     const [selected, setSelected] = useState();
     const [expanded, setExpanded] = useState();
 
