@@ -18,7 +18,7 @@ const jobSlice = createSlice({
             state.industries.push(action.payload);
         },
         removeIndustry(state, action) {
-            state.industries = state.industries.filter(industry => industry !== action.payload);
+            state.industries = state.industries.filter(industry => industry.code !== action.payload.code);
         },
         clearIndustries(state) {
             state.industries = []
@@ -27,7 +27,7 @@ const jobSlice = createSlice({
             state.professions.push(action.payload);
         },
         removeProfession(state, action) {
-            state.professions = state.professions.filter(profession => profession !== action.payload);
+            state.professions = state.professions.filter(profession => profession.code !== action.payload.code);
         },
         addWorkType(state, action) {
             state.workTypes.push(action.payload);
