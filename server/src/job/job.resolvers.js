@@ -19,7 +19,6 @@ const JobResolvers = {
             return job
         },
         jobs: async (_, query) => {
-            console.log(query)
             if (query.industry) query.industry = { $in: query.industry }
             if (query.profession) query.profession = { $in: query.profession }
             if (query.workType) query.workType = { $in: query.workType }

@@ -13,7 +13,7 @@ function Search(props) {
     const dispatch = useDispatch();
     const [visible, setVisible] = useState(false);
     const [expanded, setExpanded] = useState(props.expanded);
-
+    const [title, setTitle] = useState();
     const selectedIndustries = useSelector(state => state.jobSearch.industries);
     const selectedProfessions = useSelector(state => state.jobSearch.professions);
     const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
@@ -22,17 +22,14 @@ function Search(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const vars = {
-            // title: $title, 
-            // company: $company, 
-            // city: $city, 
-            // suburb: $suburb, 
-            industry: selectedIndustries.map(industry => industry.id), 
-            profession: selectedProfessions.map(profession => profession.id),
-            workType: selectedWorkTypes, 
-            payBase: selectedPayBase, 
-            payCeiling: selectedPayCeiling
-        }
+        const vars = {}
+
+        if (selectedIndustries.length > 0) vars.industry = selectedIndustries.map(industry => industry.id) 
+        if (selectedProfessions.length > 0) vars.profession = selectedProfessions.map(profession => profession.id) 
+        if (selectedWorkTypes.length > 0) vars.workType = selectedWorkTypes
+        if (selectedPayBase) vars.payBase = selectedPayBase;
+        if (selectedPayCeiling) vars.payCeiling = selectedPayCeiling;
+        
         const response = await getJobs(vars);
         if (response.data.jobs) {
             console.log(response.data.jobs); 
