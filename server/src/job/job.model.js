@@ -29,12 +29,10 @@ const JobSchema = Schema({
         ref: 'Company',
         required: true
     },
-    city: {
-        type: String,
+    location: {
+        type: Schema.Types.ObjectId,
+        ref:' Location',
         required: true
-    },
-    suburb: {
-        type: String
     },
     industry: {
         type: Schema.Types.ObjectId,
