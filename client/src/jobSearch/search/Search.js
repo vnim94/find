@@ -32,7 +32,6 @@ function Search(props) {
         
         const response = await getJobs(vars);
         if (response.data.jobs) {
-            console.log(response.data.jobs); 
             dispatch(setJobs(response.data.jobs));
             setVisible(false);
             navigate(`/jobs`);

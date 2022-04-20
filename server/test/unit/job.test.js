@@ -10,9 +10,11 @@ const tester = new EasyGraphQLTester(typeDefs, resolvers);
 let context;
 let company;
 let job;
+let jobB;
 let industry;
 let industryB;
 let profession;
+let professionB;
 
 beforeAll(async () => {
     await database.connect();

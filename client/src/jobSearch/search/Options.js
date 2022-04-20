@@ -1,10 +1,10 @@
 import './Options.css';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addWorkType, removeWorkType, setPayBase, setPayCeiling, setTimeElapsed } from '../job.slice';
 
 function Options() {
 
-    const dispatch = useDispatch();
     const [selected, setSelected] = useState();
     const [expanded, setExpanded] = useState();
 
@@ -14,68 +14,68 @@ function Options() {
         'Contract/Temp',
         'Casual/Vacation'
     ];
-    const payBasesAnnually = [
-        '$0',
-        '30k',
-        '40k',
-        '50k',
-        '60k',
-        '70k',
-        '80k',
-        '100k',
-        '120k',
-        '150k',
-        '200k'
-    ];
-    const payBasesHourly = [
-        '$0',
-        '$15',
-        '$20',
-        '$25',
-        '$30',
-        '$35',
-        '$40',
-        '$50',
-        '$60',
-        '$75',
-        '$100'
-    ]
-    const payCeilingsAnnually = [
-        '30k',
-        '40k',
-        '50k',
-        '60k',
-        '70k',
-        '80k',
-        '100k',
-        '120k',
-        '150k',
-        '200k',
-        '200k+'
-    ];
-    const payCeilingHourly = [
-        '$15',
-        '$20',
-        '$25',
-        '$30',
-        '$35',
-        '$40',
-        '$50',
-        '$60',
-        '$75',
-        '$100',
-        '$100+'
-    ]
-    const times = [
-        'Any time',
-        'Today',
-        'Last 3 days', 
-        'Last 7 days',
-        'Last 14 days',
-        'Last 30 days'
-    ]
+    const payBasesAnnually = {
+        '$0': 0,
+        '30k': 30000,
+        '40k': 40000,
+        '50k': 50000,
+        '60k': 60000,
+        '70k': 70000,
+        '80k': 80000,
+        '100k': 100000,
+        '120k': 120000,
+        '150k': 150000,
+        '200k': 200000
+    };
+    const payBasesHourly = {
+        '$0': 0,
+        '$15': 30000,
+        '$20': 40000,
+        '$25': 50000,
+        '$30': 60000,
+        '$35': 70000,
+        '$40': 80000,
+        '$50': 100000,
+        '$60': 120000,
+        '$75': 150000,
+        '$100': 200000
+    }
+    const payCeilingsAnnually = {
+        '30k': 30000,
+        '40k': 40000,
+        '50k': 50000,
+        '60k': 60000,
+        '70k': 70000,
+        '80k': 80000,
+        '100k': 100000,
+        '120k': 120000,
+        '150k': 150000,
+        '200k': 200000,
+        '200k+': null
+    };
+    const payCeilingHourly = {
+        '$15': 30000,
+        '$20': 40000,
+        '$25': 50000,
+        '$30': 60000,
+        '$35': 70000,
+        '$40': 80000,
+        '$50': 100000,
+        '$60': 120000,
+        '$75': 150000,
+        '$100': 200000,
+        '$100+': 0
+    }
+    const times = {
+        'Any time': null,
+        'Today': Date.now(),
+        'Last 3 days': Date.now() - 3 * 24 * 60 * 60 * 1000, 
+        'Last 7 days': Date.now() - 7 * 24 * 60 * 60 * 1000,
+        'Last 14 days': Date.now() - 14 * 24 * 60 * 60 * 1000,
+        'Last 30 days': Date.now() - 30 * 24 * 60 * 60 * 1000
+    }
 
-    const [workType, setWorkType] = useState([]);
+    const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
     const [payBase, setPayBase] = useState('0');
     const [payBaseScale, setPayBaseScale] = useState('annually');
     const [payCeiling, setPayCeiling] = useState('200k+');
@@ -87,7 +87,9 @@ function Options() {
         <div className="options flex flex-jc-c">
             <div className="page flex flex-row">
                 <span className="light-black">|</span>
-                <Option id="workType" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text={workType.length === 0 || workType.length === workTypes.length ? 'All work types' : (workType.length > 1 ? `${workType.length} work types` : workType[0])} />
+                <Option id="workType" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} 
+                    text={selectedWorkTypes.length === 0 || selectedWorkTypes.length === workTypes.length ? 'All work types' : (selectedWorkTypes.length > 1 ? `${selectedWorkTypes.length} work types` : selectedWorkTypes[0])} 
+                />
                 <span className="light-black">|</span>
                 <Option id="payBase" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="paying" value={payBase.startsWith('$') ? payBase : `$${payBase}`}/>
                 <span className="light-black">|</span>
@@ -97,7 +99,7 @@ function Options() {
                 <span className="light-black">|</span>
             </div>
         </div>
-        {selected === "workType" ? <ExpandedOption type='multi' values={workTypes} display={workType} setDisplay={setWorkType} /> : undefined}
+        {selected === "workType" ? <ExpandedOption type='multi' values={workTypes} /> : undefined}
         {selected === "payBase" ? <ExpandedOption type='toggle' toggle={payBaseScale} setToggle={setPayBaseScale} annually={payBasesAnnually} hourly={payBasesHourly} selectedSubOption={payBase} setDisplay={setPayBase}/> : undefined}
         {selected === "payCeiling" ? <ExpandedOption type='toggle' toggle={payCeilingScale} setToggle={setPayCeilingScale} annually={payCeilingsAnnually} hourly={payCeilingHourly} selectedSubOption={payCeiling} setDisplay={setPayCeiling}/> : undefined}
         {selected === "time" ? <ExpandedOption values={times} selectedSubOption={time} setDisplay={setTime}/> : undefined}
@@ -136,22 +138,22 @@ function Option(props) {
 
 function ExpandedOption(props) {
 
-    const { annually, hourly, display, setDisplay, selectedSubOption, toggle, setToggle, type, values } = props;
+    const { annually, hourly, setDisplay, selectedSubOption, toggle, setToggle, type, values } = props;
     
     return (
         <div className="expanded-option flex flex-jc-c">
             <nav className="page">
                 <ul className="expanded-sub-options flex flex-row flex-jc-sb">
                     {type === 'multi' ? 
-                        values.map((value,index) => { return <MultiSubOption key={index} display={display} selectedSubOption={selectedSubOption} setDisplay={setDisplay} text={value} /> })
+                        values.map((value,index) => { return <MultiSubOption key={index} text={value} /> })
                     : 
                         type === 'toggle' ?
                             toggle === 'annually' ? 
-                                annually.map((value,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={value} /> })
+                                Object.keys(annually).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={text} value={annually[text]} setValue={setPayBase} /> })
                             :
-                                hourly.map((value,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={value} />})
+                                Object.keys(hourly).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={text} value={hourly[text]} setValue={setPayCeiling} />})
                         : 
-                            values.map((value,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={value} /> })
+                            Object.keys(values).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={text} value={values[text]} setValue={setTimeElapsed} /> })
                     }
                 </ul>
                 {type && type === 'toggle' && <ScaleToggle toggle={toggle} setToggle={setToggle}/>}
@@ -162,14 +164,16 @@ function ExpandedOption(props) {
 
 function MultiSubOption(props) {
 
-    const { text, display, setDisplay } = props;
-    
+    const dispatch = useDispatch();
+    const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
+    const { text } = props;
+
     const handleClick = () => {
-        display.indexOf(text) > -1 ? setDisplay(display.filter(type => type !== text)) : setDisplay([ ...display, text]);
+        selectedWorkTypes.indexOf(text) > -1 ? dispatch(removeWorkType(text)) : dispatch(addWorkType(text));
     }
 
     return (
-        <li className={display.includes(text) ? 'selected-sub-option' :  undefined} onClick={handleClick}>
+        <li className={selectedWorkTypes.includes(text) ? 'selected-sub-option' :  undefined} onClick={handleClick}>
             <span>{text}</span>
         </li>
     )
@@ -177,10 +181,12 @@ function MultiSubOption(props) {
 
 function SingleSubOption(props) {
 
-    const { setDisplay, selectedSubOption, text} = props;
+    const dispatch = useDispatch();
+    const { setDisplay, selectedSubOption, text, value, setValue } = props;
     
     const handleClick = () => {
         setDisplay(text);
+        dispatch(setValue(value));
     }
 
     return (

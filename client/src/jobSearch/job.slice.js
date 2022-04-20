@@ -8,7 +8,8 @@ const jobSlice = createSlice({
         professions: [],
         workTypes: [],
         payBase: null,
-        payCeiling: null 
+        payCeiling: null,
+        timeElapsed: null 
     },
     reducers: {
         setJobs(state, action) {
@@ -40,6 +41,9 @@ const jobSlice = createSlice({
         },
         setPayCeiling(state, action) {
             state.payCeiling = action.payload;
+        },
+        setTimeElapsed(state, action) {
+            state.timeElapsed = action.payload;
         }
     }
 })
@@ -54,7 +58,8 @@ export const {
     addWorkType,
     removeWorkType,
     setPayBase,
-    setPayCeiling
+    setPayCeiling,
+    setTimeElapsed
 } = jobSlice.actions;
 
 export default jobSlice.reducer;
