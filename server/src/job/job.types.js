@@ -6,8 +6,7 @@ const JobTypes = `
         summary: String
         description: String!
         company: Company!
-        city: String!
-        suburb: String
+        location: Location!
         industry: Industry!
         profession: Profession!
         workType: String!
@@ -15,6 +14,12 @@ const JobTypes = `
         payCeiling: Int!
         added: Date!
         closing: Date!
+    }
+
+    type Location {
+        id: ID!
+        city: String!
+        suburb: String!
     }
 
     type Industry {
@@ -41,8 +46,7 @@ const JobTypes = `
         summary: String
         description: String
         company: String
-        city: String
-        suburb: String
+        location: String
         industry: String
         profession: String
         workType: String
@@ -57,14 +61,15 @@ const JobTypes = `
 
     type Query {
         job(id: ID!): JobResult!
-        jobs(title: String, company: ID, city: String, suburb: String, industry: [ID], profession: [ID], workType: [String], payBase: Int, payCeiling: Int, added: Date): [Job]!
+        jobs(title: String, company: ID, location: [ID], industry: [ID], profession: [ID], workType: [String], payBase: Int, payCeiling: Int, added: Date): [Job]!
         allIndustries: [Industry]!
         allProfessions: [Profession]!
+        allLocations: [Location]!
     }
 
     type Mutation {
-        createJob(title: String!, headliner: String!, summary: String, description: String!, company: ID!, city: String!, suburb: String, industry: ID!, profession: ID!, workType: String!): JobResult
-        updateJob(id: ID!, title: String, headliner: String, summary: String, description: String, city: String, suburb: String, industry: ID, profession: ID, workType: String): JobResult
+        createJob(title: String!, headliner: String!, summary: String, description: String!, company: ID!, location: ID!, industry: ID!, profession: ID!, workType: String!): JobResult
+        updateJob(id: ID!, title: String, headliner: String, summary: String, description: String, location: ID, industry: ID, profession: ID, workType: String): JobResult
         closeJob(id: ID!): JobResult
         deleteJob(id: ID!): JobResult
     }

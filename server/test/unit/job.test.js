@@ -1,3 +1,4 @@
+const Location = require('../../src/job/location.model');
 const Job = require('../../src/job/job.model');
 const Industry = require('../../src/job/industry.model');
 const Profession = require('../../src/job/profession.model');
@@ -20,28 +21,21 @@ beforeAll(async () => {
     await database.connect();
     await database.seed();
     company = await Company.findOne();
+    location = await Location.findOne();
     job = await Job.findOne({ title: 'burger flipper' });
     jobB = await Job.findOne({ title: 'manager' });
-    industry = await Industry.findOne({ code: '0001' })
-        .populate('jobs')
-        .populate('jobCount')
+    industry = await Industry.findOne({ code: '0001' }).populate('jobs jobCount')
         .populate({
             path: 'professions',
             populate: { path: 'jobCount' }
         });
-    industryB = await Industry.findOne({ code: '0000' })
-        .populate('jobs')
-        .populate('jobCount')
+    industryB = await Industry.findOne({ code: '0000' }).populate('jobs jobCount')
         .populate({
             path: 'professions',
             populate: { path: 'jobCount' }
         });
-    profession = await Profession.findOne({ code: '0001' })
-        .populate('jobs')
-        .populate('jobCount');
-    professionB = await Profession.findOne({ code: '0000' })
-        .populate('jobs')
-        .populate('jobCount');
+    profession = await Profession.findOne({ code: '0001' }).populate('jobs jobCount');
+    professionB = await Profession.findOne({ code: '0000' }).populate('jobs jobCount');
     context = { user: 'abc' };
 });
 
@@ -120,8 +114,8 @@ describe('models', () => {
 describe('job query resolvers', () => {
 
     const jobsQuery = `
-        query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
-            jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
+        query jobs($title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+            jobs(title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
                 id
                 title
                 headliner
@@ -130,8 +124,10 @@ describe('job query resolvers', () => {
                 company {
                     name
                 }
-                city
-                suburb
+                location {
+                    city
+                    suburb
+                }
                 industry {
                     name
                     code
@@ -216,6 +212,14 @@ describe('job query resolvers', () => {
         expect(result.data.jobs[0].profession.name).toBe('Chefs/Cooks');
     })
 
+    test('jobs query for multiple locations returns jobs for those locations', async () => {
+        const result = await tester.graphql(jobsQuery, {}, {}, {
+            location: [`${location._id.toString()}`]
+        })
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs.length).toBe(2);
+    })
+
     test('jobs query for multiple industries returns jobs for those industries', async () => {
         const result = await tester.graphql(jobsQuery, {}, {} ,{
             industry: [`${industry._id.toString()}`,`${industryB._id.toString()}`]    
@@ -257,8 +261,7 @@ describe('job query resolvers', () => {
             summary: 'this is a job to supervise things',
             description: 'supervise things',
             company: company._id,
-            city: 'Melbourne',
-            suburb: 'CBD', 
+            location: location._id,
             industry: industry._id,
             profession: profession._id,
             workType: 'Part time',
@@ -314,13 +317,28 @@ describe('job query resolvers', () => {
         expect(result.data.allProfessions[0].jobCount).toBe(1);
     })
 
+    test('allLocations returns all possible locations', async () => {
+        const query = `
+            {
+                allLocations {
+                    city
+                    suburb
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.data.allLocations).toBeTruthy();
+        expect(result.data.allLocations.length).toBe(1);
+        expect(result.data.allLocations[0].city).toBe('Melbourne');
+    })
+
 })
 
 describe('job mutation resolvers', () => {
     test('createJob', async () => {
         const createJob = `
             mutation {
-                createJob(title: "manager", headliner: "great chance to manage", description: "manage stuff", company: "${company._id.toString()}", city: "Melbourne", industry: "${job.industry._id}", profession: "${job.profession._id}", workType: "Full time") {
+                createJob(title: "manager", headliner: "great chance to manage", description: "manage stuff", company: "${company._id.toString()}", location: "${location._id.toString()}", industry: "${job.industry._id}", profession: "${job.profession._id}", workType: "Full time") {
                     ... on Job {
                         id
                         title
@@ -344,14 +362,14 @@ describe('job mutation resolvers', () => {
     test('createJob input errors', async () => {
         const createJob = `
             mutation {
-                createJob(title: "", headliner: "", description: "", company: "${company._id.toString()}", city: "", industry: "", profession: "", workType: "") {
+                createJob(title: "", headliner: "", description: "", company: "${company._id.toString()}", location: "", industry: "", profession: "", workType: "") {
                     ... on InvalidJobInput {
                         message
                         errors {
                             title
                             headliner
                             description
-                            city
+                            location 
                             industry
                             profession
                             workType
@@ -368,12 +386,15 @@ describe('job mutation resolvers', () => {
     test('updateJob', async () => {
         const updateJob = `
             mutation {
-                updateJob(id: "${job._id.toString()}", title: "updated", headliner: "updated" description: "updated", city: "Sydney", industry: "${industry._id}", profession: "${profession._id}", workType: "Part time") {
+                updateJob(id: "${job._id.toString()}", title: "updated", headliner: "updated" description: "updated", location: "${location._id}", industry: "${industry._id}", profession: "${profession._id}", workType: "Part time") {
                     ... on Job {
                         title
                         headliner
                         description
-                        city
+                        location {
+                            city
+                            suburb
+                        }
                         industry {
                             name
                         }
