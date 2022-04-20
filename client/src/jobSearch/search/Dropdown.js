@@ -61,6 +61,7 @@ function Classification(props) {
 
 function SubClassification(props) {
     
+    const selectedProfessions = useSelector(state => state.jobSearch.professions);
     const { industry, jobCount, professions } = props;
     const [allChecked, setAllChecked] = useState(true);
 
@@ -68,7 +69,7 @@ function SubClassification(props) {
         <div className="sub-items">
             <div className="item-container flex flex-row flex-jc-sb flex-ai-c" onClick={() => setAllChecked(!allChecked)}>
                 <div className="item flex flex-ai-c">
-                    <span className={`${allChecked && 'checked'} checkbox`}></span>
+                    <span className={`${allChecked && selectedProfessions.length === 0 && 'checked'} checkbox`}></span>
                     <span className="item-text">All {industry}</span>
                 </div>
                 <span>{jobCount}</span>
@@ -94,8 +95,8 @@ function Item(props) {
     const [checked, setChecked] = useState(selectedProfessions.some(p => p.code === profession.code));
 
     const handleClick = () => {
-        setAllChecked(false);
         setChecked(!checked);
+        // selectedProfessions.length === 1 && checked === false && allChecked === false ? setAllChecked(true) : setAllChecked(false);
         selectedProfessions.some(p => p.code === profession.code) ? dispatch(removeProfession(profession)) : dispatch(addProfession(profession));
     }
 

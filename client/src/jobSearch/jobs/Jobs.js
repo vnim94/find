@@ -13,7 +13,7 @@ function Jobs() {
             <div className="page flex flex-row">
                 <div className="job-feed">
                     <div className="job-search-result">
-                        <span>{jobs && jobs.length} jobs found</span>
+                        <span><b>{jobs && jobs.length}</b> jobs found</span>
                         <div className="sort flex flex-row flex-ai-c">
                             <span>Sorted by</span>
                             <div className="sort-option flex flex-ai-c" onClick={() => setSort(!sort)}>

@@ -53,7 +53,7 @@ function Options() {
         '200k': 200000,
         '200k+': null
     };
-    const payCeilingHourly = {
+    const payCeilingsHourly = {
         '$15': 30000,
         '$20': 40000,
         '$25': 50000,
@@ -76,9 +76,9 @@ function Options() {
     }
 
     const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
-    const [payBase, setPayBase] = useState('0');
+    const [displayedPayBase, setDisplayedPayBase] = useState('0');
     const [payBaseScale, setPayBaseScale] = useState('annually');
-    const [payCeiling, setPayCeiling] = useState('200k+');
+    const [displayedPayCeiling, setDisplayedPayCeiling] = useState('200k+');
     const [payCeilingScale, setPayCeilingScale] = useState('annually');
     const [time, setTime] = useState('any time');
 
@@ -91,18 +91,32 @@ function Options() {
                     text={selectedWorkTypes.length === 0 || selectedWorkTypes.length === workTypes.length ? 'All work types' : (selectedWorkTypes.length > 1 ? `${selectedWorkTypes.length} work types` : selectedWorkTypes[0])} 
                 />
                 <span className="light-black">|</span>
-                <Option id="payBase" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="paying" value={payBase.startsWith('$') ? payBase : `$${payBase}`}/>
+                <Option id="payBase" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="paying" value={displayedPayBase.startsWith('$') ? displayedPayBase : `$${displayedPayBase}`}/>
                 <span className="light-black">|</span>
-                <Option id="payCeiling" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="to" value={payCeiling.startsWith('$') ? payCeiling : `$${payCeiling}`} />
+                <Option id="payCeiling" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="to" value={displayedPayCeiling.startsWith('$') ? displayedPayCeiling : `$${displayedPayCeiling}`} />
                 <span className="light-black">|</span>
                 <Option id="time" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="listed" value={time.toLowerCase()} />
                 <span className="light-black">|</span>
             </div>
         </div>
-        {selected === "workType" ? <ExpandedOption type='multi' values={workTypes} /> : undefined}
-        {selected === "payBase" ? <ExpandedOption type='toggle' toggle={payBaseScale} setToggle={setPayBaseScale} annually={payBasesAnnually} hourly={payBasesHourly} selectedSubOption={payBase} setDisplay={setPayBase}/> : undefined}
-        {selected === "payCeiling" ? <ExpandedOption type='toggle' toggle={payCeilingScale} setToggle={setPayCeilingScale} annually={payCeilingsAnnually} hourly={payCeilingHourly} selectedSubOption={payCeiling} setDisplay={setPayCeiling}/> : undefined}
-        {selected === "time" ? <ExpandedOption values={times} selectedSubOption={time} setDisplay={setTime}/> : undefined}
+        {selected === "workType" ? <ExpandedOption>{workTypes.map((value,index) => { return <MultiSubOption key={index} text={value} /> })}</ExpandedOption> : undefined}
+        {selected === "payBase" ? <ExpandedOption type='toggle' toggle={payBaseScale} setToggle={setPayBaseScale}>
+            {payBaseScale === 'annually' ? 
+                Object.keys(payBasesAnnually).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayBase} selectedSubOption={displayedPayBase} text={text} value={payBasesAnnually[text]} setValue={setPayBase} /> })
+            :
+                Object.keys(payBasesHourly).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayBase} selectedSubOption={displayedPayBase} text={text} value={payBasesHourly[text]} setValue={setPayBase} />})
+            }
+        </ExpandedOption> : undefined}
+        {selected === "payCeiling" ? <ExpandedOption type='toggle' toggle={payCeilingScale} setToggle={setPayCeilingScale}>
+            {payBaseScale === 'annually' ? 
+                Object.keys(payBasesAnnually).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} setValue={setPayCeiling} /> })
+            :
+                Object.keys(payBasesHourly).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} setValue={setPayCeiling} />})
+            }
+        </ExpandedOption> : undefined}
+        {selected === "time" ? <ExpandedOption>
+            {Object.keys(times).map((text,index) => { return <SingleSubOption key={index} setDisplay={setTime} selectedSubOption={time} text={text} value={times[text]} setValue={setTimeElapsed} /> })}
+        </ExpandedOption> : undefined}
         </>
     )
 }
@@ -138,23 +152,13 @@ function Option(props) {
 
 function ExpandedOption(props) {
 
-    const { annually, hourly, setDisplay, selectedSubOption, toggle, setToggle, type, values } = props;
+    const { toggle, setToggle, type } = props;
     
     return (
         <div className="expanded-option flex flex-jc-c">
             <nav className="page">
                 <ul className="expanded-sub-options flex flex-row flex-jc-sb">
-                    {type === 'multi' ? 
-                        values.map((value,index) => { return <MultiSubOption key={index} text={value} /> })
-                    : 
-                        type === 'toggle' ?
-                            toggle === 'annually' ? 
-                                Object.keys(annually).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={text} value={annually[text]} setValue={setPayBase} /> })
-                            :
-                                Object.keys(hourly).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={text} value={hourly[text]} setValue={setPayCeiling} />})
-                        : 
-                            Object.keys(values).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplay} selectedSubOption={selectedSubOption} text={text} value={values[text]} setValue={setTimeElapsed} /> })
-                    }
+                    {props.children}
                 </ul>
                 {type && type === 'toggle' && <ScaleToggle toggle={toggle} setToggle={setToggle}/>}
             </nav>

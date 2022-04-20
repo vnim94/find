@@ -13,6 +13,7 @@ function Search(props) {
     const dispatch = useDispatch();
     const [visible, setVisible] = useState(false);
     const [expanded, setExpanded] = useState(props.expanded);
+
     const [title, setTitle] = useState();
     const selectedIndustries = useSelector(state => state.jobSearch.industries);
     const selectedProfessions = useSelector(state => state.jobSearch.professions);
