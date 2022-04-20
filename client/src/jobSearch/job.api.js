@@ -1,8 +1,8 @@
 import { request } from '../profile/user.api';
 
 const getJobsRequest = `
-    query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int) {
-        jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling) {
+    query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+        jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
             id
             title
             headliner

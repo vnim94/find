@@ -55,9 +55,7 @@ describe('models', () => {
         })
     
         test('closing should be current date + 30 days', () => {
-            const today = new Date();
-            const expiry = new Date();
-            expiry.setDate(today.getDate() + 30)
+            const expiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
             expect(job.closing.toDateString()).toBe(expiry.toDateString())
         })
         
@@ -122,8 +120,8 @@ describe('models', () => {
 describe('job query resolvers', () => {
 
     const jobsQuery = `
-        query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int) {
-            jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling) {
+        query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+            jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
                 id
                 title
                 headliner
@@ -234,7 +232,7 @@ describe('job query resolvers', () => {
         expect(result.data.jobs.length).toBe(2);
     })
 
-    test('jobs query for mutliple work types returns jobs for those professions', async () => {
+    test('jobs query for multiple work types returns jobs for those professions', async () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
             workTypes: ['Full time', 'Part time']
         });
@@ -250,6 +248,29 @@ describe('job query resolvers', () => {
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs.length).toBe(1);
         expect(result.data.jobs[0].payBase).toBe(70000);
+    })
+
+    test('jobs query for time elapsed', async () => {
+        const oldJob = await Job.create({
+            title: 'supervisor',
+            headliner: 'supervise stuff',
+            summary: 'this is a job to supervise things',
+            description: 'supervise things',
+            company: company._id,
+            city: 'Melbourne',
+            suburb: 'CBD', 
+            industry: industry._id,
+            profession: profession._id,
+            workType: 'Part time',
+            payBase: 70000,
+            payCeiling: 85000,
+            added: Date.now() - 7 * 24 * 60 * 60 * 1000
+        })
+        const result = await tester.graphql(jobsQuery, {}, {}, {
+            added: Date.now() - 6 * 24 * 60 * 60 * 1000
+        })
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs.length).toBe(2);
     })
 
     test('allIndustries return all industries and their professions', async () => {

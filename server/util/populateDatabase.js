@@ -272,7 +272,8 @@ function populateJobs(callback) {
             profession: profession._id,
             workType: workTypes[getRandomIndex(workTypes.length)],
             payBase: payBases[payBase],
-            payCeiling: payBases[getRandomIndex(payBases.length - payBase) + payBase]
+            payCeiling: payBases[getRandomIndex(payBases.length - payBase) + payBase],
+            added: Date.now() - getRandomIndex(30) * 24 * 60 * 60 * 1000
         }
         jobsToCreate.push(function(callback) { createJob(details, callback) });
     }

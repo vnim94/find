@@ -20,6 +20,7 @@ function Search(props) {
     const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
     const selectedPayBase = useSelector(state => state.jobSearch.payBase);
     const selectedPayCeiling = useSelector(state => state.jobSearch.payCeiling);
+    const selectedTimeElapsed = useSelector(state => state.jobSearch.timeElapsed);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -30,6 +31,7 @@ function Search(props) {
         if (selectedWorkTypes.length > 0) vars.workType = selectedWorkTypes
         if (selectedPayBase) vars.payBase = selectedPayBase;
         if (selectedPayCeiling) vars.payCeiling = selectedPayCeiling;
+        if (selectedTimeElapsed) vars.added = selectedTimeElapsed;
         
         const response = await getJobs(vars);
         if (response.data.jobs) {

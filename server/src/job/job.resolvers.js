@@ -24,6 +24,8 @@ const JobResolvers = {
             if (query.workType) query.workType = { $in: query.workType }
             if (query.payBase) query.payBase = { $gte: query.payBase }
             if (query.payCeiling) query.payCeiling = { $lte: query.payCeiling }
+            if (query.added) query.added = { $gt: query.added }
+            
             return await Job.find(query)
                 .populate('company')
                 .populate('industry')

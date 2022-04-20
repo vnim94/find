@@ -65,7 +65,7 @@ const JobSchema = Schema({
     },
     closing: {
         type: Date,
-        default: () => Date.now() + (30 * 24 * 60 * 60 * 1000)
+        default: function() { return this.added.getTime() + 30 * 24 * 60 * 60 * 1000 }
     }
 })
 
