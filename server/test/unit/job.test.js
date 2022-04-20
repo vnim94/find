@@ -143,11 +143,12 @@ describe('job query resolvers', () => {
                     code
                 }
                 workType
+                payBase
+                payCeiling
                 added
             }
         }
     `
-
     test('job', async () => {
         const query = `
             {
@@ -239,6 +240,16 @@ describe('job query resolvers', () => {
         });
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs.length).toBe(2);
+    })
+
+    test('jobs query for pay range', async () => {
+        const result = await tester.graphql(jobsQuery, {}, {}, {
+            payBase: 50000,
+            payCeiling: 100000
+        })
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs.length).toBe(1);
+        expect(result.data.jobs[0].payBase).toBe(70000);
     })
 
     test('allIndustries return all industries and their professions', async () => {
