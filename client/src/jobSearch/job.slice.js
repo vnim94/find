@@ -4,6 +4,7 @@ const jobSlice = createSlice({
     name: 'jobSearch',
     initialState: { 
         jobs: [], 
+        locations: [],
         industries: [], 
         professions: [],
         workTypes: [],
@@ -14,6 +15,12 @@ const jobSlice = createSlice({
     reducers: {
         setJobs(state, action) {
             state.jobs = action.payload
+        },
+        addLocation(state, action) {
+            state.locations.push(action.payload);
+        },
+        removeLocation(state, action) {
+            state.locations = state.locations.filter(location => location.city !== action.payload.city && location.suburb !== action.payload.suburb)
         },
         addIndustry(state, action) {
             state.industries.push(action.payload);
@@ -49,6 +56,8 @@ const jobSlice = createSlice({
 })
 
 export const { 
+    addLocation,
+    removeLocation,
     addIndustry, 
     removeIndustry, 
     clearIndustries,

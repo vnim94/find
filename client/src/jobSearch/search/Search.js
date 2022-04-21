@@ -24,7 +24,7 @@ function Search(props) {
     const selectedPayBase = useSelector(state => state.jobSearch.payBase);
     const selectedPayCeiling = useSelector(state => state.jobSearch.payCeiling);
     const selectedTimeElapsed = useSelector(state => state.jobSearch.timeElapsed);
-    const [location, setLocation] = useState();
+    const selectedLocation = useSelector(state => state.jobSearch.location);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -91,9 +91,9 @@ function Search(props) {
                     <form className="flex flex-row flex-jc-sb" onSubmit={handleSubmit}>
                         <div className="what flex flex-col">
                             <label>What</label>
-                            <div className="flex flex-row">
+                            <div className="flex flex-row" ref={selectClassification}>
                                 <input className="form-control" type="text" placeholder="Enter Keywords"/>
-                                <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} ref={selectClassification} onClick={() => setClassificationDropdown(!classificationDropdown)}>
+                                <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} onClick={() => setClassificationDropdown(!classificationDropdown)}>
                                     <span className="dark-grey">
                                         {selectedIndustries.length === 0 ? 
                                             'Any classification' 
@@ -126,12 +126,12 @@ function Search(props) {
                                 </Dropdown>}
                             </div>
                         </div>
-                        <div className="where flex flex-col">
+                        <div className="where flex flex-col" ref={where}>
                             <label>Where</label>
-                            <input className="form-control" type="search" placeholder="Enter suburb, city, or region" ref={where} onFocus={() => setLocationDropdown(!locationDropdown)}/>
+                            <input className="form-control" type="search" placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
                             {locationDropdown && <Dropdown>
                                 {allLocations && allLocations.map((location, index) => {
-                                    return <Item key={index} text={`${location.city} - ${location.suburb}`} />
+                                    return <Item key={index} text={`${location.city} - ${location.suburb}`} toggleList={setLocationDropdown}/>
                                 })}
                             </Dropdown>}
                         </div>

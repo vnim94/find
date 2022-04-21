@@ -1,4 +1,6 @@
 import jobSlice, { 
+    addLocation,
+    removeLocation,
     addIndustry, 
     removeIndustry, 
     addProfession, 
@@ -14,15 +16,18 @@ describe('job slice', () => {
     let initialState;
     const industry = { name: 'Accounting', code: '0000' };
     const profession = { name: 'Bookkeeper', code: '0000' };
+    const location = { city: 'Melbourne', suburb: 'CBD' };
 
     beforeEach(() => {
         initialState = {
             jobs: [], 
+            locations: [],
             industries: [], 
             professions: [],
             workTypes: [],
             payBase: null,
-            payCeiling: null
+            payCeiling: null,
+            timeElapsed: null
         }
     })
 
@@ -30,15 +35,44 @@ describe('job slice', () => {
         expect(jobSlice(undefined, {})).toEqual(initialState)
     })
 
+    test('addLocation should add a location to the locations array in state', () => {
+        expect(jobSlice(initialState, addLocation(location))).toEqual({
+            jobs: [],
+            locations: [location],
+            industries: [],
+            professions: [],
+            workTypes: [],
+            payBase: null,
+            payCeiling: null,
+            timeElapsed: null
+        })
+    })
+
+    test('removeLocation should remove a location from the locations array in state', () => {
+        initialState.locations = [location];
+        expect(jobSlice(initialState, removeLocation(location))).toEqual({
+            jobs: [],
+            locations: [],
+            industries: [],
+            professions: [],
+            workTypes: [],
+            payBase: null,
+            payCeiling: null,
+            timeElapsed: null
+        })
+    })
+
     test('addIndustry should add an industry to industries array in state', () => {
         
         expect(jobSlice(initialState, addIndustry(industry))).toEqual({
             jobs: [],
+            locations: [],
             industries: [industry],
             professions: [],
             workTypes: [],
             payBase: null,
-            payCeiling: null
+            payCeiling: null,
+            timeElapsed: null
         })
     })
 
@@ -46,11 +80,13 @@ describe('job slice', () => {
         initialState.industries.push(industry);
         expect(jobSlice(initialState, removeIndustry(industry))).toEqual({
             jobs: [], 
+            locations: [],
             industries: [], 
             professions: [],
             workTypes: [],
             payBase: null,
-            payCeiling: null
+            payCeiling: null,
+            timeElapsed: null
         })
     })
 
@@ -59,11 +95,13 @@ describe('job slice', () => {
         const newIndustry = { name: 'Retail', code: '0001' }
         expect(jobSlice(initialState, addIndustry(newIndustry))).toEqual({
             jobs: [],
+            locations: [],
             industries: [industry, newIndustry],
             professions: [],
             workTypes: [],
             payBase: null,
-            payCeiling: null
+            payCeiling: null,
+            timeElapsed: null
         })
     })
 
@@ -71,11 +109,13 @@ describe('job slice', () => {
         initialState.industries.push(industry);
         expect(jobSlice(initialState, clearIndustries())).toEqual({
             jobs: [], 
+            locations: [],
             industries: [], 
             professions: [],
             workTypes: [],
             payBase: null,
-            payCeiling: null
+            payCeiling: null,
+            timeElapsed: null
         });
     })
 
@@ -95,22 +135,26 @@ describe('job slice', () => {
         ]
         expect(jobSlice(initialState, setJobs(jobs))).toEqual({
             jobs: jobs,
+            locations: [],
             industries: [],
             professions: [],
             workTypes: [],
             payBase: null,
-            payCeiling: null
+            payCeiling: null,
+            timeElapsed: null
         })
     })
 
     test('addProfession should add a profession to the professions array in state', () => {
         expect(jobSlice(initialState, addProfession(profession))).toEqual({
             jobs: [], 
+            locations: [],
             industries: [], 
             professions: [profession],
             workTypes: [],
             payBase: null,
-            payCeiling: null
+            payCeiling: null,
+            timeElapsed: null
         })
     })
 
@@ -118,22 +162,26 @@ describe('job slice', () => {
         initialState.professions.push(profession);
         expect(jobSlice(initialState, removeProfession(profession))).toEqual({
             jobs: [], 
+            locations: [],
             industries: [], 
             professions: [],
             workTypes: [],
             payBase: null,
-            payCeiling: null
+            payCeiling: null,
+            timeElapsed: null
         })
     })
 
     test('addWorkType should add a workType to the workTypes array in state', () => {
         expect(jobSlice(initialState, addWorkType('Full time'))).toEqual({
             jobs: [], 
+            locations: [],
             industries: [], 
             professions: [],
             workTypes: ['Full time'],
             payBase: null,
-            payCeiling: null
+            payCeiling: null,
+            timeElapsed: null
         })
     })
 
@@ -141,11 +189,13 @@ describe('job slice', () => {
         initialState.workTypes = ['Full time'];
         expect(jobSlice(initialState, removeWorkType('Full time'))).toEqual({
             jobs: [], 
+            locations: [],
             industries: [], 
             professions: [],
             workTypes: [],
             payBase: null,
-            payCeiling: null
+            payCeiling: null,
+            timeElapsed: null
         })
     })
 

@@ -94,10 +94,11 @@ function CheckBoxItem(props) {
 
 export function Item(props) {
 
-    const { text } = props;
+    const dispatch = useDispatch();
+    const { text, toggleList } = props;
 
     const handleClick = () => {
-
+        toggleList(false);
     }
 
     return (
