@@ -25,6 +25,7 @@
 }
 
 .list-action > span {
+    transition: 0.6s;
     margin-left: 10px;
 }
 
@@ -61,8 +62,17 @@
     border: 3px solid transparent;
 }
 
+.what > * > .dropdown {
+    top: 130px;
+    left: 280px;
+}
+
 .where {
     width: 28%;
+}
+
+.where > .dropdown {
+    top: 130px;
 }
 
 .where > .form-control {

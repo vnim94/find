@@ -1,17 +1,19 @@
 import './Search.css';
-import Dropdown from './Dropdown';
+import Dropdown, { Classification, Item } from './Dropdown';
 import Options from './Options';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
 import { setJobs, clearIndustries } from '../job.slice';
+import { getAllIndustries, getAllLocations } from '../job.api';
 
 function Search(props) {
 
     const navigate  = useNavigate();
     const dispatch = useDispatch();
-    const [visible, setVisible] = useState(false);
+    const [classificationDropdown, setClassificationDropdown] = useState(false);
+    const [locationDropdown, setLocationDropdown] = useState(false);
     const [expanded, setExpanded] = useState(props.expanded);
 
     const [title, setTitle] = useState();
@@ -21,6 +23,7 @@ function Search(props) {
     const selectedPayBase = useSelector(state => state.jobSearch.payBase);
     const selectedPayCeiling = useSelector(state => state.jobSearch.payCeiling);
     const selectedTimeElapsed = useSelector(state => state.jobSearch.timeElapsed);
+    const [location, setLocation] = useState();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -36,10 +39,27 @@ function Search(props) {
         const response = await getJobs(vars);
         if (response.data.jobs) {
             dispatch(setJobs(response.data.jobs));
-            setVisible(false);
+            setClassificationDropdown(false);
             navigate(`/jobs`);
         }
     }
+
+    const [allIndustries, setAllIndustries] = useState();
+    const [allLocations, setAllLocations] = useState();
+
+    useEffect(() => {
+        async function fetchAllIndustries() {
+            const response = await getAllIndustries();
+            if (response.data.allIndustries) setAllIndustries(response.data.allIndustries);
+        }
+        async function fetchAllLocations() {
+            const response = await getAllLocations();
+            if (response.data.allLocations) setAllLocations(response.data.allLocations);
+        }
+
+        fetchAllIndustries();
+        fetchAllLocations();
+    },[])
 
     return (
         <>
@@ -50,8 +70,8 @@ function Search(props) {
                         <div className="what flex flex-col">
                             <label>What</label>
                             <div className="flex flex-row">
-                                <input className="form-control" type="text" placeholder="Enter Keywords"></input>
-                                <div className={`classification form-control flex flex-ai-c flex-jc-sb ${visible && 'outlined'}`} onClick={() => setVisible(!visible)}>
+                                <input className="form-control" type="text" placeholder="Enter Keywords"/>
+                                <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} onClick={() => setClassificationDropdown(!classificationDropdown)}>
                                     <span className="dark-grey">
                                         {selectedIndustries.length === 0 ? 
                                             'Any classification' 
@@ -66,18 +86,32 @@ function Search(props) {
                                         }
                                     </span>
                                     <div className={`${selectedIndustries.length > 0 && 'shrink'} list-action flex flex-ai-c`}>
-                                        <span className={`${visible && 'flip'} material-icons-outlined`}>expand_more</span>
+                                        <span className={`${classificationDropdown && 'flip'} material-icons-outlined`}>expand_more</span>
                                         <div className={`${selectedIndustries.length === 0 && 'hidden'} clear flex flex-ai-c`} onClick={() => dispatch(clearIndustries())}>
                                             <span className="medium material-icons-outlined">clear</span>
                                         </div>
                                     </div>
                                 </div>
-                                {visible && <Dropdown />}
+                                {classificationDropdown && <Dropdown>
+                                    {allIndustries && allIndustries.map((industry,index) => { 
+                                        return <Classification 
+                                            key={index} 
+                                            industry={industry} 
+                                            jobCount={industry.jobCount}
+                                            professions={industry.professions}
+                                        />
+                                    })}    
+                                </Dropdown>}
                             </div>
                         </div>
                         <div className="where flex flex-col">
                             <label>Where</label>
-                            <input className="form-control" type="search" placeholder="Enter suburb, city, or region"></input>
+                            <input className="form-control" type="search" placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
+                            {locationDropdown && <Dropdown>
+                                {allLocations && allLocations.map((location, index) => {
+                                    return <Item key={index} text={`${location.city} - ${location.suburb}`} />
+                                })}
+                            </Dropdown>}
                         </div>
                         <div className="find flex flex-ai-fe">
                             <button className="bg-black white btn" type="submit">Find</button>

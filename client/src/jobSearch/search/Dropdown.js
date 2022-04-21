@@ -1,38 +1,19 @@
 import './Dropdown.css';
-import { useEffect, useState } from 'react';
-import { getAllIndustries } from '../job.api';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addIndustry, removeIndustry, addProfession, removeProfession } from '../job.slice';
 
-function Dropdown() {
-
-    const [allIndustries, setAllIndustries] = useState();
-
-    useEffect(() => {
-        async function fetchAllIndustries() {
-            const response = await getAllIndustries();
-            if (response.data.allIndustries) setAllIndustries(response.data.allIndustries);
-        }
-        fetchAllIndustries();
-    },[])
-
+function Dropdown(props) {
     return (
         <div className="dropdown">
             <ul className="dropdown-list">
-                {allIndustries && allIndustries.map((industry,index) => { 
-                    return <Classification 
-                        key={index} 
-                        industry={industry} 
-                        jobCount={industry.jobCount}
-                        professions={industry.professions}
-                    />
-                })}
+                {props.children}
             </ul>
         </div>
     )
 }
 
-function Classification(props) {
+export function Classification(props) {
 
     const dispatch = useDispatch();
     const selectedIndustries = useSelector(state => state.jobSearch.industries);
@@ -76,7 +57,7 @@ function SubClassification(props) {
             </div>
             <hr className="sub-item-divider"></hr>
             {professions && professions.map((profession, index) => {
-                return <Item 
+                return <CheckBoxItem 
                     key={index} 
                     allChecked={allChecked} 
                     setAllChecked={setAllChecked} 
@@ -87,7 +68,7 @@ function SubClassification(props) {
     )
 }
 
-function Item(props) {
+function CheckBoxItem(props) {
 
     const dispatch = useDispatch();
     const selectedProfessions = useSelector(state => state.jobSearch.professions);
@@ -108,6 +89,25 @@ function Item(props) {
             </div>
             <span>{profession.jobCount}</span>
         </div>
+    )
+}
+
+export function Item(props) {
+
+    const { text } = props;
+
+    const handleClick = () => {
+
+    }
+
+    return (
+        <li className="list-item">
+            <div className="item-container flex flex-row flex-jc-sb flex-ai-c" onClick={handleClick}>
+                <div className="item flex flex-ai-c">
+                    <span className="item-text">{text}</span>
+                </div>
+            </div>
+        </li>
     )
 }
 

@@ -23,8 +23,6 @@
     border-radius: 5px;
     box-shadow: 0 0 5px var(--grey);
     position: absolute;
-    top: 130px;
-    left: 280px;
     height: 385px;
     width: 420px;
     z-index: 100;
@@ -50,6 +48,15 @@
 .item-text {
     width: 80%;
     overflow-wrap: break-word;
+}
+
+.list-item {
+    list-style-type: none;
+    padding: 10px;
+}
+
+.list-item:hover {
+    background-color: var(--pale-grey);
 }
 
 .sub-items {
