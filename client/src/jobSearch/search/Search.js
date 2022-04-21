@@ -1,7 +1,7 @@
 import './Search.css';
 import Dropdown, { Classification, Item } from './Dropdown';
 import Options from './Options';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
@@ -12,6 +12,7 @@ function Search(props) {
 
     const navigate  = useNavigate();
     const dispatch = useDispatch();
+    
     const [classificationDropdown, setClassificationDropdown] = useState(false);
     const [locationDropdown, setLocationDropdown] = useState(false);
     const [expanded, setExpanded] = useState(props.expanded);
@@ -61,6 +62,27 @@ function Search(props) {
         fetchAllLocations();
     },[])
 
+    const what = useRef();
+    const where = useRef();
+
+    useEffect(() => {
+        const clickOutside = (event) => {
+            if (classificationDropdown && what.current && !what.current.contains(event.target)) {
+                setClassificationDropdown(false);
+            }
+            if (locationDropdown && where.current && !where.current.contains(event.target)) {
+                setLocationDropdown(false);
+            }
+        }
+
+        document.addEventListener('mousedown', clickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', clickOutside);
+        }
+
+    },[classificationDropdown, locationDropdown])
+
     return (
         <>
         <section className="search flex flex-jc-c">
@@ -69,7 +91,7 @@ function Search(props) {
                     <form className="flex flex-row flex-jc-sb" onSubmit={handleSubmit}>
                         <div className="what flex flex-col">
                             <label>What</label>
-                            <div className="flex flex-row">
+                            <div className="flex flex-row" ref={what}>
                                 <input className="form-control" type="text" placeholder="Enter Keywords"/>
                                 <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} onClick={() => setClassificationDropdown(!classificationDropdown)}>
                                     <span className="dark-grey">
@@ -106,7 +128,7 @@ function Search(props) {
                         </div>
                         <div className="where flex flex-col">
                             <label>Where</label>
-                            <input className="form-control" type="search" placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
+                            <input className="form-control" type="search" placeholder="Enter suburb, city, or region" ref={where} onFocus={() => setLocationDropdown(!locationDropdown)}/>
                             {locationDropdown && <Dropdown>
                                 {allLocations && allLocations.map((location, index) => {
                                     return <Item key={index} text={`${location.city} - ${location.suburb}`} />
