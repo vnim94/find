@@ -62,12 +62,12 @@ function Search(props) {
         fetchAllLocations();
     },[])
 
-    const what = useRef();
+    const selectClassification = useRef();
     const where = useRef();
 
     useEffect(() => {
         const clickOutside = (event) => {
-            if (classificationDropdown && what.current && !what.current.contains(event.target)) {
+            if (classificationDropdown && selectClassification.current && !selectClassification.current.contains(event.target)) {
                 setClassificationDropdown(false);
             }
             if (locationDropdown && where.current && !where.current.contains(event.target)) {
@@ -91,9 +91,9 @@ function Search(props) {
                     <form className="flex flex-row flex-jc-sb" onSubmit={handleSubmit}>
                         <div className="what flex flex-col">
                             <label>What</label>
-                            <div className="flex flex-row" ref={what}>
+                            <div className="flex flex-row">
                                 <input className="form-control" type="text" placeholder="Enter Keywords"/>
-                                <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} onClick={() => setClassificationDropdown(!classificationDropdown)}>
+                                <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} ref={selectClassification} onClick={() => setClassificationDropdown(!classificationDropdown)}>
                                     <span className="dark-grey">
                                         {selectedIndustries.length === 0 ? 
                                             'Any classification' 
