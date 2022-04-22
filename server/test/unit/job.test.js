@@ -114,7 +114,7 @@ describe('models', () => {
 describe('job query resolvers', () => {
 
     const jobsQuery = `
-        query jobs($title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+        query jobs($title: String, $company: ID, $location: String, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
             jobs(title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
                 id
                 title
@@ -212,10 +212,19 @@ describe('job query resolvers', () => {
         expect(result.data.jobs[0].profession.name).toBe('Chefs/Cooks');
     })
 
-    test('jobs query for multiple locations returns jobs for those locations', async () => {
+    test.only('jobs query for location using location object returns jobs for that location', async () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
-            location: [`${location._id.toString()}`]
+            location: location._id.toString()
         })
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs.length).toBe(2);
+    })
+
+    test.only('jobs query for location by string returns jobs with location containing that string', async () => {
+        const result = await tester.graphql(jobsQuery, {}, {}, {
+            location: 'Melbourne'
+        })
+        console.log(result);
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs.length).toBe(2);
     })

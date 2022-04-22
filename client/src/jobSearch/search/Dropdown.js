@@ -1,7 +1,7 @@
 import './Dropdown.css';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addIndustry, removeIndustry, addProfession, removeProfession } from '../job.slice';
+import { setLocation, addIndustry, removeIndustry, addProfession, removeProfession } from '../job.slice';
 
 function Dropdown(props) {
     return (
@@ -95,7 +95,7 @@ function CheckBoxItem(props) {
 export function Item(props) {
 
     const dispatch = useDispatch();
-    const { text, toggleList } = props;
+    const { location, toggleList } = props;
 
     const handleClick = () => {
         toggleList(false);
@@ -105,7 +105,7 @@ export function Item(props) {
         <li className="list-item">
             <div className="item-container flex flex-row flex-jc-sb flex-ai-c" onClick={handleClick}>
                 <div className="item flex flex-ai-c">
-                    <span className="item-text">{text}</span>
+                    <span className="item-text">{location.city} - {location.suburb}</span>
                 </div>
             </div>
         </li>

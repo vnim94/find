@@ -16,11 +16,11 @@ const LocationSchema = Schema({
             'Inner South Suburbs', 
             'Western Suburbs', 
             'Eastern Suburbs', 
-            'Southern Suburbs', 
+            'Southern Suburbs',     
             'Northern Suburbs'
         ],
         required: true
-    }
+    },
 })
 
 module.exports = model('Location', LocationSchema);

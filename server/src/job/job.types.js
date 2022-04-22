@@ -61,7 +61,7 @@ const JobTypes = `
 
     type Query {
         job(id: ID!): JobResult!
-        jobs(title: String, company: ID, location: [ID], industry: [ID], profession: [ID], workType: [String], payBase: Int, payCeiling: Int, added: Date): [Job]!
+        jobs(title: String, company: ID, location: String , industry: [ID], profession: [ID], workType: [String], payBase: Int, payCeiling: Int, added: Date): [Job]!
         allIndustries: [Industry]!
         allProfessions: [Profession]!
         allLocations: [Location]!

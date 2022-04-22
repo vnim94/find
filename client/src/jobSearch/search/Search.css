@@ -9,6 +9,20 @@
     margin-left: 10px;
 }
 
+.clear-location {
+    position: absolute;
+    top: 83.5px;
+    right: 115px;
+    padding: 7.5px;
+    z-index: 2;
+}
+
+.clear-location:hover {
+    background-color: var(--pale-green);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
 .find {
     width: 11%;
 }
@@ -78,6 +92,7 @@
 .where > .form-control {
     background-color: var(--white);
     border: 3px solid transparent;
+    z-index: 1;
 }
 
 .outlined {

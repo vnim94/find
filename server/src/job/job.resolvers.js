@@ -3,6 +3,7 @@ const Location = require('./location.model');
 const Industry = require('./industry.model');
 const Profession = require('./profession.model');
 const validator = require('../middleware/validator');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const JobResolvers = {
     JobResult: {
@@ -20,7 +21,6 @@ const JobResolvers = {
             return job
         },
         jobs: async (_, query) => {
-            if (query.location) query.location = { $in: query.location }
             if (query.industry) query.industry = { $in: query.industry }
             if (query.profession) query.profession = { $in: query.profession }
             if (query.workType) query.workType = { $in: query.workType }
