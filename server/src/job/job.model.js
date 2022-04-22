@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const JobSchema = Schema({
+const JobSchema = new Schema({
     title: {
         type: String,
         minLength: 5,
@@ -29,9 +29,12 @@ const JobSchema = Schema({
         ref: 'Company',
         required: true
     },
-    location: {
-        type: Schema.Types.ObjectId,
-        ref: 'Location',
+    city: {
+        type: String,
+        required: true
+    },
+    suburb: {
+        type: String,
         required: true
     },
     industry: {

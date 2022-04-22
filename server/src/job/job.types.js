@@ -6,7 +6,8 @@ const JobTypes = `
         summary: String
         description: String!
         company: Company!
-        location: Location!
+        city: String!
+        suburb: String!
         industry: Industry!
         profession: Profession!
         workType: String!
@@ -46,7 +47,8 @@ const JobTypes = `
         summary: String
         description: String
         company: String
-        location: String
+        city: String
+        suburb: String
         industry: String
         profession: String
         workType: String
@@ -61,15 +63,14 @@ const JobTypes = `
 
     type Query {
         job(id: ID!): JobResult!
-        jobs(title: String, company: ID, location: String , industry: [ID], profession: [ID], workType: [String], payBase: Int, payCeiling: Int, added: Date): [Job]!
+        jobs(title: String, company: ID, city: String, suburb: String, industry: [ID], profession: [ID], workType: [String], payBase: Int, payCeiling: Int, added: Date): [Job]!
         allIndustries: [Industry]!
         allProfessions: [Profession]!
-        allLocations: [Location]!
     }
 
     type Mutation {
-        createJob(title: String!, headliner: String!, summary: String, description: String!, company: ID!, location: ID!, industry: ID!, profession: ID!, workType: String!): JobResult
-        updateJob(id: ID!, title: String, headliner: String, summary: String, description: String, location: ID, industry: ID, profession: ID, workType: String): JobResult
+        createJob(title: String!, headliner: String!, summary: String, description: String!, company: ID!, city: String!, suburb: String!, industry: ID!, profession: ID!, workType: String!): JobResult
+        updateJob(id: ID!, title: String, headliner: String, summary: String, description: String, city: String, suburb: String, industry: ID, profession: ID, workType: String): JobResult
         closeJob(id: ID!): JobResult
         deleteJob(id: ID!): JobResult
     }

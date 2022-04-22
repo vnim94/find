@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const LocationSchema = Schema({
+const LocationSchema = new Schema({
     city: {
         type: String,
         required: true

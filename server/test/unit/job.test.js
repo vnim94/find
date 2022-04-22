@@ -114,8 +114,8 @@ describe('models', () => {
 describe('job query resolvers', () => {
 
     const jobsQuery = `
-        query jobs($title: String, $company: ID, $location: String, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
-            jobs(title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
+        query jobs($title: String, $company: ID, $city: String, $suburb: String $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+            jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
                 id
                 title
                 headliner
@@ -124,10 +124,8 @@ describe('job query resolvers', () => {
                 company {
                     name
                 }
-                location {
-                    city
-                    suburb
-                }
+                city
+                suburb
                 industry {
                     name
                     code
@@ -212,21 +210,29 @@ describe('job query resolvers', () => {
         expect(result.data.jobs[0].profession.name).toBe('Chefs/Cooks');
     })
 
-    test.only('jobs query for location using location object returns jobs for that location', async () => {
+    test('jobs query for location using city only returns jobs for that city', async () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
-            location: location._id.toString()
+            city: 'Melb'
+        })
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs.length).toBe(1);
+    })
+
+    test('jobs query for location using suburb only returns jobs for that suburb', async () => {
+        const result = await tester.graphql(jobsQuery, {}, {}, {
+            suburb: 'CBD'
         })
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs.length).toBe(2);
     })
 
-    test.only('jobs query for location by string returns jobs with location containing that string', async () => {
+    test('jobs query for location using city and suburb returns jobs within that city and suburb', async () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
-            location: 'Melbourne'
+            city: 'Melbourne',
+            suburb: 'CBD'
         })
-        console.log(result);
         expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(2);
+        expect(result.data.jobs.length).toBe(1);
     })
 
     test('jobs query for multiple industries returns jobs for those industries', async () => {
@@ -264,13 +270,14 @@ describe('job query resolvers', () => {
     })
 
     test('jobs query for time elapsed', async () => {
-        const oldJob = await Job.create({
+        await Job.create({
             title: 'supervisor',
             headliner: 'supervise stuff',
             summary: 'this is a job to supervise things',
             description: 'supervise things',
             company: company._id,
-            location: location._id,
+            city: 'Melbourne',
+            suburb: 'CBD',
             industry: industry._id,
             profession: profession._id,
             workType: 'Part time',
@@ -326,28 +333,13 @@ describe('job query resolvers', () => {
         expect(result.data.allProfessions[0].jobCount).toBe(1);
     })
 
-    test('allLocations returns all possible locations', async () => {
-        const query = `
-            {
-                allLocations {
-                    city
-                    suburb
-                }
-            }
-        `
-        const result = await tester.graphql(query, {}, {}, {});
-        expect(result.data.allLocations).toBeTruthy();
-        expect(result.data.allLocations.length).toBe(1);
-        expect(result.data.allLocations[0].city).toBe('Melbourne');
-    })
-
 })
 
 describe('job mutation resolvers', () => {
     test('createJob', async () => {
         const createJob = `
             mutation {
-                createJob(title: "manager", headliner: "great chance to manage", description: "manage stuff", company: "${company._id.toString()}", location: "${location._id.toString()}", industry: "${job.industry._id}", profession: "${job.profession._id}", workType: "Full time") {
+                createJob(title: "manager", headliner: "great chance to manage", description: "manage stuff", company: "${company._id.toString()}", city: "Melbourne", suburb: "CBD", industry: "${job.industry._id}", profession: "${job.profession._id}", workType: "Full time") {
                     ... on Job {
                         id
                         title
@@ -371,14 +363,15 @@ describe('job mutation resolvers', () => {
     test('createJob input errors', async () => {
         const createJob = `
             mutation {
-                createJob(title: "", headliner: "", description: "", company: "${company._id.toString()}", location: "", industry: "", profession: "", workType: "") {
+                createJob(title: "", headliner: "", description: "", company: "${company._id.toString()}", city: "", suburb: "", industry: "", profession: "", workType: "") {
                     ... on InvalidJobInput {
                         message
                         errors {
                             title
                             headliner
                             description
-                            location 
+                            city
+                            suburb 
                             industry
                             profession
                             workType
@@ -395,15 +388,13 @@ describe('job mutation resolvers', () => {
     test('updateJob', async () => {
         const updateJob = `
             mutation {
-                updateJob(id: "${job._id.toString()}", title: "updated", headliner: "updated" description: "updated", location: "${location._id}", industry: "${industry._id}", profession: "${profession._id}", workType: "Part time") {
+                updateJob(id: "${job._id.toString()}", title: "updated", headliner: "updated" description: "updated", city: "Melbourne", suburb: "CBD", industry: "${industry._id}", profession: "${profession._id}", workType: "Part time") {
                     ... on Job {
                         title
                         headliner
                         description
-                        location {
-                            city
-                            suburb
-                        }
+                        city
+                        suburb
                         industry {
                             name
                         }

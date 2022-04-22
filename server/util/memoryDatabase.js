@@ -48,11 +48,6 @@ exports.seed = async () => {
         size: 'More than 10,001'
     })
 
-    const location = await Location.create({
-        city: 'Melbourne',
-        suburb: 'CBD'
-    })
-
     const industryA = await Industry.create({
         name: 'Hospitality & Tourism',
         code: '0000'
@@ -81,7 +76,8 @@ exports.seed = async () => {
         summary: 'this is a job for flipping burgers',
         description: 'flip stuff',
         company: companyA._id,
-        location: location._id,
+        city: 'Melbourne',
+        suburb: 'CBD',
         industry: industryA._id,
         profession: professionA._id,
         workType: 'Full time',
@@ -94,7 +90,8 @@ exports.seed = async () => {
         summary: 'this is a job to manage things',
         description: 'manage things',
         company: companyB._id,
-        location: location._id,
+        city: 'Sydney',
+        suburb: 'CBD',
         industry: industryB._id,
         profession: professionB._id,
         workType: 'Part time',
