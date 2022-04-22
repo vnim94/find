@@ -1,5 +1,4 @@
 const Job = require('./job.model');
-const Location = require('./location.model');
 const Industry = require('./industry.model');
 const Profession = require('./profession.model');
 const validator = require('../middleware/validator');
@@ -20,8 +19,6 @@ const JobResolvers = {
             return job
         },
         jobs: async (_, query) => {
-            if (query.city) query.city = { $regex: query.city }
-            if (query.suburb) query.suburb = { $regex: query.suburb }
             if (query.industry) query.industry = { $in: query.industry }
             if (query.profession) query.profession = { $in: query.profession }
             if (query.workType) query.workType = { $in: query.workType }

@@ -1,8 +1,8 @@
 import { request } from '../profile/user.api';
 
 const getJobsRequest = `
-    query jobs($title: String, $company: ID, $location: ID, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
-        jobs(title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
+    query jobs($title: String, $company: ID, $city: String, $suburb: String, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+        jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
             id
             title
             headliner
@@ -11,10 +11,8 @@ const getJobsRequest = `
             company {
                 name
             }
-            location {
-                city
-                suburb
-            }
+            city
+            suburb
             industry {
                 name
                 code
@@ -46,15 +44,6 @@ const getAllIndustriesRequest = `
     }
 `
 
-const getAllLocationsRequest = `
-    {
-        allLocations {
-            id
-            city
-            suburb
-        }
-    }
-`
 
 export const getJobs = async (vars) => {
     return await request(getJobsRequest, vars);
@@ -62,8 +51,4 @@ export const getJobs = async (vars) => {
 
 export const getAllIndustries = async () => {
     return await request(getAllIndustriesRequest);
-}
-
-export const getAllLocations = async () => {
-    return await request(getAllLocationsRequest);
 }

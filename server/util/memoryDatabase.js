@@ -3,7 +3,6 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 let database;
 
 const User = require('../src/user/user.model');
-const Location = require('../src/job/location.model');
 const Company = require('../src/company/company.model');
 const Job = require('../src/job/job.model');
 const Industry = require('../src/job/industry.model');

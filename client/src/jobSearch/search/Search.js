@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
 import { setLocation, setJobs, clearIndustries } from '../job.slice';
-import { getAllIndustries, getAllLocations } from '../job.api';
+import { getAllIndustries } from '../job.api';
 
 function Search(props) {
 
@@ -54,13 +54,7 @@ function Search(props) {
             const response = await getAllIndustries();
             if (response.data.allIndustries) setAllIndustries(response.data.allIndustries);
         }
-        async function fetchAllLocations() {
-            const response = await getAllLocations();
-            if (response.data.allLocations) setAllLocations(response.data.allLocations);
-        }
-
         fetchAllIndustries();
-        fetchAllLocations();
     },[])
 
     const selectClassification = useRef();

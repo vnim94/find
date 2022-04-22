@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const async = require('async');
 
 const User = require('../src/user/user.model');
-const Location = require('../src/job/location.model');
 const Company = require('../src/company/company.model');
 const Job = require('../src/job/job.model');
 const Industry = require('../src/job/industry.model');
@@ -137,25 +136,6 @@ function createUser(firstName, lastName, email, location, password, phone, callb
 
 }
  
-function createLocation(city, suburb, callback) {
-    let location = new Location({
-        city: city,
-        suburb: suburb
-    })
-
-    location.save((err) => {
-        if (err) {
-            console.log(`[ERROR] Error creating location: ${location.city} ${location.suburb} - ${err}`);
-            callback(err, null);
-            return;
-        }
-
-        console.log(`[INFO] New city created: ${location.city} ${location.suburb}`);
-        locations.push(location);
-        callback(null, location);
-    });
-}
-
 function createCompany(name, callback) {
 
     let company = new Company({ name: name });
@@ -245,18 +225,6 @@ function populateUsers(callback) {
 
 }
 
-function populateLocations(callback) {
-    let locationsToCreate = [];
-    
-    cities.forEach(city => {
-        suburbs.forEach(suburb => {
-            locationsToCreate.push(function(callback) { createLocation(city, suburb, callback) });
-        })
-    })
-
-    async.series(locationsToCreate, callback);
-}
-
 function populateCompanies(callback) {
     let companiesToCreate = [];
 
@@ -300,7 +268,8 @@ function populateJobs(callback) {
             summary: faker.lorem.lines(3),
             description: faker.lorem.paragraphs(3),
             company: companies[getRandomIndex(companies.length)],
-            location: locations[getRandomIndex(locations.length)],
+            city: cities[getRandomIndex(cities.length)],
+            suburb: suburbs[getRandomIndex(suburbs.length)],
             industry: industry._id,
             profession: profession._id,
             workType: workTypes[getRandomIndex(workTypes.length)],
@@ -322,7 +291,7 @@ function getRandomIndex(length) {
 
 console.log('[INFO] Populating database...');
 
-async.series([populateUsers, populateLocations, populateCompanies, populateIndustries, populateProfessions, populateJobs], (err) => {
+async.series([populateUsers, populateCompanies, populateIndustries, populateProfessions, populateJobs], (err) => {
 
     if (err) {
         console.log(`[ERROR] ${err}`);
