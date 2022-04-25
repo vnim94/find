@@ -112,8 +112,8 @@ describe('models', () => {
 describe('job query resolvers', () => {
 
     const jobsQuery = `
-        query jobs($title: String, $company: ID, $city: String, $suburb: String $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
-            jobs(title: $title, company: $company, city: $city, suburb: $suburb, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
+        query jobs($title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+            jobs(title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
                 id
                 title
                 headliner
@@ -208,28 +208,9 @@ describe('job query resolvers', () => {
         expect(result.data.jobs[0].profession.name).toBe('Chefs/Cooks');
     })
 
-    test.skip('jobs query for location using city only returns jobs for that city', async () => {
+    test('jobs query for multiple locations returns jobs for those locations', async () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
-            city: 'Melb',
-            suburb: 'Melb'
-        })
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(1);
-    })
-
-    test.skip('jobs query for location using suburb only returns jobs for that suburb', async () => {
-        const result = await tester.graphql(jobsQuery, {}, {}, {
-            city: 'CBD',
-            suburb: 'CBD'
-        })
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(2);
-    })
-
-    test.skip('jobs query for location using city and suburb returns jobs within that city and suburb', async () => {
-        const result = await tester.graphql(jobsQuery, {}, {}, {
-            city: 'Melbourne - CBD',
-            suburb: 'Melbourne - CBD'
+            location: [`${location._id.toString()}`]
         })
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs.length).toBe(1);

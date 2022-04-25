@@ -1,4 +1,5 @@
 const Job = require('./job.model');
+const Location = require('./location.model');
 const Industry = require('./industry.model');
 const Profession = require('./profession.model');
 const validator = require('../middleware/validator');
@@ -19,6 +20,7 @@ const JobResolvers = {
             return job
         },
         jobs: async (_, query) => {
+            if (query.location) query.location = { $in: query.location }
             if (query.industry) query.industry = { $in: query.industry }
             if (query.profession) query.profession = { $in: query.profession }
             if (query.workType) query.workType = { $in: query.workType }
@@ -38,6 +40,9 @@ const JobResolvers = {
         },
         allProfessions: async () => {
             return await Profession.find({}).populate('industry jobCount');
+        },
+        allLocations: async () => {
+            return await Location.find({});
         }
     },
     Mutation: {

@@ -44,6 +44,14 @@ const getAllIndustriesRequest = `
     }
 `
 
+const getAllLocationsRequest = `
+    {
+        allLocations {
+            city
+            suburb
+        }
+    }
+`
 
 export const getJobs = async (vars) => {
     return await request(getJobsRequest, vars);
