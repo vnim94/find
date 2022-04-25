@@ -28,7 +28,7 @@ const JobResolvers = {
             if (query.payCeiling) query.payCeiling = { $lte: query.payCeiling }
             if (query.added) query.added = { $gt: query.added }
             
-            return await Job.find(query).populate('company industry profession');
+            return await Job.find(query).populate('location company industry profession');
         },
         allIndustries: async () => {
             return await Industry.find({})
@@ -52,7 +52,7 @@ const JobResolvers = {
             if (Object.keys(errors).length > 0) return { __typename: 'InvalidJobInput', message: 'Invalid input', errors: errors }
 
             const job = await Job.create(args)
-            return job.populate('company industry profession')
+            return job.populate('location company industry profession')
         },
         updateJob: async (_, args, context) => {
             if (!context.user) throw new Error('UNAUTHORISED');
@@ -70,7 +70,7 @@ const JobResolvers = {
                 industry: industry,
                 profession: profession,
                 workType: workType
-            }, { new: true }).populate('company industry profession');
+            }, { new: true }).populate('location company industry profession');
         },
         closeJob: async (_, { id }, context) => {
             if (!context.user) throw new Error('UNAUTHORISED');

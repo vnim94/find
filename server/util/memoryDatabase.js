@@ -3,6 +3,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 let database;
 
 const User = require('../src/user/user.model');
+const Location = require('../src/job/location.model');
 const Company = require('../src/company/company.model');
 const Job = require('../src/job/job.model');
 const Industry = require('../src/job/industry.model');
@@ -30,6 +31,18 @@ exports.seed = async () => {
         password: 'password',
         phone: '01234567890'
     })    
+
+    const locationA = await Location.create({
+        suburb: 'CBD',
+        city: 'Melbourne',
+        region: 'Australia'
+    })
+
+    const locationB = await Location.create({
+        suburb: 'CBD',
+        city: 'Sydney',
+        region: 'Australia'
+    })
 
     const companyA = await Company.create({
         name: "McDonalds",
@@ -75,8 +88,7 @@ exports.seed = async () => {
         summary: 'this is a job for flipping burgers',
         description: 'flip stuff',
         company: companyA._id,
-        city: 'Melbourne',
-        suburb: 'CBD',
+        location: locationA._id,
         industry: industryA._id,
         profession: professionA._id,
         workType: 'Full time',
@@ -89,8 +101,7 @@ exports.seed = async () => {
         summary: 'this is a job to manage things',
         description: 'manage things',
         company: companyB._id,
-        city: 'Sydney',
-        suburb: 'CBD',
+        location: locationB._id,
         industry: industryB._id,
         profession: professionB._id,
         workType: 'Part time',
