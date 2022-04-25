@@ -1,10 +1,6 @@
 const { Schema, model } = require('mongoose');
 
 const LocationSchema = Schema({
-    city: {
-        type: String,
-        required: true
-    },
     suburb: {
         type: String,
         enum: [
@@ -19,6 +15,14 @@ const LocationSchema = Schema({
             'Southern Suburbs', 
             'Northern Suburbs'
         ],
+        required: true
+    },
+    city: {
+        type: String,
+        required: true
+    },
+    region: {
+        type: String,
         required: true
     }
 })

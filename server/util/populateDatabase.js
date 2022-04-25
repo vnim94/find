@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const async = require('async');
 
 const User = require('../src/user/user.model');
+const Location = require('../src/job/location.model');
 const Company = require('../src/company/company.model');
 const Job = require('../src/job/job.model');
 const Industry = require('../src/job/industry.model');
@@ -135,7 +136,22 @@ function createUser(firstName, lastName, email, location, password, phone, callb
     });
 
 }
- 
+
+function createLocation(suburb, city, region, callback) {
+    let location = new Location({ suburb, city, region });
+    location.save((err) => {
+        if (err) {
+            console.log(`[ERROR] Error creating location: ${location.region}-${location.city}-${location.suburb} - ${err}`);
+            callback(err, null);
+            return;
+        }
+
+        console.log(`[INFO] New location created: ${location.region}-${location.city}-${location.suburb}`);
+        locations.push(location);
+        callback(null, location);
+    })
+}
+
 function createCompany(name, callback) {
 
     let company = new Company({ name: name });
@@ -225,6 +241,18 @@ function populateUsers(callback) {
 
 }
 
+function populateLocations(callback) {
+    let locationsToCreate = [];
+    cities.forEach(city => {
+        suburbs.forEach(suburb => {
+            locationsToCreate.push(function(callback) {
+                createLocation(suburb, city, 'Australia', callback);
+            })
+        })
+    })
+    async.series(locationsToCreate, callback);
+}
+
 function populateCompanies(callback) {
     let companiesToCreate = [];
 
@@ -291,7 +319,7 @@ function getRandomIndex(length) {
 
 console.log('[INFO] Populating database...');
 
-async.series([populateUsers, populateCompanies, populateIndustries, populateProfessions, populateJobs], (err) => {
+async.series([populateUsers, populateLocations, populateCompanies, populateIndustries, populateProfessions, populateJobs], (err) => {
 
     if (err) {
         console.log(`[ERROR] ${err}`);
