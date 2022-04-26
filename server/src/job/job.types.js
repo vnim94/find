@@ -20,6 +20,7 @@ const JobTypes = `
         id: ID!
         suburb: String!
         city: String!
+        state: String!
         region: String!
     }
 

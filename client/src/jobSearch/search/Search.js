@@ -45,6 +45,13 @@ function Search(props) {
         }
     }
 
+    const [location, setLocation] = useState('');
+    const [displayedLocations, setDisplayedLocations] = useState();
+
+    const handleChange = (event) => {
+        setLocation(event.target.value);
+    }
+
     const [allIndustries, setAllIndustries] = useState();
     const [allLocations, setAllLocations] = useState();
 
@@ -55,7 +62,7 @@ function Search(props) {
         }
         async function fetchAllLocations() {
             const response = await getAllLocations();
-            if (response.data.allLocations) setAllLocations(response.data.allLocations);
+            if (response.data.allLocations) { setAllLocations(response.data.allLocations); setDisplayedLocations(response.data.allLocations) };
         }
         fetchAllIndustries();
         fetchAllLocations();
@@ -127,9 +134,12 @@ function Search(props) {
                         </div>
                         <div className="where flex flex-col" ref={where}>
                             <label>Where</label>
-                            <input className="form-control" type="search" placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
+                            <input className="form-control" type="search" value={location} onChange={handleChange} placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
+                            <div className={`${location === '' && 'hidden'} clear-where flex flex-ai-c`} onClick={() => setLocation('')}>
+                                <span className="medium material-icons-outlined">clear</span>
+                            </div>
                             {locationDropdown && <Dropdown>
-                                {allLocations && allLocations.map((location, index) => {
+                                {displayedLocations && displayedLocations.map((location, index) => {
                                     return <Item key={index} text={`${location.city} - ${location.suburb}`} toggleList={setLocationDropdown}/>
                                 })}
                             </Dropdown>}

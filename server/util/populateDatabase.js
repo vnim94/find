@@ -16,15 +16,15 @@ const database = mongoose.connection;
 database.once('open', () => console.log('[INFO] Successfully connected to database'));
 database.on('error', console.error.bind(console, 'Error connecting to database'));
 
-const cities = [
-    'Melbourne',
-    'Sydney',
-    'Brisbane',
-    'Perth',
-    'Hobart',
-    'Darwin',
-    'Adelaide'
-];
+const states = {
+    'VIC':'Melbourne',
+    'NSW':'Sydney',
+    'QLD':'Brisbane',
+    'WA':'Perth',
+    'TAS':'Hobart',
+    'NT':'Darwin',
+    'SA':'Adelaide'
+};
 
 const suburbs = [
     'CBD', 
@@ -137,11 +137,11 @@ function createUser(firstName, lastName, email, location, password, phone, callb
 
 }
 
-function createLocation(suburb, city, region, callback) {
-    let location = new Location({ suburb, city, region });
+function createLocation(suburb, city, state, region, callback) {
+    let location = new Location({ suburb, city, state, region });
     location.save((err) => {
         if (err) {
-            console.log(`[ERROR] Error creating location: ${location.region}-${location.city}-${location.suburb} - ${err}`);
+            console.log(`[ERROR] Error creating location: ${location.region}-${location.state}-${location.city}-${location.suburb} - ${err}`);
             callback(err, null);
             return;
         }
@@ -234,7 +234,8 @@ function populateUsers(callback) {
         let firstName = faker.name.firstName();
         let lastName = faker.name.lastName();
         let email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@email.com`
-        usersToCreate.push(function(callback) { createUser(firstName, lastName, email, cities[getRandomIndex(cities.length)], 'password', faker.phone.phoneNumber(), callback) });
+        let location = states[Object.keys(states)[getRandomIndex(Object.keys(states).length)]]
+        usersToCreate.push(function(callback) { createUser(firstName, lastName, email, location, 'password', faker.phone.phoneNumber(), callback) });
     }
 
     async.series(usersToCreate, callback);
@@ -243,10 +244,10 @@ function populateUsers(callback) {
 
 function populateLocations(callback) {
     let locationsToCreate = [];
-    cities.forEach(city => {
+    Object.keys(states).forEach(state => {
         suburbs.forEach(suburb => {
             locationsToCreate.push(function(callback) {
-                createLocation(suburb, city, 'Australia', callback);
+                createLocation(suburb, states[state], state, 'Australia', callback);
             })
         })
     })

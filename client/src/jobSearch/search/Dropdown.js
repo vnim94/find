@@ -1,7 +1,7 @@
 import './Dropdown.css';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addIndustry, removeIndustry, addProfession, removeProfession } from '../job.slice';
+import { setLocation, addIndustry, removeIndustry, addProfession, removeProfession } from '../job.slice';
 
 function Dropdown(props) {
     return (
@@ -98,6 +98,7 @@ export function Item(props) {
     const { text, toggleList } = props;
 
     const handleClick = () => {
+        dispatch(setLocation(text));
         toggleList(false);
     }
 

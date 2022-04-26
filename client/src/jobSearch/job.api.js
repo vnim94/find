@@ -52,6 +52,7 @@ const getAllLocationsRequest = `
         allLocations {
             suburb
             city
+            state
             region
         }
     }

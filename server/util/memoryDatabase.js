@@ -35,12 +35,14 @@ exports.seed = async () => {
     const locationA = await Location.create({
         suburb: 'CBD',
         city: 'Melbourne',
+        state: 'VIC',
         region: 'Australia'
     })
 
     const locationB = await Location.create({
         suburb: 'CBD',
         city: 'Sydney',
+        state: 'NSW',
         region: 'Australia'
     })
 
