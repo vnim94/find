@@ -30,7 +30,11 @@ function Search(props) {
         event.preventDefault();
         const vars = {}
         
-        if (selectedLocation !== '') vars.location = allLocations.filter(loc => loc.city.toLowerCase().match(selectedLocation.toLowerCase()) !== null || loc.suburb.toLowerCase().match(selectedLocation.toLowerCase()) !== null).map(loc => loc.id);
+        if (selectedLocation !== '') vars.location = allLocations.filter(loc => 
+            loc.city.toLowerCase().match(selectedLocation.toLowerCase()) !== null || 
+            loc.suburb.toLowerCase().match(selectedLocation.toLowerCase()) !== null || 
+            selectedLocation === `${loc.city} ${loc.suburb}`
+        ).map(loc => loc.id);
         if (selectedIndustries.length > 0) vars.industry = selectedIndustries.map(industry => industry.id) 
         if (selectedProfessions.length > 0) vars.profession = selectedProfessions.map(profession => profession.id) 
         if (selectedWorkTypes.length > 0) vars.workType = selectedWorkTypes
