@@ -59,11 +59,17 @@ const JobTypes = `
         errors: JobInputErrors!
     }
 
+    type JobsResult {
+        jobs: [Job]!
+        totalPages: Int
+        currentPage: Int
+    }
+
     union JobResult = Job | NotFound | InvalidJobInput
 
     type Query {
-        job(id: ID!): JobResult!
-        jobs(title: String, company: ID, location: [ID], industry: [ID], profession: [ID], workType: [String], payBase: Int, payCeiling: Int, added: Date): [Job]!
+        getJob(id: ID!): JobResult!
+        getJobs(page: Int, limit: Int, title: String, company: ID, location: [ID], industry: [ID], profession: [ID], workType: [String], payBase: Int, payCeiling: Int, added: Date): JobsResult!
         allIndustries: [Industry]!
         allProfessions: [Profession]!
         allLocations: [Location]!

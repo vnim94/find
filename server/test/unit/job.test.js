@@ -117,40 +117,44 @@ describe('models', () => {
 describe('job query resolvers', () => {
 
     const jobsQuery = `
-        query jobs($title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
-            jobs(title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
-                id
-                title
-                headliner
-                summary
-                description
-                company {
-                    name
+        query getJobsQuery($page: Int, $limit: Int, $title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+            getJobs(page: $page, limit: $limit, title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
+                jobs {
+                    id
+                    title
+                    headliner
+                    summary
+                    description
+                    company {
+                        name
+                    }
+                    location {
+                        suburb
+                        city
+                        region
+                    }
+                    industry {
+                        name
+                        code
+                    }
+                    profession {
+                        name
+                        code
+                    }
+                    workType
+                    payBase
+                    payCeiling
+                    added
                 }
-                location {
-                    suburb
-                    city
-                    region
-                }
-                industry {
-                    name
-                    code
-                }
-                profession {
-                    name
-                    code
-                }
-                workType
-                payBase
-                payCeiling
-                added
+                totalPages
+                currentPage
             }
         }
     `
     test('job', async () => {
         const query = `
             {
-                job(id: "${job._id.toString()}") {
+                getJob(id: "${job._id.toString()}") {
                     ... on Job {
                         title
                         headliner
@@ -163,16 +167,16 @@ describe('job query resolvers', () => {
             }
         `
         const result = await tester.graphql(query, {}, {}, {});
-        expect(result.data.job.title).toBe('burger flipper');
-        expect(result.data.job.headliner).toBe('great opportunity to flip stuff');
-        expect(result.data.job.description).toBe('flip stuff');
-        expect(result.data.job.company.name).toBe('McDonalds');
+        expect(result.data.getJob.title).toBe('burger flipper');
+        expect(result.data.getJob.headliner).toBe('great opportunity to flip stuff');
+        expect(result.data.getJob.description).toBe('flip stuff');
+        expect(result.data.getJob.company.name).toBe('McDonalds');
     })
 
     test('job not found', async () => {
         const query = `
             {
-                job(id: "6242943990b42b3aa078d5d2") {
+                getJob(id: "6242943990b42b3aa078d5d2") {
                     ... on NotFound {
                         message
                         id
@@ -181,26 +185,53 @@ describe('job query resolvers', () => {
             }
         `
         const result = await tester.graphql(query, {}, {}, {});
-        expect(result.data.job.message).toBe('Job not found');
-        expect(result.data.job.id).toBeTruthy();
+        expect(result.data.getJob.message).toBe('Job not found');
+        expect(result.data.getJob.id).toBeTruthy();
     })
 
     test('jobs', async () => {
         const query = `
             {
-                jobs {
-                    title
-                    description
-                    company {
-                        name
+                getJobs {
+                    jobs {
+                        title
+                        description
+                        company {
+                            name
+                        }
                     }
+                    totalPages
+                    currentPage
                 }
             }
         `
         const result = await tester.graphql(query, {}, {}, {});
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs[0].title).toBe('burger flipper');
-        expect(result.data.jobs[0].company.name).toBe('McDonalds');
+        console.log(result)
+        expect(result.data.getJobs.jobs).toBeTruthy();
+        expect(result.data.getJobs.jobs[0].title).toBe('burger flipper');
+        expect(result.data.getJobs.jobs[0].company.name).toBe('McDonalds');
+    })
+
+    test('jobs pagination', async () => {
+        const query = `
+            {
+                getJobs(page: 1, limit: 1) {
+                    jobs {
+                        title
+                        description
+                        company {
+                            name
+                        }
+                    }
+                    totalPages
+                    currentPage
+                }
+            }
+        `
+        const result = await tester.graphql(query, {}, {}, {});
+        expect(result.data.getJobs.jobs.length).toBe(1); 
+        expect(result.data.getJobs.totalPages).toBe(2);
+        expect(result.data.getJobs.currentPage).toBe(1);
     })
 
     test('jobs with multiple parameters', async () => {
@@ -208,53 +239,56 @@ describe('job query resolvers', () => {
             company: `${company._id.toString()}`,
             industry: `${industryB._id.toString()}`
         });
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs[0].title).toBe('burger flipper');
-        expect(result.data.jobs[0].company.name).toBe('McDonalds');
-        expect(result.data.jobs[0].industry.name).toBe('Hospitality & Tourism');
-        expect(result.data.jobs[0].industry.code).toBe('0000');
-        expect(result.data.jobs[0].profession.name).toBe('Chefs/Cooks');
+        console.log(result);
+        expect(result.data.getJobs.jobs).toBeTruthy();
+        expect(result.data.getJobs.jobs[0].title).toBe('burger flipper');
+        expect(result.data.getJobs.jobs[0].company.name).toBe('McDonalds');
+        expect(result.data.getJobs.jobs[0].industry.name).toBe('Hospitality & Tourism');
+        expect(result.data.getJobs.jobs[0].industry.code).toBe('0000');
+        expect(result.data.getJobs.jobs[0].profession.name).toBe('Chefs/Cooks');
     })
 
     test('jobs query for job title returns jobs containing that title', async () => {
         const result = await tester.graphql(jobsQuery, {}, {} ,{
             title: 'burger'
         })
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(1);
-        expect(result.data.jobs[0].title).toBe('burger flipper');
+        console.log(result);
+        expect(result.data.getJobs.jobs).toBeTruthy();
+        expect(result.data.getJobs.jobs.length).toBe(1);
+        expect(result.data.getJobs.jobs[0].title).toBe('burger flipper');
     })
 
     test('jobs query for location returns jobs for that locations', async () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
             location: [location._id.toString()]
         })
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(1);
+        console.log(result)
+        expect(result.data.getJobs.jobs).toBeTruthy();
+        expect(result.data.getJobs.jobs.length).toBe(1);
     })
 
     test('jobs query for multiple industries returns jobs for those industries', async () => {
         const result = await tester.graphql(jobsQuery, {}, {} ,{
             industry: [`${industry._id.toString()}`,`${industryB._id.toString()}`]    
         });
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(2);
+        expect(result.data.getJobs.jobs).toBeTruthy();
+        expect(result.data.getJobs.jobs.length).toBe(2);
     })
 
     test('jobs query for multiple professions returns jobs for those professions', async () => {
         const result = await tester.graphql(jobsQuery, {}, {} ,{
             profession: [`${profession._id.toString()}`, `${professionB._id.toString()}`]
         });
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(2);
+        expect(result.data.getJobs.jobs).toBeTruthy();
+        expect(result.data.getJobs.jobs.length).toBe(2);
     })
 
     test('jobs query for multiple work types returns jobs for those professions', async () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
             workTypes: ['Full time', 'Part time']
         });
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(2);
+        expect(result.data.getJobs.jobs).toBeTruthy();
+        expect(result.data.getJobs.jobs.length).toBe(2);
     })
 
     test('jobs query for pay range', async () => {
@@ -262,9 +296,9 @@ describe('job query resolvers', () => {
             payBase: 50000,
             payCeiling: 100000
         })
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(1);
-        expect(result.data.jobs[0].payBase).toBe(70000);
+        expect(result.data.getJobs.jobs).toBeTruthy();
+        expect(result.data.getJobs.jobs.length).toBe(1);
+        expect(result.data.getJobs.jobs[0].payBase).toBe(70000);
     })
 
     test('jobs query for time elapsed', async () => {
@@ -285,8 +319,8 @@ describe('job query resolvers', () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
             added: Date.now() - 6 * 24 * 60 * 60 * 1000
         })
-        expect(result.data.jobs).toBeTruthy();
-        expect(result.data.jobs.length).toBe(2);
+        expect(result.data.getJobs.jobs).toBeTruthy();
+        expect(result.data.getJobs.jobs.length).toBe(2);
     })
 
     test('allIndustries return all industries and their professions', async () => {

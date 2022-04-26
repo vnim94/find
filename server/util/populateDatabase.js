@@ -286,7 +286,7 @@ function populateJobs(callback) {
     let jobsToCreate = [];
     const industry = industries.find(industry => industry.code === '0017');
 
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 50; i++) {
 
         let profession = professions[getRandomIndex(professions.length)]
         let payBase = getRandomIndex(payBases.length)

@@ -14,22 +14,39 @@ const JobResolvers = {
         }
     },
     Query: {
-        job: async (_, { id }) => {
+        getJob: async (_, { id }) => {
             const job = await Job.findById(id).populate('company');
             if (!job) return { __typename: 'NotFound', message: 'Job not found', id: id }
             return job
         },
-        jobs: async (_, query) => {
-            if (query.title) query.title = { $regex: query.title, $options: 'i' }
-            if (query.location) query.location = { $in: query.location }
-            if (query.industry) query.industry = { $in: query.industry }
-            if (query.profession) query.profession = { $in: query.profession }
-            if (query.workType) query.workType = { $in: query.workType }
-            if (query.payBase) query.payBase = { $gte: query.payBase }
-            if (query.payCeiling) query.payCeiling = { $lte: query.payCeiling }
-            if (query.added) query.added = { $gt: query.added }
+        getJobs: async (_, query) => {
+
+            let { page, limit, title, industry, location, profession, workType, payBase, payCeiling, added } = query
+
+            if (title) query.title = { $regex: title, $options: 'i' }
+            if (location) query.location = { $in: location }
+            if (industry) query.industry = { $in: industry }
+            if (profession) query.profession = { $in: profession }
+            if (workType) query.workType = { $in: workType }
+            if (payBase) query.payBase = { $gte: payBase }
+            if (payCeiling) query.payCeiling = { $lte: payCeiling }
+            if (added) query.added = { $gt: added }
             
-            return await Job.find(query).populate('location company industry profession');
+            if (page && limit) {
+                const jobs = await Job.find(query)
+                    .populate('location company industry profession')
+                    .limit(limit)
+                    .skip((page - 1) * limit)
+                const totalPages = Math.ceil(await Job.find(query).countDocuments() / limit)
+            
+                return { jobs, totalPages, currentPage: page }
+            }
+
+            return { 
+                jobs: await Job.find(query).populate('location company industry profession'),
+                totalPages: 1,
+                currentPage: 1
+            }
         },
         allIndustries: async () => {
             return await Industry.find({})
