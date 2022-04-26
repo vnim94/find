@@ -49,7 +49,17 @@ function Search(props) {
     const [displayedLocations, setDisplayedLocations] = useState();
 
     const handleChange = (event) => {
-        setLocation(event.target.value);
+        let searchTerms = event.target.value;
+        setLocation(searchTerms);
+
+        let filteredLocations;
+        if (searchTerms === '') { 
+            filteredLocations = allLocations
+        } else {
+            filteredLocations = allLocations.filter(loc => loc.city.toLowerCase().match(searchTerms.toLowerCase()) !== null || loc.suburb.toLowerCase().match(searchTerms.toLowerCase()) !== null)
+        }
+
+        setDisplayedLocations(filteredLocations);
     }
 
     const [allIndustries, setAllIndustries] = useState();
@@ -135,7 +145,7 @@ function Search(props) {
                         <div className="where flex flex-col" ref={where}>
                             <label>Where</label>
                             <input className="form-control" type="search" value={location} onChange={handleChange} placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
-                            <div className={`${location === '' && 'hidden'} clear-where flex flex-ai-c`} onClick={() => setLocation('')}>
+                            <div className={`${location === '' && 'hidden'} clear-where flex flex-ai-c`} onClick={() => { setLocation(''); setLocationDropdown(false); }}>
                                 <span className="medium material-icons-outlined">clear</span>
                             </div>
                             {locationDropdown && <Dropdown>

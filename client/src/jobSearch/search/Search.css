@@ -82,8 +82,8 @@
 }
 
 .where {
-    /* position: relative; */
     width: 28%;
+    z-index: 2;
 }
 
 .where > .dropdown {
