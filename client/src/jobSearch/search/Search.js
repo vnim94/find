@@ -144,13 +144,13 @@ function Search(props) {
                         </div>
                         <div className="where flex flex-col" ref={where}>
                             <label>Where</label>
-                            <input className="form-control" type="search" value={location} onChange={handleChange} placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
+                            <input className="form-control" type="search" value={location.length > 15 ? location.slice(0, 25) + '...' : location} onChange={handleChange} placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
                             <div className={`${location === '' && 'hidden'} clear-where flex flex-ai-c`} onClick={() => { setLocation(''); setLocationDropdown(false); }}>
                                 <span className="medium material-icons-outlined">clear</span>
                             </div>
                             {locationDropdown && <Dropdown>
                                 {displayedLocations && displayedLocations.map((location, index) => {
-                                    return <Item key={index} text={`${location.city} - ${location.suburb}`} toggleList={setLocationDropdown}/>
+                                    return <Item key={index} setValue={setLocation} text={`${location.city} ${location.suburb}`} toggleList={setLocationDropdown}/>
                                 })}
                             </Dropdown>}
                         </div>
