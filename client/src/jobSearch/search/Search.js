@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import { setJobs, clearIndustries } from '../job.slice';
+import { setLocation, setJobs, clearIndustries } from '../job.slice';
 import { getAllIndustries, getAllLocations } from '../job.api';
 
 function Search(props) {
@@ -29,7 +29,8 @@ function Search(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const vars = {}
-
+        
+        if (selectedLocation !== '') vars.location = allLocations.filter(loc => loc.city.toLowerCase().match(selectedLocation.toLowerCase()) !== null || loc.suburb.toLowerCase().match(selectedLocation.toLowerCase()) !== null).map(loc => loc.id);
         if (selectedIndustries.length > 0) vars.industry = selectedIndustries.map(industry => industry.id) 
         if (selectedProfessions.length > 0) vars.profession = selectedProfessions.map(profession => profession.id) 
         if (selectedWorkTypes.length > 0) vars.workType = selectedWorkTypes
@@ -41,16 +42,17 @@ function Search(props) {
         if (response.data.jobs) {
             dispatch(setJobs(response.data.jobs));
             setClassificationDropdown(false);
+            setLocationDropdown(false);
             navigate(`/jobs`);
         }
     }
 
-    const [location, setLocation] = useState('');
     const [displayedLocations, setDisplayedLocations] = useState();
 
     const handleChange = (event) => {
+        if (locationDropdown === false) setLocationDropdown(true);
         let searchTerms = event.target.value;
-        setLocation(searchTerms);
+        dispatch(setLocation(searchTerms));
 
         let filteredLocations;
         if (searchTerms === '') { 
@@ -144,13 +146,13 @@ function Search(props) {
                         </div>
                         <div className="where flex flex-col" ref={where}>
                             <label>Where</label>
-                            <input className="form-control" type="search" value={location.length > 15 ? location.slice(0, 25) + '...' : location} onChange={handleChange} placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
-                            <div className={`${location === '' && 'hidden'} clear-where flex flex-ai-c`} onClick={() => { setLocation(''); setLocationDropdown(false); }}>
+                            <input className="form-control" type="search" value={selectedLocation.length > 15 ? selectedLocation.slice(0, 25) + '...' : selectedLocation} onChange={handleChange} placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
+                            <div className={`${selectedLocation === '' && 'hidden'} clear-where flex flex-ai-c`} onClick={() => { dispatch(setLocation('')); setLocationDropdown(false); }}>
                                 <span className="medium material-icons-outlined">clear</span>
                             </div>
                             {locationDropdown && <Dropdown>
                                 {displayedLocations && displayedLocations.map((location, index) => {
-                                    return <Item key={index} setValue={setLocation} text={`${location.city} ${location.suburb}`} toggleList={setLocationDropdown}/>
+                                    return <Item key={index} text={`${location.city} ${location.suburb}`} toggleList={setLocationDropdown}/>
                                 })}
                             </Dropdown>}
                         </div>

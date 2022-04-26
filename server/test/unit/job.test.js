@@ -117,7 +117,7 @@ describe('models', () => {
 describe('job query resolvers', () => {
 
     const jobsQuery = `
-        query jobs($title: String, $company: ID, $location: ID, $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+        query jobs($title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
             jobs(title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
                 id
                 title
@@ -218,7 +218,7 @@ describe('job query resolvers', () => {
 
     test('jobs query for location returns jobs for that locations', async () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
-            location: location._id.toString()
+            location: [location._id.toString()]
         })
         expect(result.data.jobs).toBeTruthy();
         expect(result.data.jobs.length).toBe(1);

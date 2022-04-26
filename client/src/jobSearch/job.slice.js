@@ -17,7 +17,7 @@ const jobSlice = createSlice({
             state.jobs = action.payload
         },
         setLocation(state, action) {
-            state.locations.push(action.payload);
+            state.location = action.payload;
         },
         addIndustry(state, action) {
             state.industries.push(action.payload);

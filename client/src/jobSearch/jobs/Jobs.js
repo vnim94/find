@@ -45,7 +45,7 @@ function Jobs() {
 
 function JobCard(props) {
 
-    const { title, headliner, summary, company, city, suburb, industry, profession, workType, added, logo } = props.job;
+    const { title, headliner, summary, company, location, industry, profession, workType, added, logo } = props.job;
 
     return (
         <div className="job-card">
@@ -58,10 +58,10 @@ function JobCard(props) {
             </div>
             <div>
                 <div className="flex flex-row">
-                    <b>{city}</b>
-                    {suburb && <>
+                    <b>{location.city}</b>
+                    {location.suburb && <>
                         <span className="material-icons-outlined">navigate_next</span>
-                        <span>{suburb}</span>
+                        <span>{location.suburb}</span>
                     </>
                     }
                 </div>
