@@ -20,6 +20,7 @@ const JobResolvers = {
             return job
         },
         jobs: async (_, query) => {
+            if (query.title) query.title = { $regex: query.title, $options: 'i' }
             if (query.location) query.location = { $in: query.location }
             if (query.industry) query.industry = { $in: query.industry }
             if (query.profession) query.profession = { $in: query.profession }

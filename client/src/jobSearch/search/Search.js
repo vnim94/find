@@ -17,7 +17,7 @@ function Search(props) {
     const [locationDropdown, setLocationDropdown] = useState(false);
     const [expanded, setExpanded] = useState(props.expanded);
 
-    const [title, setTitle] = useState();
+    const [title, setTitle] = useState('');
     const selectedIndustries = useSelector(state => state.jobSearch.industries);
     const selectedProfessions = useSelector(state => state.jobSearch.professions);
     const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
@@ -30,6 +30,7 @@ function Search(props) {
         event.preventDefault();
         const vars = {}
         
+        if (title !== '') vars.title = title;
         if (selectedLocation !== '') vars.location = allLocations.filter(loc => 
             loc.city.toLowerCase().match(selectedLocation.toLowerCase()) !== null || 
             loc.suburb.toLowerCase().match(selectedLocation.toLowerCase()) !== null || 
@@ -114,7 +115,7 @@ function Search(props) {
                         <div className="what flex flex-col">
                             <label>What</label>
                             <div className="flex flex-row" ref={selectClassification}>
-                                <input className="form-control" type="text" placeholder="Enter Keywords"/>
+                                <input className="form-control" type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter Keywords"/>
                                 <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} onClick={() => setClassificationDropdown(!classificationDropdown)}>
                                     <span className="dark-grey">
                                         {selectedIndustries.length === 0 ? 

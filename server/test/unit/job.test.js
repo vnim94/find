@@ -216,6 +216,15 @@ describe('job query resolvers', () => {
         expect(result.data.jobs[0].profession.name).toBe('Chefs/Cooks');
     })
 
+    test('jobs query for job title returns jobs containing that title', async () => {
+        const result = await tester.graphql(jobsQuery, {}, {} ,{
+            title: 'burger'
+        })
+        expect(result.data.jobs).toBeTruthy();
+        expect(result.data.jobs.length).toBe(1);
+        expect(result.data.jobs[0].title).toBe('burger flipper');
+    })
+
     test('jobs query for location returns jobs for that locations', async () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
             location: [location._id.toString()]
