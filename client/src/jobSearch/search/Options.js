@@ -108,10 +108,10 @@ function Options() {
             }
         </ExpandedOption> : undefined}
         {selected === "payCeiling" ? <ExpandedOption type='toggle' toggle={payCeilingScale} setToggle={setPayCeilingScale}>
-            {payBaseScale === 'annually' ? 
-                Object.keys(payBasesAnnually).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} setValue={setPayCeiling} /> })
+            {payCeilingScale === 'annually' ? 
+                Object.keys(payCeilingsAnnually).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} setValue={setPayCeiling} /> })
             :
-                Object.keys(payBasesHourly).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} setValue={setPayCeiling} />})
+                Object.keys(payCeilingsHourly).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} setValue={setPayCeiling} />})
             }
         </ExpandedOption> : undefined}
         {selected === "time" ? <ExpandedOption>
