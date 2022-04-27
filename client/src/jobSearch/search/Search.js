@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import { clearIndustries, setLocation, setJobs, setTotalJobs, setCurrentPage } from '../job.slice';
+import { setQuery, setTitle, clearIndustries, setLocation, setJobs, setTotalJobs, setCurrentPage } from '../job.slice';
 import { getAllIndustries, getAllLocations } from '../job.api';
 
 function Search(props) {
@@ -17,8 +17,7 @@ function Search(props) {
     const [locationDropdown, setLocationDropdown] = useState(false);
     const [expanded, setExpanded] = useState(props.expanded);
 
-    const page = useSelector(state => state.jobSearch.currentPage);
-    const [title, setTitle] = useState('');
+    const title = useSelector(state => state.jobSearch.title);
     const selectedIndustries = useSelector(state => state.jobSearch.industries);
     const selectedProfessions = useSelector(state => state.jobSearch.professions);
     const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
@@ -29,7 +28,7 @@ function Search(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const vars = { page: page, limit: 15 }
+        const vars = { limit: 15 }
 
         if (title !== '') vars.title = title;
         if (selectedLocation !== '') vars.location = allLocations.filter(loc => 
@@ -44,7 +43,9 @@ function Search(props) {
         if (selectedPayCeiling) vars.payCeiling = selectedPayCeiling;
         if (selectedTimeElapsed) vars.added = selectedTimeElapsed;
         
-        const response = await getJobs(vars);
+        dispatch(setQuery(vars));
+
+        const response = await getJobs({ ...vars, page: 1 });
         if (response.data) {
             const { jobs, totalJobs, currentPage } = response.data.getJobs;
 
@@ -120,7 +121,7 @@ function Search(props) {
                         <div className="what flex flex-col">
                             <label>What</label>
                             <div className="flex flex-row" ref={selectClassification}>
-                                <input className="form-control" type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter Keywords"/>
+                                <input className="form-control" type="text" value={title} onChange={(e) => dispatch(setTitle(e.target.value))} placeholder="Enter Keywords"/>
                                 <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} onClick={() => setClassificationDropdown(!classificationDropdown)}>
                                     <span className="dark-grey">
                                         {selectedIndustries.length === 0 ? 

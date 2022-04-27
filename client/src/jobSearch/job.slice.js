@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const jobSlice = createSlice({
     name: 'jobSearch',
     initialState: { 
+        title: '',
         jobs: [], 
         totalJobs: null,
         currentPage: 1,
@@ -13,9 +14,16 @@ const jobSlice = createSlice({
         workTypes: [],
         payBase: null,
         payCeiling: null,
-        timeElapsed: null 
+        timeElapsed: null,
+        query: {}
     },
     reducers: {
+        setQuery(state, action) {
+            state.query = action.payload;
+        },
+        setTitle(state, action) {
+            state.title = action.payload;
+        },
         setCurrentPage(state, action) {
             state.currentPage = action.payload;
         },
@@ -65,6 +73,8 @@ const jobSlice = createSlice({
 })
 
 export const { 
+    setQuery,
+    setTitle,
     setCurrentPage,
     setTotalPages,
     setLocation,

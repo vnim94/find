@@ -1,7 +1,8 @@
 import './Jobs.css'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentPage } from '../job.slice';
+import { getJobs } from '../job.api';
+import { setJobs, setCurrentPage } from '../job.slice';
 import getTimeElapsed from '../../helpers/getTimeElapsed';
 
 function Jobs() {
@@ -105,20 +106,34 @@ function Paginator(props) {
     const { totalPages } = props;
     const dispatch = useDispatch();
     const currentPage = useSelector(state => state.jobSearch.currentPage);
+    const query = useSelector(state => state.jobSearch.query);
 
     const handleClick = (event) => {
         dispatch(setCurrentPage(parseInt(event.target.innerText)))
+        reSubmit(parseInt(event.target.innerText));
     }
 
-    let pages = []
-    for (let i = 0; i < totalPages; i++) {
-        pages.push(<span key={i} className={`${i + 1 === currentPage ? 'current-page' :  undefined} paginator-item`} onClick={handleClick}>{i + 1}</span>)
+    const handleNext = () => {
+        if (currentPage < totalPages) {
+            dispatch(setCurrentPage(currentPage + 1));
+            reSubmit(currentPage + 1);
+        }
+    }
+
+    const reSubmit = async (page) => {
+        const updatedQuery = { ...query, page }
+        const response = await getJobs(updatedQuery);
+        if (response.data) {
+            dispatch(setJobs(response.data.getJobs.jobs));
+        }
     }
 
     return (
         <div className="paginator">
-            {pages}
-            <div className="paginator-next" onClick={() => currentPage < totalPages && dispatch(setCurrentPage(currentPage + 1))}>
+            {Array(totalPages).fill().map((_,index) => {
+                return <span key={index} className={`${index + 1 === currentPage ? 'current-page' :  undefined} paginator-item`} onClick={handleClick}>{index + 1}</span>
+            })}
+            <div className="paginator-next" onClick={handleNext}>
                 <span>Next</span>
                 <span className="material-icons-outlined">navigate_next</span>
             </div>
