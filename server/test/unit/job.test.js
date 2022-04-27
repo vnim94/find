@@ -146,7 +146,7 @@ describe('job query resolvers', () => {
                     payCeiling
                     added
                 }
-                totalPages
+                totalJobs
                 currentPage
             }
         }
@@ -200,13 +200,12 @@ describe('job query resolvers', () => {
                             name
                         }
                     }
-                    totalPages
+                    totalJobs
                     currentPage
                 }
             }
         `
         const result = await tester.graphql(query, {}, {}, {});
-        console.log(result)
         expect(result.data.getJobs.jobs).toBeTruthy();
         expect(result.data.getJobs.jobs[0].title).toBe('burger flipper');
         expect(result.data.getJobs.jobs[0].company.name).toBe('McDonalds');
@@ -223,14 +222,14 @@ describe('job query resolvers', () => {
                             name
                         }
                     }
-                    totalPages
+                    totalJobs
                     currentPage
                 }
             }
         `
         const result = await tester.graphql(query, {}, {}, {});
         expect(result.data.getJobs.jobs.length).toBe(1); 
-        expect(result.data.getJobs.totalPages).toBe(2);
+        expect(result.data.getJobs.totalJobs).toBe(2);
         expect(result.data.getJobs.currentPage).toBe(1);
     })
 
@@ -239,7 +238,6 @@ describe('job query resolvers', () => {
             company: `${company._id.toString()}`,
             industry: `${industryB._id.toString()}`
         });
-        console.log(result);
         expect(result.data.getJobs.jobs).toBeTruthy();
         expect(result.data.getJobs.jobs[0].title).toBe('burger flipper');
         expect(result.data.getJobs.jobs[0].company.name).toBe('McDonalds');
@@ -252,7 +250,6 @@ describe('job query resolvers', () => {
         const result = await tester.graphql(jobsQuery, {}, {} ,{
             title: 'burger'
         })
-        console.log(result);
         expect(result.data.getJobs.jobs).toBeTruthy();
         expect(result.data.getJobs.jobs.length).toBe(1);
         expect(result.data.getJobs.jobs[0].title).toBe('burger flipper');
@@ -262,7 +259,6 @@ describe('job query resolvers', () => {
         const result = await tester.graphql(jobsQuery, {}, {}, {
             location: [location._id.toString()]
         })
-        console.log(result)
         expect(result.data.getJobs.jobs).toBeTruthy();
         expect(result.data.getJobs.jobs.length).toBe(1);
     })

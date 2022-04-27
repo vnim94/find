@@ -4,6 +4,9 @@ const jobSlice = createSlice({
     name: 'jobSearch',
     initialState: { 
         jobs: [], 
+        totalJobs: null,
+        currentPage: 1,
+        totalPages: null,
         location: '',
         industries: [], 
         professions: [],
@@ -13,8 +16,17 @@ const jobSlice = createSlice({
         timeElapsed: null 
     },
     reducers: {
+        setCurrentPage(state, action) {
+            state.currentPage = action.payload;
+        },
+        setTotalPages(state, action) {
+            state.totalPages = action.payload;
+        },
         setJobs(state, action) {
-            state.jobs = action.payload
+            state.jobs = action.payload;
+        },
+        setTotalJobs(state, action) {
+            state.totalJobs = action.payload;
         },
         setLocation(state, action) {
             state.location = action.payload;
@@ -26,7 +38,7 @@ const jobSlice = createSlice({
             state.industries = state.industries.filter(industry => industry.code !== action.payload.code);
         },
         clearIndustries(state) {
-            state.industries = []
+            state.industries = [];
         },
         addProfession(state, action) {
             state.professions.push(action.payload);
@@ -53,6 +65,8 @@ const jobSlice = createSlice({
 })
 
 export const { 
+    setCurrentPage,
+    setTotalPages,
     setLocation,
     addIndustry, 
     removeIndustry, 
@@ -60,6 +74,7 @@ export const {
     addProfession, 
     removeProfession, 
     setJobs,
+    setTotalJobs,
     addWorkType,
     removeWorkType,
     setPayBase,

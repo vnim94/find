@@ -1,31 +1,35 @@
 import { request } from '../profile/user.api';
 
 const getJobsRequest = `
-    query jobs($title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
-        jobs(title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
-            id
-            title
-            headliner
-            summary
-            description
-            company {
-                name
+    query getJobsQuery($page: Int, $limit: Int, $title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+        getJobs(page: $page, limit: $limit, title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
+            jobs { 
+                id
+                title
+                headliner
+                summary
+                description
+                company {
+                    name
+                }
+                location {
+                    suburb
+                    city
+                    region
+                }
+                industry {
+                    name
+                    code
+                }
+                profession {
+                    name
+                    code
+                }
+                workType
+                added
             }
-            location {
-                suburb
-                city
-                region
-            }
-            industry {
-                name
-                code
-            }
-            profession {
-                name
-                code
-            }
-            workType
-            added
+            totalJobs
+            currentPage
         }
     }
 `

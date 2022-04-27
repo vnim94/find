@@ -37,14 +37,14 @@ const JobResolvers = {
                     .populate('location company industry profession')
                     .limit(limit)
                     .skip((page - 1) * limit)
-                const totalPages = Math.ceil(await Job.find(query).countDocuments() / limit)
+                const totalJobs = await Job.find(query).countDocuments()
             
-                return { jobs, totalPages, currentPage: page }
+                return { jobs, totalJobs, currentPage: page }
             }
 
             return { 
                 jobs: await Job.find(query).populate('location company industry profession'),
-                totalPages: 1,
+                totalJobs: 1,
                 currentPage: 1
             }
         },

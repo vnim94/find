@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import { setLocation, setJobs, clearIndustries } from '../job.slice';
+import { clearIndustries, setLocation, setJobs, setTotalJobs, setCurrentPage } from '../job.slice';
 import { getAllIndustries, getAllLocations } from '../job.api';
 
 function Search(props) {
@@ -17,6 +17,7 @@ function Search(props) {
     const [locationDropdown, setLocationDropdown] = useState(false);
     const [expanded, setExpanded] = useState(props.expanded);
 
+    const page = useSelector(state => state.jobSearch.currentPage);
     const [title, setTitle] = useState('');
     const selectedIndustries = useSelector(state => state.jobSearch.industries);
     const selectedProfessions = useSelector(state => state.jobSearch.professions);
@@ -28,8 +29,8 @@ function Search(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const vars = {}
-        
+        const vars = { page: page, limit: 15 }
+
         if (title !== '') vars.title = title;
         if (selectedLocation !== '') vars.location = allLocations.filter(loc => 
             loc.city.toLowerCase().match(selectedLocation.toLowerCase()) !== null || 
@@ -44,8 +45,12 @@ function Search(props) {
         if (selectedTimeElapsed) vars.added = selectedTimeElapsed;
         
         const response = await getJobs(vars);
-        if (response.data.jobs) {
-            dispatch(setJobs(response.data.jobs));
+        if (response.data) {
+            const { jobs, totalJobs, currentPage } = response.data.getJobs;
+
+            dispatch(setJobs(jobs));
+            dispatch(setTotalJobs(totalJobs));
+            dispatch(setCurrentPage(currentPage));
             setClassificationDropdown(false);
             setLocationDropdown(false);
             navigate(`/jobs`);

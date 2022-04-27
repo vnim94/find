@@ -61,7 +61,7 @@ const JobTypes = `
 
     type JobsResult {
         jobs: [Job]!
-        totalPages: Int
+        totalJobs: Int
         currentPage: Int
     }
 

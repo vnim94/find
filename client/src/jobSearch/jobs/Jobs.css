@@ -43,6 +43,34 @@
     width: 100%;
 }
 
+.current-page {
+    background-color: var(--pale-green);
+    border: 1px solid var(--light-green);
+    border-radius: 10px;
+}
+
+.paginator {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.paginator-item {
+    cursor: pointer;
+    font-size: 18px;
+    padding: 10px;
+    padding-left: 17.5px;
+    padding-right: 17.5px;
+}
+
+.paginator-next {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    padding-left: 15px;
+}
+
 .sort > span {
     margin-right: 5px;
 }

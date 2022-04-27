@@ -1,11 +1,13 @@
 import './Jobs.css'
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentPage } from '../job.slice';
 import getTimeElapsed from '../../helpers/getTimeElapsed';
 
 function Jobs() {
 
     const jobs = useSelector(state => state.jobSearch.jobs);
+    const totalJobs = useSelector(state => state.jobSearch.totalJobs);
     const [sort, setSort] = useState(false);
 
     return (
@@ -13,7 +15,7 @@ function Jobs() {
             <div className="page flex flex-row">
                 <div className="job-feed">
                     <div className="job-search-result">
-                        <span><b>{jobs && jobs.length}</b> jobs found</span>
+                        <span><b>{totalJobs && totalJobs}</b> jobs found</span>
                         <div className="sort flex flex-row flex-ai-c">
                             <span>Sorted by</span>
                             <div className="sort-option flex flex-ai-c" onClick={() => setSort(!sort)}>
@@ -27,6 +29,7 @@ function Jobs() {
                             return <JobCard key={index} job={job} />
                         })}
                     </div>
+                    {totalJobs && <Paginator totalPages={Math.ceil(totalJobs / 15)}/>}
                 </div>
                 <div className="sidebar">
                     <div className="card">
@@ -92,6 +95,32 @@ function JobCard(props) {
                     </div>
                 </div>
                 <img className="company-logo" src={logo} alt="company-logo"></img>
+            </div>
+        </div>
+    )
+}
+
+function Paginator(props) {
+
+    const { totalPages } = props;
+    const dispatch = useDispatch();
+    const currentPage = useSelector(state => state.jobSearch.currentPage);
+
+    const handleClick = (event) => {
+        dispatch(setCurrentPage(parseInt(event.target.innerText)))
+    }
+
+    let pages = []
+    for (let i = 0; i < totalPages; i++) {
+        pages.push(<span key={i} className={`${i + 1 === currentPage ? 'current-page' :  undefined} paginator-item`} onClick={handleClick}>{i + 1}</span>)
+    }
+
+    return (
+        <div className="paginator">
+            {pages}
+            <div className="paginator-next" onClick={() => currentPage < totalPages && dispatch(setCurrentPage(currentPage + 1))}>
+                <span>Next</span>
+                <span className="material-icons-outlined">navigate_next</span>
             </div>
         </div>
     )
