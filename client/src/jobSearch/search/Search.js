@@ -161,7 +161,7 @@ function Search(props) {
                             <div className={`${selectedLocation === '' && 'hidden'} clear-where flex flex-ai-c`} onClick={() => { dispatch(setLocation('')); setLocationDropdown(false); }}>
                                 <span className="medium material-icons-outlined">clear</span>
                             </div>
-                            {locationDropdown && <Dropdown>
+                            {locationDropdown && displayedLocations.length > 0 && <Dropdown>
                                 {displayedLocations && displayedLocations.map((location, index) => {
                                     return <Item key={index} text={`${location.city} ${location.suburb}`} toggleList={setLocationDropdown}/>
                                 })}

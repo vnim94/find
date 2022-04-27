@@ -30,7 +30,7 @@ function Jobs() {
                             return <JobCard key={index} job={job} />
                         })}
                     </div>
-                    {totalJobs && <Paginator totalPages={Math.ceil(totalJobs / 15)}/>}
+                    {totalJobs > 0 && <Paginator totalPages={Math.ceil(totalJobs / 15)}/>}
                 </div>
                 <div className="sidebar">
                     <div className="card">
