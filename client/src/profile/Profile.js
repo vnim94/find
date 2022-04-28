@@ -16,7 +16,7 @@ function Profile() {
                     <div className="profile-banner-item flex flex-col flex-ai-fe">
                         <div>
                             <h2>Be seen with a Find profile</h2>
-                            <button className="bg-dark-green white btn">Update Profile</button>
+                            <a className="bg-dark-green white btn" href="/login">Update Profile</a>
                         </div>
                     </div>
                 </div>

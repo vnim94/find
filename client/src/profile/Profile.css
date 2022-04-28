@@ -100,8 +100,8 @@
     padding-bottom: 50px;
 }
 
-.profile-banner-item > * > * + * {
-    margin-top: 15px;
+.profile-banner-item > * > * {
+    margin-bottom: 15px;
 }
 
 .profile-details {
