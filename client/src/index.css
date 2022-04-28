@@ -46,7 +46,6 @@ select {
 
 .page {
     position: relative;
-    min-width: 940px;
     width: 940px;
 }
 
