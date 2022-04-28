@@ -20,12 +20,10 @@ function Jobs() {
             setSortOption('relevance');
             dispatch(toggleSort(false));
             dispatch(setCurrentPage(1));
-            
+
             const updatedQuery = { ...query, page: 1, sortByDate: false }
             const response = await getJobs(updatedQuery);
-            if (response.data) {
-                dispatch(setJobs(response.data.getJobs.jobs));
-            }
+            if (response.data) dispatch(setJobs(response.data.getJobs.jobs));
         } else {
             setSortOption('date'); 
             dispatch(toggleSort(true)); 
@@ -33,9 +31,7 @@ function Jobs() {
 
             const updatedQuery = { ...query, page: 1, sortByDate: true }
             const response = await getJobs(updatedQuery);
-            if (response.data) {
-                dispatch(setJobs(response.data.getJobs.jobs));
-            }
+            if (response.data) dispatch(setJobs(response.data.getJobs.jobs));
         }
         setDisplaySortOptions(!displaySortOptions);
     }
