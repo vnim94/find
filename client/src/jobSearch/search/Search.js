@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import { setQuery, setTitle, clearIndustries, setLocation, setJobs, setTotalJobs, setCurrentPage } from '../job.slice';
+import { setQuery, setTitle, clearIndustries, setLocation, setJobs, setTotalJobs } from '../job.slice';
 import { getAllIndustries, getAllLocations } from '../job.api';
 
 function Search(props) {

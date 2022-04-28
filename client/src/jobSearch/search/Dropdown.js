@@ -77,7 +77,7 @@ function CheckBoxItem(props) {
 
     const handleClick = () => {
         setChecked(!checked);
-        // selectedProfessions.length === 1 && checked === false && allChecked === false ? setAllChecked(true) : setAllChecked(false);
+        selectedProfessions.length === 1 && checked === false && allChecked === false ? setAllChecked(true) : setAllChecked(false);
         selectedProfessions.some(p => p.code === profession.code) ? dispatch(removeProfession(profession)) : dispatch(addProfession(profession));
     }
 

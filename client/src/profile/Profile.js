@@ -334,7 +334,7 @@ function Tile(props) {
 
     return (
         <div className="profile-tile">
-            <img src={pic}></img>
+            <img src={pic} alt="tile-img"></img>
             <span className="medium">{heading}</span>
             <span>{text}</span>
         </div>
