@@ -96,7 +96,7 @@ function App() {
                         <BrowseDirectory />
                     </>}/>
                 </Route>
-                <Route path="/*" element={jobs}/>
+                <Route path="/jobs" element={jobs}/>
             </Routes>
         </Router>
     )

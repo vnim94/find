@@ -8,6 +8,40 @@ function Profile() {
 
     const user = useSelector(state => state.user.details);
 
+    return  (
+        <div className="bg-pale-grey profile">
+            {user ? <UserProfile /> : <>
+            <div className="profile-banner">
+                <div className="page flex flex-col">
+                    <div className="profile-banner-item flex flex-col flex-ai-fe">
+                        <div>
+                            <h2>Be seen with a Find profile</h2>
+                            <button className="bg-dark-green white btn">Update Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="flex flex-row">
+                <Tile pic="/bell.png" heading={'More updates than just the latest jobs'} text={"We won't just alert you to the latest job opportunities, we'll also let you know what's happening in the market, on your profile and what you're worth"}/>
+                <Tile pic="/person.png" heading={'Attract the right employers and opportunities'} text={'Only registered employers can view your profile and get in contact with opportunities that best match your skills and career ambitions'}/>
+                <Tile pic="/privacy.png" heading={'Manage who can view your profile'} text={'Select from three privacy settings to stay in control of who can see your profile and get in touch with opportunities'}/> 
+            </div>
+            <div className="page">
+                <div className="employer-site flex flex-jc-c flex-ai-c">
+                    <h3>Hiring? Your job ad seen by all the right people</h3>
+                    <button className="bg-dark-green white btn">Find out more</button>
+                    <a className="dark-green" href="/">Employer Site</a>
+                </div>            
+            </div>
+            </>}
+        </div>
+    )
+}
+
+function UserProfile() {
+
+    const user = useSelector(state => state.user.details);
+
     const newValue = (value='') => {
         return {
             value: value,
@@ -36,9 +70,9 @@ function Profile() {
 
     const [jobTitle, setJobTitle] = useState(newValue());
 
-    return  (
-        <div className="bg-pale-grey profile">
-            <div className="profile-banner">
+    return (
+        <>
+        <div className="profile-banner">
                 <div className="page">
                     <h1>{user.firstName ? user.fullName : user.email.split('@')[0]}</h1>
                     <div className="flex flex-col">
@@ -47,235 +81,235 @@ function Profile() {
                     </div>
                     <button className="bg-light-green black btn-outline btn" onClick={() => setEditPersonalDetails(true)}>Edit personal details</button>
                 </div>
-            </div>
-            <div className="page flex flex-col">
-                <div className="bg-pale-grey flex flex-row">
-                    <div className="profile-details">
-                        {editPersonalDetails &&
-                        <div className="profile-card"> 
-                            <Edit heading="Edit personal details" toggle={setEditPersonalDetails}>
-                                <Callout icon="info">
-                                    <span>Phone number has been updated to include a country code</span>
-                                </Callout>
-                                <div className="flex flex-row">
-                                    <Input label="First name" value={firstName} onChange={setFirstName}/>
-                                    <Input label="Last name" value={lastName} onChange={setLastName}/>
-                                </div>
-                                <Select label="Lives in" placeholder="Select location..." value={location} onChange={setLocation} />
-                                <div className="flex flex-row">
-                                    <div className="phone flex flex-col">
-                                        <label>
-                                            <span>Phone number</span>
-                                            <span className="grey">(recommended)</span>
-                                        </label>
-                                        <div className="flex flex-row">
-                                            <div className="form-group">
-                                                <select className="form-control" value={countryCode} onChange={(e) => setCountryCode({ value: e.target.value, updated: true })} required>
-                                                    <option value="" disabled>Select country code</option>
-                                                </select>
-                                                <span className="option-dropdown material-icons-outlined">expand_more</span>
+        </div>
+        <div className="page flex flex-col">
+            <div className="bg-pale-grey flex flex-row">
+                <div className="profile-details">
+                    {editPersonalDetails &&
+                    <div className="profile-card"> 
+                        <Edit heading="Edit personal details" toggle={setEditPersonalDetails}>
+                            <Callout icon="info">
+                                <span>Phone number has been updated to include a country code</span>
+                            </Callout>
+                            <div className="flex flex-row">
+                                <Input label="First name" value={firstName} onChange={setFirstName}/>
+                                <Input label="Last name" value={lastName} onChange={setLastName}/>
+                            </div>
+                            <Select label="Lives in" placeholder="Select location..." value={location} onChange={setLocation} />
+                            <div className="flex flex-row">
+                                <div className="phone flex flex-col">
+                                    <label>
+                                        <span>Phone number</span>
+                                        <span className="grey">(recommended)</span>
+                                    </label>
+                                    <div className="flex flex-row">
+                                        <div className="form-group">
+                                            <select className="form-control" value={countryCode} onChange={(e) => setCountryCode({ value: e.target.value, updated: true })} required>
+                                                <option value="" disabled>Select country code</option>
+                                            </select>
+                                            <span className="option-dropdown material-icons-outlined">expand_more</span>
+                                        </div>
+                                        <div className="form-group">
+                                            <div className="country-code">
+                                                <span>123</span> 
                                             </div>
-                                            <div className="form-group">
-                                                <div className="country-code">
-                                                    <span>123</span> 
-                                                </div>
-                                                <input className={`${phone.updated && phone.value.length === 0 && 'invalid'} form-control`} type="text" value={phone.value} onChange={(e) => setPhone({ value: e.target.value, updated: true})}/>
-                                                <Error field={phone}/>
-                                            </div>
+                                            <input className={`${phone.updated && phone.value.length === 0 && 'invalid'} form-control`} type="text" value={phone.value} onChange={(e) => setPhone({ value: e.target.value, updated: true})}/>
+                                            <Error field={phone}/>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="form-group flex flex-col">
-                                    <label>Email address</label>
-                                    <span>victor.nim01@gmail.com</span>
-                                </div>
-                                <Callout icon="info">
-                                    <span>Change you email, password or delete your account in settings</span>
-                                </Callout>
-                            </Edit>
-                        </div>}
-                        <div className="bg-pale-green profile-card">
-                            <span className="medium">Create a new resume from your Find Profile</span>
-                            <div className="flex flex-row flex-ai-c">
-                                <button className="bg-dark-green white btn">Get started</button>
-                                <span>Or, upload your resume</span>
                             </div>
-                        </div>
-                        <div className="profile-card">
-                            {editSummary ? 
-                                <Edit heading="Add personal summary" toggle={setEditSummary}>
-                                    <span><b>Summary</b></span>
-                                    <span>Highlight your unique experiences, ambitions and strengths</span>
-                                    <textarea></textarea>
-                                </Edit>
-                            :
-                                <Card button="Add summary" heading="Personal summary" toggle={setEditSummary}>
-                                    <span>Add a personal summary to your profile as a way to introduce who you are</span>
-                                </Card>
-                            }
-                        </div>
-                        <div className="profile-card">
-                            {addRole ?
-                                <Edit heading="Add role" toggle={setAddRole}>
-                                    <Input label="Job title" value={jobTitle} onChange={setJobTitle}/>
-                                </Edit>
-                            :
-                                <Card button="Add role" heading="Career history" toggle={setAddRole}>
-                                    <div className="role">
-                                    </div>
-                                </Card>
-                            }
-                        </div>
-                        <div className="profile-card">
-                            {addEducation ?
-                                <Edit heading="Add education" toggle={setAddEducation}>
-
-                                </Edit>
-                            :
-                                <Card button="Add education" heading="Education" toggle={setAddEducation}>
-                                    <span>Tell employers about your education.</span>
-                                </Card> 
-                            }
-                        </div>
-                        <div className="profile-card">
-                            {addLicence ?
-                                <Edit heading="Add licence or certification" toggle={setAddLicence}>
-
-                                </Edit>
-                            :
-                                <Card button="Add licence or certification" heading="Licence &amp; certification" toggle={setAddLicence}>
-                                    <Callout icon="auto_awesome">
-                                        <span>Add you COVID-19 vaccination status.</span>
-                                        <a className="underline" href="/">Learn more</a>
-                                    </Callout>
-                                </Card> 
-                            }
-                        </div>
-                        <div className="profile-card">
-                            {addSkills ?
-                                <Edit heading="Add skill" toggle={setAddSkills}>
-
-                                </Edit>
-                            :
-                                <Card button="Add skill" heading="Skills" toggle={setAddSkills}>
-                                    <Callout icon="auto_awesome">
-                                        <span>Building your Find Profile is now easier with skills suggested based on your roles.</span>
-                                        <span className="skills underline"><b>View suggested skills</b></span>
-                                    </Callout>
-                                </Card> 
-                            }
-                        </div>
-                        <div className="profile-card">
-                            {addLanguage ?
-                                <Edit heading="Add language" toggle={setAddLanguage}>
-
-                                </Edit>
-                            :
-                                <Card button="Add language" heading="Languages" toggle={setAddLanguage}>
-                                    <span>Add languages to appeal to more companies and employers.</span>
-                                </Card> 
-                            }
-                        </div>
-                        <div className="profile-card">
-                            {addResume ?
-                                <Edit heading="Add resumé" toggle={setAddResume}>
-
-                                </Edit>
-                            :
-                                <Card button="Add resumé" heading="Resumé" toggle={setAddResume}>
-                                </Card> 
-                            }
-                        </div>
-                        <div className="profile-card">
-                            {editPreferences ?
-                                <Edit heading="About your next role" toggle={setEditPreferences}>
-
-                                </Edit>
-                            :
-                                <Card button="Add or edit preferences" heading="About your next role" toggle={setEditPreferences}>
-                                    <table className="next-role">
-                                        <tbody>
-                                            <tr>
-                                                <th>Availability</th>
-                                                <td>Not specified</td>
-                                                <td>Add</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Preferred work type</th>
-                                                <td>Not specified</td>
-                                                <td>Add</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Preferred work types</th>
-                                                <td>Not specified</td>
-                                                <td>Add</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Right to work</th>
-                                                <td>Not specified</td>
-                                                <td>Add</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Salary expectation</th>
-                                                <td>Not specified</td>
-                                                <td>Add</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Classification of interest</th>
-                                                <td>Not specified</td>
-                                                <td>Add</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Approachability</th>
-                                                <td>Not specified</td>
-                                                <td>Add</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </Card> 
-                            }
+                            <div className="form-group flex flex-col">
+                                <label>Email address</label>
+                                <span>victor.nim01@gmail.com</span>
+                            </div>
+                            <Callout icon="info">
+                                <span>Change you email, password or delete your account in settings</span>
+                            </Callout>
+                        </Edit>
+                    </div>}
+                    <div className="bg-pale-green profile-card">
+                        <span className="medium">Create a new resume from your Find Profile</span>
+                        <div className="flex flex-row flex-ai-c">
+                            <button className="bg-dark-green white btn">Get started</button>
+                            <span>Or, upload your resume</span>
                         </div>
                     </div>
-                    <div className="sidebar">
-                        <div className="card">
-                            <span className="medium">Profile visibility</span>
-                            <span>Your profile visibility setting controls if employers can approach you with job opportunities</span>
-                            <div className="flex flex-col">
-                                <div className="profile-visibility relative flex flex-row flex-jc-sb">
-                                    <span><b>{profileVisibility}</b></span>
-                                    <div className="select-visibility flex flex-row" onClick={() => setHidden(!hidden)}>
-                                        <span>Select</span>
-                                        <span className={`${!hidden ? 'expand' : undefined} select-visibility-arrow material-icons-outlined`}>expand_more</span>
-                                    </div>
-                                    {!hidden && <VisibilityDropdown value={profileVisibility} setValue={setProfileVisibility} setHidden={setHidden}/>}
+                    <div className="profile-card">
+                        {editSummary ? 
+                            <Edit heading="Add personal summary" toggle={setEditSummary}>
+                                <span><b>Summary</b></span>
+                                <span>Highlight your unique experiences, ambitions and strengths</span>
+                                <textarea></textarea>
+                            </Edit>
+                        :
+                            <Card button="Add summary" heading="Personal summary" toggle={setEditSummary}>
+                                <span>Add a personal summary to your profile as a way to introduce who you are</span>
+                            </Card>
+                        }
+                    </div>
+                    <div className="profile-card">
+                        {addRole ?
+                            <Edit heading="Add role" toggle={setAddRole}>
+                                <Input label="Job title" value={jobTitle} onChange={setJobTitle}/>
+                            </Edit>
+                        :
+                            <Card button="Add role" heading="Career history" toggle={setAddRole}>
+                                <div className="role">
                                 </div>
-                                <span>For all settings, your Profile including any verified credentials will be sent to the employer with you applications.</span>
-                                <a className="green" href="/">Learn more about visibility</a>
+                            </Card>
+                        }
+                    </div>
+                    <div className="profile-card">
+                        {addEducation ?
+                            <Edit heading="Add education" toggle={setAddEducation}>
+
+                            </Edit>
+                        :
+                            <Card button="Add education" heading="Education" toggle={setAddEducation}>
+                                <span>Tell employers about your education.</span>
+                            </Card> 
+                        }
+                    </div>
+                    <div className="profile-card">
+                        {addLicence ?
+                            <Edit heading="Add licence or certification" toggle={setAddLicence}>
+
+                            </Edit>
+                        :
+                            <Card button="Add licence or certification" heading="Licence &amp; certification" toggle={setAddLicence}>
+                                <Callout icon="auto_awesome">
+                                    <span>Add you COVID-19 vaccination status.</span>
+                                    <a className="underline" href="/">Learn more</a>
+                                </Callout>
+                            </Card> 
+                        }
+                    </div>
+                    <div className="profile-card">
+                        {addSkills ?
+                            <Edit heading="Add skill" toggle={setAddSkills}>
+
+                            </Edit>
+                        :
+                            <Card button="Add skill" heading="Skills" toggle={setAddSkills}>
+                                <Callout icon="auto_awesome">
+                                    <span>Building your Find Profile is now easier with skills suggested based on your roles.</span>
+                                    <span className="skills underline"><b>View suggested skills</b></span>
+                                </Callout>
+                            </Card> 
+                        }
+                    </div>
+                    <div className="profile-card">
+                        {addLanguage ?
+                            <Edit heading="Add language" toggle={setAddLanguage}>
+
+                            </Edit>
+                        :
+                            <Card button="Add language" heading="Languages" toggle={setAddLanguage}>
+                                <span>Add languages to appeal to more companies and employers.</span>
+                            </Card> 
+                        }
+                    </div>
+                    <div className="profile-card">
+                        {addResume ?
+                            <Edit heading="Add resumé" toggle={setAddResume}>
+
+                            </Edit>
+                        :
+                            <Card button="Add resumé" heading="Resumé" toggle={setAddResume}>
+                            </Card> 
+                        }
+                    </div>
+                    <div className="profile-card">
+                        {editPreferences ?
+                            <Edit heading="About your next role" toggle={setEditPreferences}>
+
+                            </Edit>
+                        :
+                            <Card button="Add or edit preferences" heading="About your next role" toggle={setEditPreferences}>
+                                <table className="next-role">
+                                    <tbody>
+                                        <tr>
+                                            <th>Availability</th>
+                                            <td>Not specified</td>
+                                            <td>Add</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Preferred work type</th>
+                                            <td>Not specified</td>
+                                            <td>Add</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Preferred work types</th>
+                                            <td>Not specified</td>
+                                            <td>Add</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Right to work</th>
+                                            <td>Not specified</td>
+                                            <td>Add</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Salary expectation</th>
+                                            <td>Not specified</td>
+                                            <td>Add</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Classification of interest</th>
+                                            <td>Not specified</td>
+                                            <td>Add</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Approachability</th>
+                                            <td>Not specified</td>
+                                            <td>Add</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </Card> 
+                        }
+                    </div>
+                </div>
+                <div className="sidebar">
+                    <div className="card">
+                        <span className="medium">Profile visibility</span>
+                        <span>Your profile visibility setting controls if employers can approach you with job opportunities</span>
+                        <div className="flex flex-col">
+                            <div className="profile-visibility relative flex flex-row flex-jc-sb">
+                                <span><b>{profileVisibility}</b></span>
+                                <div className="select-visibility flex flex-row" onClick={() => setHidden(!hidden)}>
+                                    <span>Select</span>
+                                    <span className={`${!hidden ? 'expand' : undefined} select-visibility-arrow material-icons-outlined`}>expand_more</span>
+                                </div>
+                                {!hidden && <VisibilityDropdown value={profileVisibility} setValue={setProfileVisibility} setHidden={setHidden}/>}
+                            </div>
+                            <span>For all settings, your Profile including any verified credentials will be sent to the employer with you applications.</span>
+                            <a className="green" href="/">Learn more about visibility</a>
+                        </div>
+                    </div>
+                    <div className="card">
+                        <div>
+                            <span>Profile strength: <b>Silver</b></span>
+                        </div>
+                        <div className="flex flex-row flex-ai-c flex-jc-sb">
+                            <span className="grey material-icons-outlined">star</span>
+                            <div className="completion">
+                                <div></div>
                             </div>
                         </div>
-                        <div className="card">
-                            <div>
-                                <span>Profile strength: <b>Silver</b></span>
-                            </div>
-                            <div className="flex flex-row flex-ai-c flex-jc-sb">
-                                <span className="grey material-icons-outlined">star</span>
-                                <div className="completion">
-                                    <div></div>
-                                </div>
-                            </div>
-                            <hr></hr>
-                            <div className="flex flex-col">
-                                <span>Add a minimum salary to appear in more searches by employers.</span>
-                                <button className="btn-outline bg-white dark-green btn">Add salary</button>
-                                <div className="flex flex-jc-c">
-                                    <span className="dark-green">Next tip</span>    
-                                </div>
+                        <hr></hr>
+                        <div className="flex flex-col">
+                            <span>Add a minimum salary to appear in more searches by employers.</span>
+                            <button className="btn-outline bg-white dark-green btn">Add salary</button>
+                            <div className="flex flex-jc-c">
+                                <span className="dark-green">Next tip</span>    
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        </>
     )
 }
 
@@ -291,6 +325,19 @@ function Card(props) {
                 <button className="btn-outline bg-white dark-green btn" onClick={() => toggle(true)}>{button}</button>
             </div>
         </>
+    )
+}
+
+function Tile(props) {
+
+    const { pic, heading, text } = props;
+
+    return (
+        <div className="profile-tile">
+            <img src={pic}></img>
+            <span className="medium">{heading}</span>
+            <span>{text}</span>
+        </div>
     )
 }
 

@@ -12,6 +12,19 @@
     margin-top: 10px;
 }
 
+.employer-site {
+    background-color: var(--pale-green);
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 100%;
+}
+
+.employer-site > * + * {
+    margin-left: 15px;
+}
+
 .next-role {
     margin-bottom: 10px;
 }
@@ -82,8 +95,37 @@
     margin-bottom: 10px;
 }
 
+.profile-banner-item {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.profile-banner-item > * > * + * {
+    margin-top: 15px;
+}
+
 .profile-details {
     width: 70%;
+}
+
+.profile-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 50px;
+    padding: 10px;
+    width: calc(940px / 3);
+}
+
+.profile-tile > img {
+    height: 60px;
+    width: 60px;
+}
+
+.profile-tile > * + * {
+    margin-top: 15px;
 }
 
 .sidebar {

@@ -54,7 +54,7 @@ function Footer() {
                     <div className="column">
                         <span><b>Employers</b></span>
                         <a className="footer-link" href="/">Register for free</a>
-                        <a className="footer-link" href="/">Post a job as</a>
+                        <a className="footer-link" href="/">Post a job ad</a>
                         <a className="footer-link" href="/">Products &amp; prices</a>
                         <a className="footer-link" href="/">Customer service</a>
                         <a className="footer-link" href="/">Hiring Advice</a>
