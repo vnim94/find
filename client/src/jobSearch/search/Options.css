@@ -33,7 +33,6 @@
 }
 
 .expanded-sub-options {
-    border: 1px solid var(--white);
     border-radius: 5px;
 }
 
@@ -42,6 +41,7 @@
 }
 
 .expanded-sub-options > li {
+    border: 1px solid var(--white);
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -53,8 +53,19 @@
     width: 100%;
 }
 
-.expanded-sub-options > li + li {
-    border-left: 1px solid var(--white);
+.expanded-sub-options > li:first-child {
+    border-top-left-radius: 7.5px;
+    border-bottom-left-radius: 7.5px;
+} 
+
+.expanded-sub-options > li:last-child {
+    border-top-right-radius: 7.5px;
+    border-bottom-right-radius: 7.5px;
+}
+
+.expanded-sub-options > li[class~='disabled'] {
+    border: 1px solid var(--grey);
+    cursor: default;
 } 
 
 .selected-sub-option {

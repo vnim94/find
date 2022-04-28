@@ -51,7 +51,7 @@ function Options() {
         '120k': 120000,
         '150k': 150000,
         '200k': 200000,
-        '200k+': null
+        '200k+': 999999
     };
     const payCeilingsHourly = {
         '$15': 30000,
@@ -64,7 +64,7 @@ function Options() {
         '$60': 120000,
         '$75': 150000,
         '$100': 200000,
-        '$100+': 0
+        '$100+': 999999
     }
     const times = {
         'Any time': null,
@@ -76,7 +76,7 @@ function Options() {
     }
 
     const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
-    const [displayedPayBase, setDisplayedPayBase] = useState('0');
+    const [displayedPayBase, setDisplayedPayBase] = useState('$0');
     const [payBaseScale, setPayBaseScale] = useState('annually');
     const [displayedPayCeiling, setDisplayedPayCeiling] = useState('200k+');
     const [payCeilingScale, setPayCeilingScale] = useState('annually');
@@ -102,27 +102,25 @@ function Options() {
         {selected === "workType" ? <ExpandedOption>{workTypes.map((value,index) => { return <MultiSubOption key={index} text={value} /> })}</ExpandedOption> : undefined}
         {selected === "payBase" ? <ExpandedOption type='toggle' toggle={payBaseScale} setToggle={setPayBaseScale}>
             {payBaseScale === 'annually' ? 
-                Object.keys(payBasesAnnually).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayBase} selectedSubOption={displayedPayBase} text={text} value={payBasesAnnually[text]} setValue={setPayBase} /> })
+                Object.keys(payBasesAnnually).map((text,index) => { 
+                    let disabled = payBasesAnnually[text] < payBasesAnnually[displayedPayBase] || payBasesAnnually[text] >= payCeilingsAnnually[displayedPayCeiling]
+                    return <SingleSubOption key={index} disabled={disabled} setDisplay={setDisplayedPayBase} selectedSubOption={displayedPayBase} text={text} value={payBasesAnnually[text]} setValue={setPayBase} /> 
+                })
             :
-                Object.keys(payBasesHourly).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayBase} selectedSubOption={displayedPayBase} text={text} value={payBasesHourly[text]} setValue={setPayBase} />})
+                Object.keys(payBasesHourly).map((text,index) => { 
+                    let disabled = payBasesHourly[text] < payBasesHourly[displayedPayBase] || payBasesHourly[text] >= payCeilingsHourly[displayedPayCeiling]
+                    return <SingleSubOption key={index} disabled={disabled} setDisplay={setDisplayedPayBase} selectedSubOption={displayedPayBase} text={text} value={payBasesHourly[text]} setValue={setPayBase} />
+                })
             }
         </ExpandedOption> : undefined}
         {selected === "payCeiling" ? <ExpandedOption type='toggle' toggle={payCeilingScale} setToggle={setPayCeilingScale}>
             {payCeilingScale === 'annually' ? 
                 Object.keys(payCeilingsAnnually).map((text,index) => {
-                    if (payCeilingsAnnually[text] > payBasesAnnually[displayedPayBase]) { 
-                        return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} setValue={setPayCeiling} /> 
-                    } else {
-                        return <SingleSubOption key={index} disabled={true} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} setValue={setPayCeiling} />
-                    }
+                    return <SingleSubOption key={index} disabled={payCeilingsAnnually[text] <= payBasesAnnually[displayedPayBase]} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} setValue={setPayCeiling} /> 
                 })
             :
                 Object.keys(payCeilingsHourly).map((text,index) => { 
-                    if (payCeilingsHourly[text] > payBasesAnnually[displayedPayBase]) {
-                        return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} setValue={setPayCeiling} />
-                    } else {
-                        return <SingleSubOption key={index} disabled={true} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} setValue={setPayCeiling} />
-                    }
+                    return <SingleSubOption key={index} disabled={payCeilingsHourly[text] <= payBasesHourly[displayedPayBase]} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} setValue={setPayCeiling} />
                 })
             }
         </ExpandedOption> : undefined}
@@ -206,7 +204,7 @@ function SingleSubOption(props) {
     }
 
     return (
-        <li className={`${selectedSubOption === text ? 'selected-sub-option' :  undefined} ${disabled && 'disabled'}`} onClick={handleClick}>
+        <li className={`${selectedSubOption === text ? 'selected-sub-option' :  undefined} ${disabled && 'disabled'}`} onClick={!disabled && handleClick}>
             <span>{text}</span>
         </li>        
     )
