@@ -2,12 +2,14 @@
     background-color: var(--white);
     position: absolute;
     top: -125px;
-    padding: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
     width: 100%;
 }
 
 .company-search-bar {
-    width: 80%;
+    margin-left: 100px;
+    width: 70%;
 }
 
 .company-search-bar > label {
@@ -17,6 +19,7 @@
 
 .search-bar {
     background-color: var(--pale-grey);
+    border: 1px solid var(--light-grey);
     appearance: none;
 }
 

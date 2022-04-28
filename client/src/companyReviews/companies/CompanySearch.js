@@ -3,7 +3,7 @@ import './CompanySearch.css';
 function CompanySearch() {
     return (
         <div className="company-search">
-            <div className="flex flex-col flex-ai-c">
+            <div>
                 <div className="company-search-bar">
                     <h2>Discover the right workplace for you</h2>
                     <Search />

@@ -23,7 +23,6 @@ import { Disclaimer } from './companyReviews/content/Content';
 import Jobs from './jobSearch/jobs/Jobs';
 
 function App() {
-
     const dispatch = useDispatch();
     const jobs =
     <>

@@ -1,5 +1,3 @@
-import env from 'react-dotenv';
-
 const loginRequest = (email, password) => `
     mutation {
         login(email: "${email}", password: "${password}") {
@@ -76,7 +74,7 @@ const getUserRequest = (token) => `
 `
 
 export const request = async (query, variables={}) => {
-    const response = await fetch(env.API, { 
+    const response = await fetch(process.env.REACT_APP_API, { 
         mode: 'cors',
         method: 'POST',
         headers: {

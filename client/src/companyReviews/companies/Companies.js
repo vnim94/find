@@ -13,14 +13,14 @@ function Companies(props) {
             setCompanies(response.data.companies);
         }   
         fetchCompanies();
-    })
+    },[])
 
     return (
-        <div className="bg-light-grey companies">
+        <div className="bg-pale-grey companies">
             <div className="page">
                 {!props.reviews && <CompanySearch />}
                 {!props.reviews && <div className="review-heading flex flex-row flex-jc-sb">
-                    <span className="large">Popular employers</span>
+                    <span className="large">Explore Company Profiles</span>
                     <button className="bg-dark-green white btn">Write a Review</button>
                 </div>}
                 <div className="tiles">
@@ -51,7 +51,7 @@ function Tile(props) {
             <div className="company-details">
                 <span><b>{company.name}</b></span>
                 <div className="rating">
-                    {Array(5).fill().map(_ => { return <span className="medium material-icons-outlined">star</span> })}
+                    {Array(5).fill().map((_,index) => { return <span key={index} className="medium material-icons-outlined">star</span> })}
                 </div>
                 <span className="small">3,471 ratings</span>
             </div>

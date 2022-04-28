@@ -30,15 +30,15 @@
 }
 
 .tag {
-    background-color: var(--dark-green);
+    background-color: var(--light-green);
     color: var(--white);
     border-radius: 5px;
     font-size: 14px;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    text-transform: uppercase;
+    padding-left: 7.5px;
+    padding-right: 7.5px;
+    padding-top: 2.5px;
+    padding-bottom: 2.5px;
+    text-transform: capitalize;
 }
 
 .tiles {

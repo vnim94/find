@@ -25,7 +25,7 @@ export function BrowseDirectory() {
         <div className="directory-browse">
             <div className="page flex flex-col">
                 <div className="company-letter">
-                    <span className="medium"><b>Company Directory</b></span>
+                    <b>Company Directory</b>
                     {letter && 
                     <>
                         <span className="grey material-icons-outlined">navigate_next</span>
