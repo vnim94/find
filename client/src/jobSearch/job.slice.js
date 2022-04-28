@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const jobSlice = createSlice({
     name: 'jobSearch',
-    initialState: { 
+    initialState: {
+        sortByDate: false,
         title: '',
         jobs: [], 
         totalJobs: null,
@@ -18,6 +19,9 @@ const jobSlice = createSlice({
         query: {}
     },
     reducers: {
+        toggleSort(state, action) {
+            state.sortByDate = action.payload;
+        },
         setQuery(state, action) {
             state.query = action.payload;
         },
@@ -73,6 +77,7 @@ const jobSlice = createSlice({
 })
 
 export const { 
+    toggleSort,
     setQuery,
     setTitle,
     setCurrentPage,

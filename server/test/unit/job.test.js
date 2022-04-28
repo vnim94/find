@@ -117,8 +117,8 @@ describe('models', () => {
 describe('job query resolvers', () => {
 
     const jobsQuery = `
-        query getJobsQuery($page: Int, $limit: Int, $title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
-            getJobs(page: $page, limit: $limit, title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
+        query getJobsQuery($sortByDate: Boolean, $page: Int, $limit: Int, $title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+            getJobs(sortByDate: $sortByDate, page: $page, limit: $limit, title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
                 jobs {
                     id
                     title
@@ -147,7 +147,6 @@ describe('job query resolvers', () => {
                     added
                 }
                 totalJobs
-                currentPage
             }
         }
     `
@@ -201,7 +200,6 @@ describe('job query resolvers', () => {
                         }
                     }
                     totalJobs
-                    currentPage
                 }
             }
         `
@@ -223,14 +221,12 @@ describe('job query resolvers', () => {
                         }
                     }
                     totalJobs
-                    currentPage
                 }
             }
         `
         const result = await tester.graphql(query, {}, {}, {});
         expect(result.data.getJobs.jobs.length).toBe(1); 
         expect(result.data.getJobs.totalJobs).toBe(2);
-        expect(result.data.getJobs.currentPage).toBe(1);
     })
 
     test('jobs with multiple parameters', async () => {
@@ -317,6 +313,29 @@ describe('job query resolvers', () => {
         })
         expect(result.data.getJobs.jobs).toBeTruthy();
         expect(result.data.getJobs.jobs.length).toBe(2);
+    })
+
+    test('jobs sort by date', async () => {
+        await Job.create({
+            title: 'Chief Executive Officer',
+            headliner: 'the CEO',
+            summary: 'this is a job to be CEO',
+            description: 'Chief Executive Officer',
+            company: company._id,
+            location: location._id,
+            industry: industry._id,
+            profession: profession._id,
+            workType: 'Part time',
+            payBase: 70000,
+            payCeiling: 85000,
+            added: Date.now() - 6 * 24 * 60 * 60 * 1000
+        })
+        const result = await tester.graphql(jobsQuery, {}, {}, {
+            sortByDate: true
+        })
+        expect(result.data.getJobs.jobs).toBeTruthy();
+        expect(result.data.getJobs.jobs.length).toBe(4);
+        expect(result.data.getJobs.jobs[2].title).toBe('Chief Executive Officer');
     })
 
     test('allIndustries return all industries and their professions', async () => {

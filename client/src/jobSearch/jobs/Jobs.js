@@ -2,14 +2,43 @@ import './Jobs.css'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import { setJobs, setCurrentPage } from '../job.slice';
+import { toggleSort, setJobs, setCurrentPage } from '../job.slice';
 import getTimeElapsed from '../../helpers/getTimeElapsed';
 
 function Jobs() {
 
+    const dispatch = useDispatch();
     const jobs = useSelector(state => state.jobSearch.jobs);
     const totalJobs = useSelector(state => state.jobSearch.totalJobs);
-    const [sort, setSort] = useState(false);
+    const query = useSelector(state => state.jobSearch.query);
+    const sortByDate = useSelector(state => state.jobSearch.sortByDate);
+    const [displaySortOptions, setDisplaySortOptions] = useState(false);
+    const [sortOption, setSortOption] = useState('relevance');
+    
+    const handleClick = async () => {
+        if (sortByDate) {
+            setSortOption('relevance');
+            dispatch(toggleSort(false));
+            dispatch(setCurrentPage(1));
+            
+            const updatedQuery = { ...query, page: 1, sortByDate: false }
+            const response = await getJobs(updatedQuery);
+            if (response.data) {
+                dispatch(setJobs(response.data.getJobs.jobs));
+            }
+        } else {
+            setSortOption('date'); 
+            dispatch(toggleSort(true)); 
+            dispatch(setCurrentPage(1));
+
+            const updatedQuery = { ...query, page: 1, sortByDate: true }
+            const response = await getJobs(updatedQuery);
+            if (response.data) {
+                dispatch(setJobs(response.data.getJobs.jobs));
+            }
+        }
+        setDisplaySortOptions(!displaySortOptions);
+    }
 
     return (
         <div className="jobs">
@@ -19,16 +48,20 @@ function Jobs() {
                         <span><b>{totalJobs && totalJobs}</b> jobs found</span>
                         <div className="sort flex flex-row flex-ai-c">
                             <span>Sorted by</span>
-                            <div className="sort-option flex flex-ai-c" onClick={() => setSort(!sort)}>
-                                <b>Relevance</b>
-                                <span className={`${sort && 'expand'} material-icons-outlined`}>expand_more</span>
+                            <div className="sort-option flex flex-ai-c" onClick={() => setDisplaySortOptions(!displaySortOptions)}>
+                                <b>{sortOption}</b>
+                                <span className={`${displaySortOptions && 'expand'} material-icons-outlined`}>expand_more</span>
                             </div>
+                            {displaySortOptions && <div className="sort-options">
+                                <ul>
+                                    <li onClick={handleClick}>Relevance</li>
+                                    <li onClick={handleClick}>Date</li>
+                                </ul>    
+                            </div>}
                         </div>
                     </div>
                     <div className="job-listings">
-                        {jobs && jobs.map((job, index) => {
-                            return <JobCard key={index} job={job} />
-                        })}
+                        {jobs && jobs.map((job, index) => { return <JobCard key={index} job={job} />})}
                     </div>
                     {totalJobs > 0 && <Paginator totalPages={Math.ceil(totalJobs / 15)}/>}
                 </div>
@@ -105,6 +138,7 @@ function Paginator(props) {
 
     const { totalPages } = props;
     const dispatch = useDispatch();
+    const sortByDate = useSelector(state => state.jobSearch.sortByDate);
     const currentPage = useSelector(state => state.jobSearch.currentPage);
     const query = useSelector(state => state.jobSearch.query);
 
@@ -121,7 +155,7 @@ function Paginator(props) {
     }
 
     const reSubmit = async (page) => {
-        const updatedQuery = { ...query, page }
+        const updatedQuery = { ...query, page, sortByDate }
         const response = await getJobs(updatedQuery);
         if (response.data) {
             dispatch(setJobs(response.data.getJobs.jobs));

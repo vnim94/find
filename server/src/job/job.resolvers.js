@@ -21,8 +21,8 @@ const JobResolvers = {
         },
         getJobs: async (_, query) => {
 
-            let { page, limit, title, industry, location, profession, workType, payBase, payCeiling, added } = query
-
+            let { sortByDate, page, limit, title, industry, location, profession, workType, payBase, payCeiling, added } = query
+            
             if (title) query.title = { $regex: title, $options: 'i' }
             if (location) query.location = { $in: location }
             if (industry) query.industry = { $in: industry }
@@ -32,21 +32,14 @@ const JobResolvers = {
             if (payCeiling) query.payCeiling = { $lte: payCeiling }
             if (added) query.added = { $gt: added }
             
-            if (page && limit) {
-                const jobs = await Job.find(query)
-                    .populate('location company industry profession')
-                    .limit(limit)
-                    .skip((page - 1) * limit)
-                const totalJobs = await Job.find(query).countDocuments()
-            
-                return { jobs, totalJobs, currentPage: page }
-            }
-
-            return { 
-                jobs: await Job.find(query).populate('location company industry profession'),
-                totalJobs: 1,
-                currentPage: 1
-            }
+            const jobs = await Job.find(query)
+                .populate('location company industry profession')
+                .sort(sortByDate ? { added: 'desc' } : undefined)
+                .limit(limit)
+                .skip((page - 1) * limit)
+            const totalJobs = await Job.find(query).countDocuments()
+        
+            return { jobs, totalJobs }
         },
         allIndustries: async () => {
             return await Industry.find({})

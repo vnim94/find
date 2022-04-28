@@ -109,9 +109,21 @@ function Options() {
         </ExpandedOption> : undefined}
         {selected === "payCeiling" ? <ExpandedOption type='toggle' toggle={payCeilingScale} setToggle={setPayCeilingScale}>
             {payCeilingScale === 'annually' ? 
-                Object.keys(payCeilingsAnnually).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} setValue={setPayCeiling} /> })
+                Object.keys(payCeilingsAnnually).map((text,index) => {
+                    if (payCeilingsAnnually[text] > payBasesAnnually[displayedPayBase]) { 
+                        return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} setValue={setPayCeiling} /> 
+                    } else {
+                        return <SingleSubOption key={index} disabled={true} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} setValue={setPayCeiling} />
+                    }
+                })
             :
-                Object.keys(payCeilingsHourly).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} setValue={setPayCeiling} />})
+                Object.keys(payCeilingsHourly).map((text,index) => { 
+                    if (payCeilingsHourly[text] > payBasesAnnually[displayedPayBase]) {
+                        return <SingleSubOption key={index} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} setValue={setPayCeiling} />
+                    } else {
+                        return <SingleSubOption key={index} disabled={true} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} setValue={setPayCeiling} />
+                    }
+                })
             }
         </ExpandedOption> : undefined}
         {selected === "time" ? <ExpandedOption>
@@ -186,7 +198,7 @@ function MultiSubOption(props) {
 function SingleSubOption(props) {
 
     const dispatch = useDispatch();
-    const { setDisplay, selectedSubOption, text, value, setValue } = props;
+    const { disabled, setDisplay, selectedSubOption, text, value, setValue } = props;
     
     const handleClick = () => {
         setDisplay(text);
@@ -194,7 +206,7 @@ function SingleSubOption(props) {
     }
 
     return (
-        <li className={selectedSubOption === text ? 'selected-sub-option' :  undefined} onClick={handleClick}>
+        <li className={`${selectedSubOption === text ? 'selected-sub-option' :  undefined} ${disabled && 'disabled'}`} onClick={handleClick}>
             <span>{text}</span>
         </li>        
     )

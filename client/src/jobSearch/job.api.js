@@ -1,8 +1,8 @@
 import { request } from '../profile/user.api';
 
 const getJobsRequest = `
-    query getJobsQuery($page: Int, $limit: Int, $title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
-        getJobs(page: $page, limit: $limit, title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
+    query getJobsQuery($sortByDate: Boolean, $page: Int, $limit: Int, $title: String, $company: ID, $location: [ID], $industry: [ID], $profession: [ID], $workType: [String], $payBase: Int, $payCeiling: Int, $added: Date) {
+        getJobs(sortByDate: $sortByDate, page: $page, limit: $limit, title: $title, company: $company, location: $location, industry: $industry, profession: $profession, workType: $workType, payBase: $payBase, payCeiling: $payCeiling, added: $added) {
             jobs { 
                 id
                 title
@@ -29,7 +29,6 @@ const getJobsRequest = `
                 added
             }
             totalJobs
-            currentPage
         }
     }
 `

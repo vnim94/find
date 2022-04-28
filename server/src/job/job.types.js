@@ -62,14 +62,13 @@ const JobTypes = `
     type JobsResult {
         jobs: [Job]!
         totalJobs: Int
-        currentPage: Int
     }
 
     union JobResult = Job | NotFound | InvalidJobInput
 
     type Query {
         getJob(id: ID!): JobResult!
-        getJobs(page: Int, limit: Int, title: String, company: ID, location: [ID], industry: [ID], profession: [ID], workType: [String], payBase: Int, payCeiling: Int, added: Date): JobsResult!
+        getJobs(sortByDate: Boolean, page: Int, limit: Int, title: String, company: ID, location: [ID], industry: [ID], profession: [ID], workType: [String], payBase: Int, payCeiling: Int, added: Date): JobsResult!
         allIndustries: [Industry]!
         allProfessions: [Profession]!
         allLocations: [Location]!

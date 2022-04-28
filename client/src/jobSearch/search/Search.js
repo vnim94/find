@@ -47,11 +47,10 @@ function Search(props) {
 
         const response = await getJobs({ ...vars, page: 1 });
         if (response.data) {
-            const { jobs, totalJobs, currentPage } = response.data.getJobs;
+            const { jobs, totalJobs } = response.data.getJobs;
 
             dispatch(setJobs(jobs));
             dispatch(setTotalJobs(totalJobs));
-            dispatch(setCurrentPage(currentPage));
             setClassificationDropdown(false);
             setLocationDropdown(false);
             navigate(`/jobs`);

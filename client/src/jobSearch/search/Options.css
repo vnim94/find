@@ -37,6 +37,10 @@
     border-radius: 5px;
 }
 
+.disabled {
+    color: var(--grey);
+}
+
 .expanded-sub-options > li {
     cursor: pointer;
     display: flex;
