@@ -7,6 +7,17 @@ const CompanySchema = new Schema({
         maxLength: 25,
         required: true
     },
+    website: {
+        type: String
+    },
+    industry: {
+        type: Schema.Types.ObjectId,
+        ref: 'Industry',
+        required: true
+    },
+    specialities: {
+        type: [String]
+    },
     headquarters: {
         type: String,
     },
@@ -21,6 +32,9 @@ const CompanySchema = new Schema({
     size: {
         type: String,
         enum: ['Less than 100', '100-500', '501-1,000', '1,001-5,000', '5,000-10,000', 'More than 10,001']
+    }, 
+    logo: {
+        type: String
     }
 })
 

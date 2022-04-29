@@ -30,13 +30,16 @@ describe('company resolvers', () => {
 
     const database = require('../../util/memoryDatabase');
     const Company = require('../../src/company/company.model');
+    const Industry = require('../../src/job/industry.model');
     let context;
     let company;
+    let industry;
 
     beforeAll(async () => {
         await database.connect();
         await database.seed();
         company = await Company.findOne();
+        industry = await Industry.findOne({ code: '0000' })
         context = { user: 'abc' };
     });
 
@@ -49,10 +52,15 @@ describe('company resolvers', () => {
                     ... on Company {
                         id
                         name
+                        website
+                        industry {
+                            code
+                        }
                         headquarters
                         overview
                         averageRating
                         size
+                        logo
                     }
                 }
             }
@@ -60,6 +68,7 @@ describe('company resolvers', () => {
         const result = await tester.graphql(companyQuery, {}, {}, {});
         expect(result.data.company.name).toBe('McDonalds');
         expect(result.data.company.headquarters).toBe('123 ABC Street');
+        expect(result.data.company.industry.code).toBe('0000')
     })
 
     test('company not found', async () => {
@@ -84,26 +93,34 @@ describe('company resolvers', () => {
                 companies {
                     id
                     name
+                    website
+                    industry {
+                        code
+                    }
                     headquarters
                     overview
                     averageRating
                     size
+                    logo
                 }
             }
         `
         const result = await tester.graphql(companies, {}, {}, {});
         expect(result.data.companies[0].name).toBe('McDonalds');
         expect(result.data.companies[0].headquarters).toBe('123 ABC Street');
+        expect(result.data.companies[0].industry.code).toBe('0000');
     })
 
     test('createCompany', async () => {
         const createCompany = `
             mutation {
-                createCompany(name: "ABC", headquarters: "123 Street") {
+                createCompany(name: "ABC", industry: "${industry._id}") {
                     ... on Company {
                         id
                         name
-                        headquarters
+                        industry {
+                            code
+                        }
                     }
                 }
             }
@@ -111,7 +128,7 @@ describe('company resolvers', () => {
         const result = await tester.graphql(createCompany, {}, context, {});
         expect(result.data.createCompany.id).toBeTruthy();
         expect(result.data.createCompany.name).toBe('ABC');
-        expect(result.data.createCompany.headquarters).toBe('123 Street');
+        expect(result.data.createCompany.industry.code).toBe('0000');
 
         const createdCompany = await Company.findOne({ name: 'ABC' });
         expect(createdCompany).toBeTruthy();
@@ -120,7 +137,7 @@ describe('company resolvers', () => {
     test('createCompany that already exists', async () => {
         const createCompany = `
             mutation {
-                createCompany(name: "McDonalds", headquarters: "123 Street") {
+                createCompany(name: "McDonalds", industry: "${industry._id}") {
                     ... on CompanyExists {
                         message
                         name
@@ -136,12 +153,12 @@ describe('company resolvers', () => {
     test('createCompany with invalid input', async () => {
         const createCompany = `
             mutation {
-                createCompany(name: "", headquarters: "") {
+                createCompany(name: "", industry: "") {
                     ... on InvalidCompanyInput {
                         message
                         errors {
                             name
-                            headquarters
+                            industry
                         }
                     }
                 }
@@ -155,18 +172,20 @@ describe('company resolvers', () => {
     test('updateCompany', async () => {
         const updateCompany = `
             mutation {
-                updateCompany(id: "${company._id.toString()}", name: "updated", headquarters: "XYZ Street") {
+                updateCompany(id: "${company._id.toString()}", name: "updated", industry: "${industry._id}") {
                     ... on Company {
                         id
                         name
-                        headquarters
+                        industry {
+                            code
+                        }
                     }
                 }
             }
         `
         const result = await tester.graphql(updateCompany, {}, context, {});
         expect(result.data.updateCompany.name).toBe('updated');
-        expect(result.data.updateCompany.headquarters).toBe('XYZ Street');
+        expect(result.data.updateCompany.industry.code).toBe('0000');
 
         const updatedCompany = await Company.findOne({ name: 'updated' });
         expect(updatedCompany).toBeTruthy();
@@ -175,7 +194,7 @@ describe('company resolvers', () => {
     test('updateCompany with name taken', async () => {
         const updateCompany = `
             mutation {
-                updateCompany(id: "${company._id.toString()}", name: "updated", headquarters: "XYZ Street") {
+                updateCompany(id: "${company._id.toString()}", name: "updated", industry: "${industry._id}") {
                     ... on CompanyExists {
                         message
                         name
@@ -191,12 +210,12 @@ describe('company resolvers', () => {
     test('updateCompany with invalid input', async () => {
         const updateCompany = `
             mutation {
-                updateCompany(id: "${company._id.toString()}", name: "", headquarters: "") {
+                updateCompany(id: "${company._id.toString()}", name: "", industry: "") {
                     ... on InvalidCompanyInput {
                         message
                         errors {
                             name
-                            headquarters
+                            industry
                         }
                     }
                 }

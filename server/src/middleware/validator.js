@@ -35,7 +35,7 @@ exports.password = (password) => {
 
 exports.company = (company) => {
     const errors = {}
-    const { name, headquarters } = company
+    const { name, industry } = company
 
     if (validator.isEmpty(name)) {
         errors['name'] = 'Name must be provided';
@@ -43,8 +43,8 @@ exports.company = (company) => {
         errors['name'] = 'Name must be between 2 and 25 characters';
     }
 
-    if(validator.isEmpty(headquarters)) {
-        errors['headquarters'] = 'Headquarters must be provided';
+    if(validator.isEmpty(industry)) {
+        errors['industry'] = 'Industry must be provided';
     } 
 
     return errors

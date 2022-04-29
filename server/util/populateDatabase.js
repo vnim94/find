@@ -41,7 +41,7 @@ const suburbs = [
 
 const companyNames = [
     'Apple',
-    'SEEK Limited',
+    'SEEK',
     'Microsoft',
     'Google',
     'Netflix',
@@ -152,9 +152,11 @@ function createLocation(suburb, city, state, region, callback) {
     })
 }
 
-function createCompany(name, callback) {
+function createCompany(name, headquarters, overview, averageRating, callback) {
 
-    let company = new Company({ name: name });
+    let company = new Company({ 
+        name: name 
+    });
 
     company.save((err) => {
         if (err) {

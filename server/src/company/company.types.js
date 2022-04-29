@@ -2,10 +2,14 @@ const CompanyTypes = `
     type Company {
         id: ID!
         name: String!
+        website: String
+        industry: Industry!
+        specialities: [String]
         headquarters: String
         overview: String
         averageRating: Float
         size: String
+        logo: String
     }
 
     type CompanyExists implements Error {
@@ -15,7 +19,7 @@ const CompanyTypes = `
 
     type CompanyInputErrors {
         name: String
-        headquarters: String
+        industry: String
     }
 
     type InvalidCompanyInput implements Error {
@@ -31,8 +35,8 @@ const CompanyTypes = `
     }
 
     type Mutation {
-        createCompany(name: String!, headquarters: String!, overview: String, size: String): CompanyResult
-        updateCompany(id: ID!, name: String, headquarters: String, overview: String, size: String): CompanyResult
+        createCompany(name: String!, website: String, industry: ID!, specialities: [String], headquarters: String, overview: String, size: String, logo: String): CompanyResult
+        updateCompany(id: ID!, name: String, website: String, industry: ID, specialities: [String], headquarters: String, overview: String, size: String, logo: String): CompanyResult
         deleteCompany(id: ID!): CompanyResult
     }
 `

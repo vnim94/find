@@ -46,22 +46,6 @@ exports.seed = async () => {
         region: 'Australia'
     })
 
-    const companyA = await Company.create({
-        name: "McDonalds",
-        headquarters: '123 ABC Street',
-        overview: "overview",
-        averageRating: 3.4,
-        size: 'More than 10,001'
-    })
-
-    const companyB = await Company.create({
-        name: "Hungry Jacks",
-        headquarters: '987 XYZ Street',
-        overview: "overview",
-        averageRating: 3.4,
-        size: 'More than 10,001'
-    })
-
     const industryA = await Industry.create({
         name: 'Hospitality & Tourism',
         code: '0000'
@@ -70,6 +54,26 @@ exports.seed = async () => {
     const industryB = await Industry.create({
         name: 'Retail & Consumer Products',
         code: '0001'
+    })
+
+    const companyA = await Company.create({
+        name: "McDonalds",
+        website: 'mcdonalds.com',
+        industry: industryA._id,
+        headquarters: '123 ABC Street',
+        overview: "overview",
+        averageRating: 3.4,
+        size: 'More than 10,001'
+    })
+
+    const companyB = await Company.create({
+        name: "Hungry Jacks",
+        website: 'hungryjacks.com',
+        industry: industryA._id,
+        headquarters: '987 XYZ Street',
+        overview: "overview",
+        averageRating: 3.4,
+        size: 'More than 10,001'
     })
 
     const professionA = await Profession.create({
