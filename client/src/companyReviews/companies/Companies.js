@@ -11,7 +11,7 @@ function Companies(props) {
     useEffect(() => {
         async function fetchCompanies() {
             const response = await getCompanies();
-            setCompanies(response.data.companies);
+            if (response.data) setCompanies(response.data.companies);
         }   
         fetchCompanies();
     },[])
@@ -52,7 +52,7 @@ function Tile(props) {
                 <span className="tag">hiring</span>
             </div>
             <div>
-                <img className="company-logo" src="/mcdonalds.jpg" alt="company-logo"></img>
+                <img className="company-logo" src={company.logo} alt="company-logo"></img>
             </div>
             <div className="company-details">
                 <span><b>{company.name}</b></span>

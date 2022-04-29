@@ -5,10 +5,16 @@ const getCompaniesRequest = `
         companies {
             id
             name
+            website
+            industry {
+                name
+            }
+            specialities
             headquarters
             overview
             averageRating
             size
+            logo
         }
     }
 `

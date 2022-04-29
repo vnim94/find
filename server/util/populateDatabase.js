@@ -256,18 +256,13 @@ function populateLocations(callback) {
 
 function populateCompanies(callback) {
     let companiesToCreate = [];
-    let website;
-    let overview;
-    let headquarters;
-    let averageRating;
-    let logo;
 
     companyNames.forEach(company => {
-        website = `${company.toLowerCase()}.com`;
-        logo = `/${company.toLowerCase()}.png`
-        overview = faker.lorem.paragraph();
-        headquarters = `${faker.address.streetAddress()}, ${faker.address.cityName()}`
-        averageRating = parseFloat((Math.random() * 5).toFixed(2));
+        let website = `${company.toLowerCase()}.com`;
+        let logo = `/${company.toLowerCase()}.png`
+        let overview = faker.lorem.paragraph();
+        let headquarters = `${faker.address.streetAddress()}, ${faker.address.cityName()}`
+        let averageRating = parseFloat((Math.random() * 5).toFixed(2));
         companiesToCreate.push(function(callback) { createCompany(company, website, industries[getRandomIndex(industries.length)], headquarters, overview, averageRating, logo, callback) });
     })
 
