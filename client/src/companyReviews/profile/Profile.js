@@ -119,7 +119,55 @@ function About() {
 }
 
 function Culture() {
-    return (<></>)
+    return (<>
+        <div className="company-profile-section">
+            <span className="large">Culture and values</span>
+            <div>
+                <span className="medium"></span>
+                <p></p>
+            </div>
+            <div>
+                <span className="medium"></span>
+                <p></p>
+            </div>
+            <div>
+                <span className="medium"></span>
+                <p></p>
+            </div>
+            <div>
+                <span className="medium"></span>
+                <p></p>
+            </div>
+        </div>
+        <div className="company-profile-section">
+            <span className="large">Perks and benefits</span>
+            <Card heading="Family focus" text="14 weeks paid primary carer leave with Parental coaching program Flexible working" />
+        </div>
+        <div className="company-profile-section">
+            <span className="large">Our approach to diversity, equity and inclusion</span>
+        </div>
+        <div className="company-profile-section">
+            <span className="large">Gallery</span>
+            <div></div>
+        </div>
+    </>)
+}
+
+function Card(props) {
+
+    const { heading, text } = props;
+
+    return (
+        <div className="section-card">
+            <div>
+                <span className="material-icons-outlined">auto_awesome</span>
+            </div>
+            <div className="flex flex-col">
+                <span className="medium">{heading}</span>
+                <span className="grey">{text}</span>
+            </div>
+        </div>
+    )
 }
 
 function Jobs() {

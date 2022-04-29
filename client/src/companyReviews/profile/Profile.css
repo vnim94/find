@@ -43,3 +43,13 @@
 .company-review-rating > * + * {
     margin-left: 15px;
 }
+
+.section-card {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+}
+
+.section-card > * + * {
+    margin-left: 10px;
+}

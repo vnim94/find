@@ -152,11 +152,9 @@ function createLocation(suburb, city, state, region, callback) {
     })
 }
 
-function createCompany(name, headquarters, overview, averageRating, callback) {
+function createCompany(name, website, industry, headquarters, overview, averageRating, logo, callback) {
 
-    let company = new Company({ 
-        name: name 
-    });
+    let company = new Company({name, website, industry, headquarters, overview, averageRating, logo});
 
     company.save((err) => {
         if (err) {
@@ -258,9 +256,19 @@ function populateLocations(callback) {
 
 function populateCompanies(callback) {
     let companiesToCreate = [];
+    let website;
+    let overview;
+    let headquarters;
+    let averageRating;
+    let logo;
 
     companyNames.forEach(company => {
-        companiesToCreate.push(function(callback) { createCompany(company, callback) });
+        website = `${company.toLowerCase()}.com`;
+        logo = `/${company.toLowerCase()}.png`
+        overview = faker.lorem.paragraph();
+        headquarters = `${faker.address.streetAddress()}, ${faker.address.cityName()}`
+        averageRating = parseFloat((Math.random() * 5).toFixed(2));
+        companiesToCreate.push(function(callback) { createCompany(company, website, industries[getRandomIndex(industries.length)], headquarters, overview, averageRating, logo, callback) });
     })
 
     async.series(companiesToCreate, callback);
@@ -321,7 +329,7 @@ function getRandomIndex(length) {
 
 console.log('[INFO] Populating database...');
 
-async.series([populateUsers, populateLocations, populateCompanies, populateIndustries, populateProfessions, populateJobs], (err) => {
+async.series([populateUsers, populateLocations, populateIndustries, populateCompanies, populateProfessions, populateJobs], (err) => {
 
     if (err) {
         console.log(`[ERROR] ${err}`);
