@@ -1,5 +1,6 @@
 import './Companies.css';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CompanySearch from './CompanySearch';
 import { getCompanies } from '../company.api';
 
@@ -38,10 +39,15 @@ function Companies(props) {
 
 function Tile(props) {
 
+    const navigate = useNavigate();
     const { company } = props;
 
+    const handleClick = () => {
+        navigate(`/companies/${company.name.toLowerCase()}`)
+    }
+
     return (
-        <div className="tile">
+        <div className="tile" onClick={handleClick}>
             <div className="tag-div flex flex-ai-c flex-jc-fe">
                 <span className="tag">hiring</span>
             </div>

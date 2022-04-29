@@ -19,6 +19,7 @@ import Background from './companyReviews/background/Background';
 import Companies from './companyReviews/companies/Companies';
 import CompanyContent from './companyReviews/content/Content';
 import CompanyShortcut from './companyReviews/shortcut/Shortcut';
+import CompanyProfile from './companyReviews/profile/Profile';
 import { Disclaimer } from './companyReviews/content/Content';
 import Jobs from './jobSearch/jobs/Jobs';
 
@@ -93,6 +94,11 @@ function App() {
                         <Directory search={true} bold={true}/>
                         <Background heading="Company Directory Listing" />
                         <BrowseDirectory />
+                    </>}/>
+                    <Route path="*" element={<>
+                        <Directory />
+                        <Background />
+                        <CompanyProfile />
                     </>}/>
                 </Route>
                 <Route path="/jobs" element={jobs}/>

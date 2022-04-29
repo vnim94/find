@@ -1,0 +1,45 @@
+.company-profile-details > tr > th, .company-profile-details > tr > td {
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.company-profile-section {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.company-profile-section > * + * {
+    margin-top: 15px;
+}
+
+.company-profile-section > * > img {
+    height: 125px;
+    width: 125px;
+}
+
+.company-profile-tabs > ul {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    padding: 15px;
+}
+
+.company-profile-tab {
+    cursor: pointer;
+    padding: 15px;
+}
+
+.company-profile-tab:not(.selected):hover {
+    border-bottom: 2px solid var(--black);
+}
+
+.company-profile-tab.selected {
+    color: var(--dark-green);
+    border-bottom: 2px solid var(--dark-green);
+}
+
+.company-review-rating > * + * {
+    margin-left: 15px;
+}
