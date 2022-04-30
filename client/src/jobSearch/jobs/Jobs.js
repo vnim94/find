@@ -2,7 +2,7 @@ import './Jobs.css'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import { toggleSort, setJobs, setCurrentPage } from '../job.slice';
+import { toggleLoading, toggleSort, setJobs, setCurrentPage } from '../job.slice';
 import getTimeElapsed from '../../helpers/getTimeElapsed';
 
 function Jobs() {
@@ -14,7 +14,7 @@ function Jobs() {
     const sortByDate = useSelector(state => state.jobSearch.sortByDate);
     const [displaySortOptions, setDisplaySortOptions] = useState(false);
     const [sortOption, setSortOption] = useState('relevance');
-    const [loading, setLoading] = useState(false);
+    const loading = useSelector(state => state.jobSearch.loading);
     
     const handleClick = async () => {
         
@@ -35,13 +35,13 @@ function Jobs() {
     }
 
     const fetchData = async (page, sortByDate) => {
-        setLoading(true);
+        dispatch(toggleLoading(true));
         const updatedQuery = { ...query, page, sortByDate }
         const response = await getJobs(updatedQuery);
         if (response.data) {
             dispatch(setJobs(response.data.getJobs.jobs));
         }
-        setLoading(false);
+        dispatch(toggleLoading(false));
     }
 
     return (

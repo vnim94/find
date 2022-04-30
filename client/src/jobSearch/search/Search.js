@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import { setQuery, setTitle, clearIndustries, setLocation, setJobs, setTotalJobs } from '../job.slice';
+import { setQuery, setTitle, clearIndustries, setLocation, setJobs, setTotalJobs, toggleLoading } from '../job.slice';
 import { getAllIndustries, getAllLocations } from '../job.api';
 
 function Search(props) {
@@ -28,6 +28,7 @@ function Search(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        dispatch(toggleLoading(true));
         navigate(`/jobs`);
 
         const vars = { limit: 15 }
@@ -57,6 +58,7 @@ function Search(props) {
             setLocationDropdown(false);
             
         }
+        dispatch(toggleLoading(false));
     }
 
     const [displayedLocations, setDisplayedLocations] = useState();

@@ -16,9 +16,13 @@ const jobSlice = createSlice({
         payBase: null,
         payCeiling: null,
         timeElapsed: null,
-        query: {}
+        query: {},
+        loading: false
     },
     reducers: {
+        toggleLoading(state, action) {
+            state.loading = action.payload;
+        },
         toggleSort(state, action) {
             state.sortByDate = action.payload;
         },
@@ -77,6 +81,7 @@ const jobSlice = createSlice({
 })
 
 export const { 
+    toggleLoading,
     toggleSort,
     setQuery,
     setTitle,
