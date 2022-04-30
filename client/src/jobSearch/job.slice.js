@@ -5,7 +5,7 @@ const jobSlice = createSlice({
     initialState: {
         sortByDate: false,
         title: '',
-        jobs: [], 
+        jobs: null, 
         totalJobs: null,
         currentPage: 1,
         totalPages: null,
