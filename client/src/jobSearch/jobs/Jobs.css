@@ -11,6 +11,7 @@
     position: relative;
     animation: move 0.5s infinite ease-in-out;
     animation-delay: 0s;
+    transition: 0.6s;
 }
 
 .dot + .dot {
@@ -18,8 +19,12 @@
 }
 
 @keyframes move {
-    from { top: 0px; }
-    to { top: 5px; }
+    from { 
+        top: 0px; 
+    }
+    to { 
+        top: 5px; 
+    }
 }
 
 .delay-1 {
@@ -33,7 +38,7 @@
 .loading {
     display: flex;
     justify-content: center;
-    padding: 15px;
+    padding: 30px;
 }
 
 .jobs {

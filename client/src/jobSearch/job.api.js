@@ -11,6 +11,7 @@ const getJobsRequest = `
                 description
                 company {
                     name
+                    logo
                 }
                 location {
                     suburb

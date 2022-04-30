@@ -17,23 +17,29 @@ function Jobs() {
     const [loading, setLoading] = useState(false);
     
     const handleClick = async () => {
-        setLoading(true);
+        
         if (sortByDate) {
             setSortOption('relevance');
             dispatch(toggleSort(false));
             dispatch(setCurrentPage(1));
             setDisplaySortOptions(!displaySortOptions);
-            const updatedQuery = { ...query, page: 1, sortByDate: false }
-            const response = await getJobs(updatedQuery);
-            if (response.data) dispatch(setJobs(response.data.getJobs.jobs));
+            fetchData(1, false);
         } else {
             setSortOption('date'); 
             dispatch(toggleSort(true)); 
             dispatch(setCurrentPage(1));
             setDisplaySortOptions(!displaySortOptions);
-            const updatedQuery = { ...query, page: 1, sortByDate: true }
-            const response = await getJobs(updatedQuery);
-            if (response.data) dispatch(setJobs(response.data.getJobs.jobs));
+            fetchData(1, true);
+        }
+        
+    }
+
+    const fetchData = async (page, sortByDate) => {
+        setLoading(true);
+        const updatedQuery = { ...query, page, sortByDate }
+        const response = await getJobs(updatedQuery);
+        if (response.data) {
+            dispatch(setJobs(response.data.getJobs.jobs));
         }
         setLoading(false);
     }
@@ -65,7 +71,7 @@ function Jobs() {
                         <div className="job-listings">
                             {jobs.map((job, index) => { return <JobCard key={index} job={job} />})}
                         </div>
-                        {totalJobs > 0 && <Paginator totalPages={Math.ceil(totalJobs / 15)}/>}
+                        {totalJobs > 0 && <Paginator fetchData={fetchData} totalPages={Math.ceil(totalJobs / 15)}/>}
                     </>}
                 </>
                 : <Loading />}
@@ -87,7 +93,7 @@ function Jobs() {
 
 function JobCard(props) {
 
-    const { title, headliner, summary, company, location, industry, profession, workType, added, logo } = props.job;
+    const { title, headliner, summary, company, location, industry, profession, workType, added } = props.job;
 
     return (
         <div className="job-card">
@@ -133,7 +139,7 @@ function JobCard(props) {
                         <span>Save</span>
                     </div>
                 </div>
-                <img className="company-logo" src={logo} alt="company-logo"></img>
+                <img className="company-logo" src={company.logo} alt="company-logo"></img>
             </div>
         </div>
     )
@@ -141,29 +147,20 @@ function JobCard(props) {
 
 function Paginator(props) {
 
-    const { totalPages } = props;
+    const { fetchData, totalPages } = props;
     const dispatch = useDispatch();
     const sortByDate = useSelector(state => state.jobSearch.sortByDate);
     const currentPage = useSelector(state => state.jobSearch.currentPage);
-    const query = useSelector(state => state.jobSearch.query);
 
     const handleClick = (event) => {
         dispatch(setCurrentPage(parseInt(event.target.innerText)))
-        reSubmit(parseInt(event.target.innerText));
+        fetchData(parseInt(event.target.innerText), sortByDate);
     }
 
     const handleNext = () => {
         if (currentPage < totalPages) {
             dispatch(setCurrentPage(currentPage + 1));
-            reSubmit(currentPage + 1);
-        }
-    }
-
-    const reSubmit = async (page) => {
-        const updatedQuery = { ...query, page, sortByDate }
-        const response = await getJobs(updatedQuery);
-        if (response.data) {
-            dispatch(setJobs(response.data.getJobs.jobs));
+            fetchData(currentPage + 1, sortByDate);
         }
     }
 
