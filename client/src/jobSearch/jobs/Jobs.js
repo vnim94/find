@@ -14,8 +14,10 @@ function Jobs() {
     const sortByDate = useSelector(state => state.jobSearch.sortByDate);
     const [displaySortOptions, setDisplaySortOptions] = useState(false);
     const [sortOption, setSortOption] = useState('relevance');
+    const [loading, setLoading] = useState(false);
     
     const handleClick = async () => {
+        setLoading(true);
         if (sortByDate) {
             setSortOption('relevance');
             dispatch(toggleSort(false));
@@ -33,14 +35,17 @@ function Jobs() {
             const response = await getJobs(updatedQuery);
             if (response.data) dispatch(setJobs(response.data.getJobs.jobs));
         }
+        setLoading(false);
     }
 
     return (
         <div className="jobs">
             <div className="page flex flex-row">
                 <div className="job-feed">
+                {jobs ? 
+                <>
                     <div className="job-search-result">
-                        <span><b>{totalJobs && totalJobs}</b> jobs found</span>
+                        <span><b>{totalJobs}</b> jobs found</span>
                         <div className="sort flex flex-row flex-ai-c">
                             <span>Sorted by</span>
                             <div className="sort-option flex flex-ai-c" onClick={() => setDisplaySortOptions(!displaySortOptions)}>
@@ -55,10 +60,15 @@ function Jobs() {
                             </div>}
                         </div>
                     </div>
-                    <div className="job-listings">
-                        {jobs && jobs.map((job, index) => { return <JobCard key={index} job={job} />})}
-                    </div>
-                    {totalJobs > 0 && <Paginator totalPages={Math.ceil(totalJobs / 15)}/>}
+                    {loading ? <Loading /> : 
+                    <>
+                        <div className="job-listings">
+                            {jobs.map((job, index) => { return <JobCard key={index} job={job} />})}
+                        </div>
+                        {totalJobs > 0 && <Paginator totalPages={Math.ceil(totalJobs / 15)}/>}
+                    </>}
+                </>
+                : <Loading />}
                 </div>
                 <div className="sidebar">
                     <div className="card">
@@ -166,6 +176,16 @@ function Paginator(props) {
                 <span>Next</span>
                 <span className="material-icons-outlined">navigate_next</span>
             </div>
+        </div>
+    )
+}
+
+function Loading() {
+    return (
+        <div className="loading">
+            <div className="dot"></div>
+            <div className="dot delay-1"></div>
+            <div className="dot delay-2"></div>
         </div>
     )
 }

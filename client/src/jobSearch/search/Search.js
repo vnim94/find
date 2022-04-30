@@ -28,6 +28,8 @@ function Search(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        navigate(`/jobs`);
+
         const vars = { limit: 15 }
 
         if (title !== '') vars.title = title;
@@ -53,7 +55,7 @@ function Search(props) {
             dispatch(setTotalJobs(totalJobs));
             setClassificationDropdown(false);
             setLocationDropdown(false);
-            navigate(`/jobs`);
+            
         }
     }
 
