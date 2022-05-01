@@ -39,17 +39,17 @@ const suburbs = [
     'Northern Suburbs'
 ]
 
-const companyNames = [
-    'Apple',
-    'SEEK',
-    'Microsoft',
-    'Google',
-    'Netflix',
-    'Meta',
-    'Airbnb',
-    'Spotify',
-    'Reddit',
-]
+const companyNamesAndLogos = {
+    'Apple': "https://www.transparentpng.com/thumb/apple-logo/Ts2ZlF-apple-logo-free-png.png",
+    'SEEK': "https://logosvector.net/wp-content/uploads/2013/12/seek-vector-logo.png",
+    'Microsoft': "https://www.transparentpng.com/thumb/windows/7Pqun8-download-windows-logo-emblem-png.png",
+    'Google': "https://www.transparentpng.com/thumb/google-logo/colorful-google-logo-transparent-clipart-download-u3DWLj.png",
+    'Netflix': "https://www.freepnglogos.com/uploads/netflix-logo-circle-png-5.png",
+    'Meta': "https://static.vecteezy.com/system/resources/previews/004/263/114/non_2x/meta-logo-meta-by-facebook-icon-editorial-logo-for-social-media-free-vector.jpg",
+    'Airbnb': "https://logodownload.org/wp-content/uploads/2016/10/airbnb-logo-0.png",
+    'Spotify': "https://www.freepnglogos.com/uploads/spotify-logo-png/spotify-brands-logo-34.png",
+    'Reddit': "https://www.logo.wine/a/logo/Reddit/Reddit-Vertical-Color-Logo.wine.svg",
+}
 
 const workTypes = [
     'Full time',
@@ -257,9 +257,9 @@ function populateLocations(callback) {
 function populateCompanies(callback) {
     let companiesToCreate = [];
 
-    companyNames.forEach(company => {
+    Object.keys(companyNamesAndLogos).forEach(company => {
         let website = `${company.toLowerCase()}.com`;
-        let logo = `/${company.toLowerCase()}.png`
+        let logo = companyNamesAndLogos[company]
         let overview = faker.lorem.paragraph();
         let headquarters = `${faker.address.streetAddress()}, ${faker.address.cityName()}`
         let averageRating = parseFloat((Math.random() * 5).toFixed(2));
