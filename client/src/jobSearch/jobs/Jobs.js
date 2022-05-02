@@ -1,5 +1,6 @@
 import './Jobs.css'
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
 import { toggleLoading, toggleSort, setJobs, setCurrentPage } from '../job.slice';
@@ -8,16 +9,17 @@ import getTimeElapsed from '../../helpers/getTimeElapsed';
 function Jobs() {
 
     const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
+    
     const jobs = useSelector(state => state.jobSearch.jobs);
     const totalJobs = useSelector(state => state.jobSearch.totalJobs);
-    const query = useSelector(state => state.jobSearch.query);
     const sortByDate = useSelector(state => state.jobSearch.sortByDate);
+    const loading = useSelector(state => state.jobSearch.loading);
+
     const [displaySortOptions, setDisplaySortOptions] = useState(false);
     const [sortOption, setSortOption] = useState('relevance');
-    const loading = useSelector(state => state.jobSearch.loading);
     
     const handleClick = async () => {
-        
         if (sortByDate) {
             setSortOption('relevance');
             dispatch(toggleSort(false));
@@ -31,12 +33,16 @@ function Jobs() {
             setDisplaySortOptions(!displaySortOptions);
             fetchData(1, true);
         }
-        
     }
 
     const fetchData = async (page, sortByDate) => {
         dispatch(toggleLoading(true));
-        const updatedQuery = { ...query, page, sortByDate }
+
+        const query = {}
+        searchParams.forEach((param, value) => { query[param] = value });
+
+        const updatedQuery = { ...query, page, limit: 15, sortByDate }
+        
         const response = await getJobs(updatedQuery);
         if (response.data) {
             dispatch(setJobs(response.data.getJobs.jobs));

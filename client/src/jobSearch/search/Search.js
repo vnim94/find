@@ -2,16 +2,17 @@ import './Search.css';
 import Dropdown, { Classification, Item } from './Dropdown';
 import Options from './Options';
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import { setQuery, setTitle, clearIndustries, setLocation, setJobs, setTotalJobs, toggleLoading } from '../job.slice';
+import { setTitle, clearIndustries, setLocation, setJobs, setTotalJobs, toggleLoading } from '../job.slice';
 import { getAllIndustries, getAllLocations } from '../job.api';
 
 function Search(props) {
 
     const navigate  = useNavigate();
     const dispatch = useDispatch();
+    const [searchParams, setSearchParams] = useSearchParams();
     
     const [classificationDropdown, setClassificationDropdown] = useState(false);
     const [locationDropdown, setLocationDropdown] = useState(false);
@@ -28,37 +29,50 @@ function Search(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        dispatch(toggleLoading(true));
-        navigate(`/jobs`);
+        
+        if (searchParams.get('title')) searchParams.delete('title');
+        if (searchParams.get('location')) searchParams.delete('location');
+        if (searchParams.get('industry')) searchParams.delete('industry');
+        if (searchParams.get('profession')) searchParams.delete('profession');
+        if (searchParams.get('workType')) searchParams.delete('workType');
+        if (searchParams.get('payBase')) searchParams.delete('payBase');
+        if (searchParams.get('payCeiling')) searchParams.delete('payCeiling');
+        if (searchParams.get('added')) searchParams.delete('added');
 
-        const vars = { limit: 15 }
-
-        if (title !== '') vars.title = title;
-        if (selectedLocation !== '') vars.location = allLocations.filter(loc => 
+        if (title !== '') searchParams.set('title', title);
+        if (selectedLocation !== '') allLocations.filter(loc => 
             loc.city.toLowerCase().match(selectedLocation.toLowerCase()) !== null || 
             loc.suburb.toLowerCase().match(selectedLocation.toLowerCase()) !== null || 
             selectedLocation === `${loc.city} ${loc.suburb}`
-        ).map(loc => loc.id);
-        if (selectedIndustries.length > 0) vars.industry = selectedIndustries.map(industry => industry.id) 
-        if (selectedProfessions.length > 0) vars.profession = selectedProfessions.map(profession => profession.id) 
-        if (selectedWorkTypes.length > 0) vars.workType = selectedWorkTypes
-        if (selectedPayBase) vars.payBase = selectedPayBase;
-        if (selectedPayCeiling) vars.payCeiling = selectedPayCeiling;
-        if (selectedTimeElapsed) vars.added = selectedTimeElapsed;
+        ).forEach(loc => searchParams.append('location', loc.id));
+        if (selectedIndustries.length > 0) selectedIndustries.forEach(industry => searchParams.append('industry', industry.id)) 
+        if (selectedProfessions.length > 0) selectedProfessions.forEach(profession => searchParams.append('profession', profession.id)); 
+        if (selectedWorkTypes.length > 0) selectedWorkTypes.forEach(workType => searchParams.append('workType', workType));
+        if (selectedPayBase) searchParams.set('payBase', selectedPayBase);
+        if (selectedPayCeiling) searchParams.set('payCeiling', selectedPayCeiling);
+        if (selectedTimeElapsed) searchParams.set('added', selectedTimeElapsed); 
+
+        setSearchParams(searchParams);
+        setClassificationDropdown(false);
+        setLocationDropdown(false);
+        dispatch(toggleLoading(true));
+
+        navigate({
+            pathname: '/jobs',
+            search: searchParams.toString()
+        })
+
+        const query = { page: 1, limit: 15 };
+        searchParams.forEach((value, param) => { query[param] = value });
         
-        dispatch(setQuery(vars));
-
-        const response = await getJobs({ ...vars, page: 1 });
+        const response = await getJobs(query);
         if (response.data) {
-            const { jobs, totalJobs } = response.data.getJobs;
-
-            dispatch(setJobs(jobs));
-            dispatch(setTotalJobs(totalJobs));
-            setClassificationDropdown(false);
-            setLocationDropdown(false);
-            
+            dispatch(setJobs(response.data.getJobs.jobs));
+            dispatch(setTotalJobs(response.data.getJobs.totalJobs));
         }
+
         dispatch(toggleLoading(false));
+
     }
 
     const [displayedLocations, setDisplayedLocations] = useState();
@@ -90,6 +104,7 @@ function Search(props) {
             const response = await getAllLocations();
             if (response.data.allLocations) { setAllLocations(response.data.allLocations); setDisplayedLocations(response.data.allLocations) };
         }
+
         fetchAllIndustries();
         fetchAllLocations();
     },[])
@@ -125,6 +140,9 @@ function Search(props) {
                             <label>What</label>
                             <div className="flex flex-row" ref={selectClassification}>
                                 <input className="form-control" type="text" value={title} onChange={(e) => dispatch(setTitle(e.target.value))} placeholder="Enter Keywords"/>
+                                <div className={`${title.length === 0 && 'hidden'} clear-what flex flex-ai-c`} onClick={() => { dispatch(setTitle('')) }}>
+                                    <span className="medium material-icons-outlined">clear</span>
+                                </div>
                                 <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} onClick={() => setClassificationDropdown(!classificationDropdown)}>
                                     <span className="dark-grey">
                                         {selectedIndustries.length === 0 ? 

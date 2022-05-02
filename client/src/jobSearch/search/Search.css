@@ -19,8 +19,18 @@
     right: 115px;
 }
 
-.clear-where:hover {
+.clear-where:hover, .clear-what:hover {
     background-color: var(--pale-green);
+}
+
+.clear-what {
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 7.5px;
+    position: absolute;
+    top: 84px;
+    left: 235px;
 }
 
 .find {

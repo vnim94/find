@@ -20,7 +20,7 @@ const JobResolvers = {
             return job
         },
         getJobs: async (_, query) => {
-
+            
             let { sortByDate, page, limit, title, industry, location, profession, workType, payBase, payCeiling, added } = query
             
             if (title) query.title = { $regex: title, $options: 'i' }

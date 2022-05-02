@@ -16,7 +16,6 @@ const jobSlice = createSlice({
         payBase: null,
         payCeiling: null,
         timeElapsed: null,
-        query: {},
         loading: false
     },
     reducers: {
@@ -25,9 +24,6 @@ const jobSlice = createSlice({
         },
         toggleSort(state, action) {
             state.sortByDate = action.payload;
-        },
-        setQuery(state, action) {
-            state.query = action.payload;
         },
         setTitle(state, action) {
             state.title = action.payload;
@@ -83,7 +79,6 @@ const jobSlice = createSlice({
 export const { 
     toggleLoading,
     toggleSort,
-    setQuery,
     setTitle,
     setCurrentPage,
     setTotalPages,
