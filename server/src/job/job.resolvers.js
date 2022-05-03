@@ -25,6 +25,7 @@ const JobResolvers = {
             
             if (title) query.title = { $regex: title, $options: 'i' }
             if (location) query.location = { $in: location }
+            // TODO: refactor to use code instead of id
             if (industry) query.industry = { $in: industry }
             if (profession) query.profession = { $in: profession }
             if (workType) query.workType = { $in: workType }

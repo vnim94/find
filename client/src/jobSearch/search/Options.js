@@ -1,10 +1,10 @@
 import './Options.css';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addWorkType, removeWorkType, setPayBase, setPayCeiling, setTimeElapsed } from '../job.slice';
+import { useSearchParams } from 'react-router-dom';
 
 function Options() {
 
+    const [searchParams] = useSearchParams();
     const [selected, setSelected] = useState();
     const [expanded, setExpanded] = useState();
 
@@ -75,12 +75,13 @@ function Options() {
         'Last 30 days': Date.now() - 30 * 24 * 60 * 60 * 1000
     }
 
-    const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
+    const selectedWorkTypes = searchParams.getAll('workType');
+
     const [displayedPayBase, setDisplayedPayBase] = useState('$0');
     const [payBaseScale, setPayBaseScale] = useState('annually');
     const [displayedPayCeiling, setDisplayedPayCeiling] = useState('200k+');
     const [payCeilingScale, setPayCeilingScale] = useState('annually');
-    const [time, setTime] = useState('any time');
+    const [displayedTime, setDisplayedTime] = useState('any time');
 
     return (
         <>
@@ -95,7 +96,7 @@ function Options() {
                 <span className="light-black">|</span>
                 <Option id="payCeiling" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="to" value={displayedPayCeiling.startsWith('$') ? displayedPayCeiling : `$${displayedPayCeiling}`} />
                 <span className="light-black">|</span>
-                <Option id="time" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="listed" value={time.toLowerCase()} />
+                <Option id="time" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="listed" value={displayedTime.toLowerCase()} />
                 <span className="light-black">|</span>
             </div>
         </div>
@@ -103,29 +104,29 @@ function Options() {
         {selected === "payBase" ? <ExpandedOption type='toggle' toggle={payBaseScale} setToggle={setPayBaseScale}>
             {payBaseScale === 'annually' ? 
                 Object.keys(payBasesAnnually).map((text,index) => { 
-                    let disabled = payBasesAnnually[text] < payBasesAnnually[displayedPayBase] || payBasesAnnually[text] >= payCeilingsAnnually[displayedPayCeiling]
-                    return <SingleSubOption key={index} disabled={disabled} setDisplay={setDisplayedPayBase} selectedSubOption={displayedPayBase} text={text} value={payBasesAnnually[text]} setValue={setPayBase} /> 
+                    let disabled = payBasesAnnually[text] >= payCeilingsAnnually[displayedPayCeiling]
+                    return <SingleSubOption key={index} disabled={disabled} setDisplay={setDisplayedPayBase} selectedSubOption={displayedPayBase} text={text} value={payBasesAnnually[text]} type={'payBase'} /> 
                 })
             :
                 Object.keys(payBasesHourly).map((text,index) => { 
-                    let disabled = payBasesHourly[text] < payBasesHourly[displayedPayBase] || payBasesHourly[text] >= payCeilingsHourly[displayedPayCeiling]
-                    return <SingleSubOption key={index} disabled={disabled} setDisplay={setDisplayedPayBase} selectedSubOption={displayedPayBase} text={text} value={payBasesHourly[text]} setValue={setPayBase} />
+                    let disabled = payBasesHourly[text] >= payCeilingsHourly[displayedPayCeiling]
+                    return <SingleSubOption key={index} disabled={disabled} setDisplay={setDisplayedPayBase} selectedSubOption={displayedPayBase} text={text} value={payBasesHourly[text]} type={'payBase'} />
                 })
             }
         </ExpandedOption> : undefined}
         {selected === "payCeiling" ? <ExpandedOption type='toggle' toggle={payCeilingScale} setToggle={setPayCeilingScale}>
             {payCeilingScale === 'annually' ? 
                 Object.keys(payCeilingsAnnually).map((text,index) => {
-                    return <SingleSubOption key={index} disabled={payCeilingsAnnually[text] <= payBasesAnnually[displayedPayBase]} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} setValue={setPayCeiling} /> 
+                    return <SingleSubOption key={index} disabled={payCeilingsAnnually[text] <= payBasesAnnually[displayedPayBase]} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsAnnually[text]} type={'payCeiling'} /> 
                 })
             :
                 Object.keys(payCeilingsHourly).map((text,index) => { 
-                    return <SingleSubOption key={index} disabled={payCeilingsHourly[text] <= payBasesHourly[displayedPayBase]} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} setValue={setPayCeiling} />
+                    return <SingleSubOption key={index} disabled={payCeilingsHourly[text] <= payBasesHourly[displayedPayBase]} setDisplay={setDisplayedPayCeiling} selectedSubOption={displayedPayCeiling} text={text} value={payCeilingsHourly[text]} type={'payCeiling'} />
                 })
             }
         </ExpandedOption> : undefined}
         {selected === "time" ? <ExpandedOption>
-            {Object.keys(times).map((text,index) => { return <SingleSubOption key={index} setDisplay={setTime} selectedSubOption={time} text={text} value={times[text]} setValue={setTimeElapsed} /> })}
+            {Object.keys(times).map((text,index) => { return <SingleSubOption key={index} setDisplay={setDisplayedTime} selectedSubOption={displayedTime} text={text} value={times[text]} type={'added'} /> })}
         </ExpandedOption> : undefined}
         </>
     )
@@ -178,12 +179,19 @@ function ExpandedOption(props) {
 
 function MultiSubOption(props) {
 
-    const dispatch = useDispatch();
-    const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const selectedWorkTypes = searchParams.getAll('workType');
     const { text } = props;
 
     const handleClick = () => {
-        selectedWorkTypes.indexOf(text) > -1 ? dispatch(removeWorkType(text)) : dispatch(addWorkType(text));
+        if (selectedWorkTypes.indexOf(text) > -1) {
+            let remaining = selectedWorkTypes.filter(type => type !== text);
+            searchParams.delete('workType');
+            remaining.forEach(type => searchParams.append('workType', type));
+        } else {
+            searchParams.append('workType', text);
+        }
+        setSearchParams(searchParams);
     }
 
     return (
@@ -195,12 +203,15 @@ function MultiSubOption(props) {
 
 function SingleSubOption(props) {
 
-    const dispatch = useDispatch();
-    const { disabled, setDisplay, selectedSubOption, text, value, setValue } = props;
+    const [searchParams, setSearchParams] = useSearchParams();
+    const { disabled, setDisplay, selectedSubOption, text, type, value } = props;
     
     const handleClick = () => {
         setDisplay(text);
-        dispatch(setValue(value));
+        if (text !== 'Any time') {
+            searchParams.set(type, value);
+            setSearchParams(searchParams);
+        }
     }
 
     return (

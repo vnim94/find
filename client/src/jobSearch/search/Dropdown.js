@@ -1,7 +1,8 @@
 import './Dropdown.css';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLocation, addIndustry, removeIndustry, addProfession, removeProfession } from '../job.slice';
+import { useSearchParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addIndustry, removeIndustry } from '../job.slice';
 
 function Dropdown(props) {
     return (
@@ -16,14 +17,24 @@ function Dropdown(props) {
 export function Classification(props) {
 
     const dispatch = useDispatch();
-    const selectedIndustries = useSelector(state => state.jobSearch.industries);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const industries = searchParams.getAll('industry');
 
     const { industry, jobCount, professions } = props;
-    const [checked, setChecked] = useState(selectedIndustries.some(i => i.code === industry.code));
+    const [checked, setChecked] = useState(industries.some(code => code === industry.code));
 
     const handleClick = () => {
         setChecked(!checked);
-        selectedIndustries.some(i => i.code === industry.code) ? dispatch(removeIndustry(industry)) : dispatch(addIndustry(industry));
+        if (industries.some(code => code === industry.code)) {
+            dispatch(removeIndustry(industry.name));
+            let remaining = industries.filter(code => code !== industry.code);
+            searchParams.delete('industry');
+            remaining.forEach(code => searchParams.append('industry', code));
+        } else {
+            dispatch(addIndustry(industry.name));
+            searchParams.append('industry', industry.code); 
+        }
+        setSearchParams(searchParams);
     }
 
     return (
@@ -42,7 +53,8 @@ export function Classification(props) {
 
 function SubClassification(props) {
     
-    const selectedProfessions = useSelector(state => state.jobSearch.professions);
+    const [searchParams] = useSearchParams();
+    const selectedProfessions = searchParams.getAll('professions');
     const { industry, jobCount, professions } = props;
     const [allChecked, setAllChecked] = useState(true);
 
@@ -70,15 +82,24 @@ function SubClassification(props) {
 
 function CheckBoxItem(props) {
 
-    const dispatch = useDispatch();
-    const selectedProfessions = useSelector(state => state.jobSearch.professions);
     const { allChecked, setAllChecked, profession } = props;
-    const [checked, setChecked] = useState(selectedProfessions.some(p => p.code === profession.code));
+    const [searchParams, setSearchParams] = useSearchParams();
+    const selectedProfessions = searchParams.getAll('profession');
+    const [checked, setChecked] = useState(selectedProfessions.some(code => code === profession.code));
 
     const handleClick = () => {
         setChecked(!checked);
+        // TODO: check all when no professions selected
         selectedProfessions.length === 1 && checked === false && allChecked === false ? setAllChecked(true) : setAllChecked(false);
-        selectedProfessions.some(p => p.code === profession.code) ? dispatch(removeProfession(profession)) : dispatch(addProfession(profession));
+        
+        if (selectedProfessions.some(code => code === profession.code)) {
+            let remaining = selectedProfessions.filter(code => code !== profession.code);
+            searchParams.delete('profession');
+            remaining.forEach(code => searchParams.append('profession', code));
+        } else {
+            searchParams.append('profession', profession.code);
+        }
+        setSearchParams(searchParams);
     }
 
     return (
@@ -94,11 +115,12 @@ function CheckBoxItem(props) {
 
 export function Item(props) {
 
-    const dispatch = useDispatch();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { text, toggleList } = props;
 
     const handleClick = () => {
-        dispatch(setLocation(text));
+        searchParams.set('location', text.toLowerCase());
+        setSearchParams(searchParams);
         toggleList(false);
     }
 

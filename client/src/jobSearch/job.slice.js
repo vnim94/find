@@ -3,9 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const jobSlice = createSlice({
     name: 'jobSearch',
     initialState: {
-        title: '',
-        location: '',
+        allLocations: null,
         industries: [], 
+        allIndustries: null,
         professions: [],
         workTypes: [],
         payBase: null,
@@ -13,11 +13,8 @@ const jobSlice = createSlice({
         timeElapsed: null,
     },
     reducers: {
-        setTitle(state, action) {
-            state.title = action.payload;
-        },
-        setLocation(state, action) {
-            state.location = action.payload;
+        setAllLocations(state, action) {
+            state.allLocations = action.payload;
         },
         addIndustry(state, action) {
             state.industries.push(action.payload);
@@ -25,46 +22,21 @@ const jobSlice = createSlice({
         removeIndustry(state, action) {
             state.industries = state.industries.filter(industry => industry.code !== action.payload.code);
         },
+        setAllIndustries(state, action) {
+            state.allIndustries = action.payload;
+        },
         clearIndustries(state) {
             state.industries = [];
         },
-        addProfession(state, action) {
-            state.professions.push(action.payload);
-        },
-        removeProfession(state, action) {
-            state.professions = state.professions.filter(profession => profession.code !== action.payload.code);
-        },
-        addWorkType(state, action) {
-            state.workTypes.push(action.payload);
-        },
-        removeWorkType(state, action) {
-            state.workTypes = state.workTypes.filter(workType => workType !== action.payload);
-        },
-        setPayBase(state, action) {
-            state.payBase = action.payload
-        },
-        setPayCeiling(state, action) {
-            state.payCeiling = action.payload;
-        },
-        setTimeElapsed(state, action) {
-            state.timeElapsed = action.payload;
-        }
     }
 })
 
 export const { 
-    setTitle,
-    setLocation,
+    setAllLocations,
     addIndustry, 
     removeIndustry, 
+    setAllIndustries,
     clearIndustries,
-    addProfession, 
-    removeProfession, 
-    addWorkType,
-    removeWorkType,
-    setPayBase,
-    setPayCeiling,
-    setTimeElapsed
 } = jobSlice.actions;
 
 export default jobSlice.reducer;

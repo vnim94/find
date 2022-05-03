@@ -1,17 +1,17 @@
 import './Jobs.css'
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useDispatch  } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
 import getTimeElapsed from '../../helpers/getTimeElapsed';
 
 function Jobs() {
 
-    const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     
     const [jobs, setJobs] = useState();
     const [totalJobs, setTotalJobs] = useState();
+    const allLocations = useSelector(state => state.jobSearch.allLocations);
     const page = parseInt(searchParams.get('page'));
     const sortByDate = searchParams.get('sortByDate') === 'true';
     const [loading, toggleLoading] = useState(false);
@@ -33,25 +33,43 @@ function Jobs() {
         setSearchParams(searchParams);
     }
 
+    
+
     useEffect(() => {
+        function findLocation (location) {
+            return allLocations.filter(loc => 
+                loc.city.toLowerCase().match(location) !== null || 
+                loc.suburb.toLowerCase().match(location) !== null || 
+                location === `${loc.city.toLowerCase()} ${loc.suburb.toLowerCase()}`
+            ).map(loc => loc.id);
+        }
         async function fetchJobs() {
             toggleLoading(true);
 
             let query = {};
             searchParams.forEach((value, param) => {
-                if (!query[param] && searchParams.getAll(param).length > 1) {
-                    query[param] = searchParams.getAll(param);
-                } else if (!query[param]) {
-                    if (param === 'added' || param === 'payBase'|| param === 'payCeiling' || param === 'page') { 
+                switch (param) {
+                    case 'location':
+                        query[param] = findLocation(value);
+                        break;
+                    case 'industry':
+                    case 'profession':
+                        query[param] = searchParams.getAll(param);
+                        break;
+                    case 'added':
+                    case 'payBase':
+                    case 'payCeiling':
+                    case 'page':
                         query[param] = parseInt(value);
-                    } else if (param === 'sortByDate') {
+                        break;
+                    case 'sortByDate':
                         value === 'false' ? query[param] = false : query[param] = true;
-                    } else {
+                        break;
+                    default:
                         query[param] = value;
-                    }
                 }
             });
-            
+
             const response = await getJobs({ ...query, limit: 15 });
             if (response.data) {
                 setJobs(response.data.getJobs.jobs);
@@ -61,7 +79,7 @@ function Jobs() {
             toggleLoading(false);
         }
         fetchJobs();
-    },[dispatch, searchParams, page, sortByDate])
+    },[allLocations, searchParams, page, sortByDate])
 
     return (
         <div className="jobs">

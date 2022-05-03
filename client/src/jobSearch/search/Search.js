@@ -4,7 +4,7 @@ import Options from './Options';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTitle, clearIndustries, setLocation } from '../job.slice';
+import { setAllIndustries, clearIndustries, setAllLocations } from '../job.slice';
 import { getAllIndustries, getAllLocations } from '../job.api';
 
 function Search(props) {
@@ -13,43 +13,35 @@ function Search(props) {
     const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     
+    const allIndustries = useSelector(state => state.jobSearch.allIndustries);
+    const allLocations = useSelector(state => state.jobSearch.allLocations);
+
+    const title = searchParams.get('title') || '';
+    const location = searchParams.get('location') || '';
+    const selectedIndustries = useSelector(state => state.jobSearch.industries);
+    const selectedWorkTypes = searchParams.getAll('workType');
+    const selectedPayBase = searchParams.get('payBase');
+    const selectedPayCeiling = searchParams.get('payCeiling');
+    const selectedTimeElapsed = searchParams.get('added');
+
     const [classificationDropdown, setClassificationDropdown] = useState(false);
     const [locationDropdown, setLocationDropdown] = useState(false);
-    const [expanded, setExpanded] = useState(props.expanded);
+    const [displayedLocations, setDisplayedLocations] = useState();
+    const [expanded, setExpanded] = useState(props.expanded || selectedWorkTypes.length > 0 || selectedPayBase || selectedPayCeiling || selectedTimeElapsed);
 
-    const title = useSelector(state => state.jobSearch.title);
-    const selectedIndustries = useSelector(state => state.jobSearch.industries);
-    const selectedProfessions = useSelector(state => state.jobSearch.professions);
-    const selectedWorkTypes = useSelector(state => state.jobSearch.workTypes);
-    const selectedPayBase = useSelector(state => state.jobSearch.payBase);
-    const selectedPayCeiling = useSelector(state => state.jobSearch.payCeiling);
-    const selectedTimeElapsed = useSelector(state => state.jobSearch.timeElapsed);
-    const selectedLocation = useSelector(state => state.jobSearch.location);
+    const updateParam = (param, value) => {
+        searchParams.set(param, value);
+        setSearchParams(searchParams);
+    }
+
+    const removeParam = (param) => {
+        searchParams.delete(param);
+        setSearchParams(searchParams);
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         
-        if (searchParams.get('title')) searchParams.delete('title');
-        if (searchParams.get('location')) searchParams.delete('location');
-        if (searchParams.get('industry')) searchParams.delete('industry');
-        if (searchParams.get('profession')) searchParams.delete('profession');
-        if (searchParams.get('workType')) searchParams.delete('workType');
-        if (searchParams.get('payBase')) searchParams.delete('payBase');
-        if (searchParams.get('payCeiling')) searchParams.delete('payCeiling');
-        if (searchParams.get('added')) searchParams.delete('added');
-
-        if (title !== '') searchParams.set('title', title);
-        if (selectedLocation !== '') allLocations.filter(loc => 
-            loc.city.toLowerCase().match(selectedLocation.toLowerCase()) !== null || 
-            loc.suburb.toLowerCase().match(selectedLocation.toLowerCase()) !== null || 
-            selectedLocation === `${loc.city} ${loc.suburb}`
-        ).forEach(loc => searchParams.append('location', loc.id));
-        if (selectedIndustries.length > 0) selectedIndustries.forEach(industry => searchParams.append('industry', industry.id)) 
-        if (selectedProfessions.length > 0) selectedProfessions.forEach(profession => searchParams.append('profession', profession.id)); 
-        if (selectedWorkTypes.length > 0) selectedWorkTypes.forEach(workType => searchParams.append('workType', workType));
-        if (selectedPayBase) searchParams.set('payBase', selectedPayBase);
-        if (selectedPayCeiling) searchParams.set('payCeiling', selectedPayCeiling);
-        if (selectedTimeElapsed) searchParams.set('added', selectedTimeElapsed); 
         searchParams.set('page', 1);
         searchParams.set('sortByDate', false);
 
@@ -63,39 +55,43 @@ function Search(props) {
         })
     }
 
-    const [displayedLocations, setDisplayedLocations] = useState();
+    const handleChangeWhat = (event) => {
+        if (event.target.value.length > 0) {
+            updateParam('title', event.target.value);
+        } else {
+            removeParam('title');
+        }
+    }
 
-    const handleChange = (event) => {
+    const handleChangeWhere = (event) => {
         if (locationDropdown === false) setLocationDropdown(true);
-        let searchTerms = event.target.value;
-        dispatch(setLocation(searchTerms));
 
+        let searchTerms = event.target.value.toLowerCase();
         let filteredLocations;
+
         if (searchTerms === '') { 
+            removeParam('location');
             filteredLocations = allLocations
         } else {
+            updateParam('location', searchTerms);
             filteredLocations = allLocations.filter(loc => loc.city.toLowerCase().match(searchTerms.toLowerCase()) !== null || loc.suburb.toLowerCase().match(searchTerms.toLowerCase()) !== null)
         }
 
         setDisplayedLocations(filteredLocations);
     }
 
-    const [allIndustries, setAllIndustries] = useState();
-    const [allLocations, setAllLocations] = useState();
-
     useEffect(() => {
         async function fetchAllIndustries() {
             const response = await getAllIndustries();
-            if (response.data.allIndustries) setAllIndustries(response.data.allIndustries);
+            if (response.data.allIndustries) dispatch(setAllIndustries(response.data.allIndustries));
         }
         async function fetchAllLocations() {
             const response = await getAllLocations();
-            if (response.data.allLocations) { setAllLocations(response.data.allLocations); setDisplayedLocations(response.data.allLocations) };
+            if (response.data.allLocations) { dispatch(setAllLocations(response.data.allLocations)); setDisplayedLocations(response.data.allLocations) };
         }
-
         fetchAllIndustries();
         fetchAllLocations();
-    },[])
+    },[dispatch])
 
     const selectClassification = useRef();
     const where = useRef();
@@ -127,8 +123,8 @@ function Search(props) {
                         <div className="what flex flex-col">
                             <label>What</label>
                             <div className="flex flex-row" ref={selectClassification}>
-                                <input className="form-control" type="text" value={title} onChange={(e) => dispatch(setTitle(e.target.value))} placeholder="Enter Keywords"/>
-                                <div className={`${title.length === 0 && 'hidden'} clear-what flex flex-ai-c`} onClick={() => { dispatch(setTitle('')) }}>
+                                <input className="form-control" type="text" value={title} onChange={handleChangeWhat} placeholder="Enter Keywords"/>
+                                <div className={`${title.length === 0 ? 'hidden' : undefined} clear-what flex flex-ai-c`} onClick={() => removeParam('title')}>
                                     <span className="medium material-icons-outlined">clear</span>
                                 </div>
                                 <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} onClick={() => setClassificationDropdown(!classificationDropdown)}>
@@ -139,15 +135,15 @@ function Search(props) {
                                             selectedIndustries.length > 1 ? 
                                                 `${selectedIndustries.length} classifications`
                                             : 
-                                                selectedIndustries[0].name.length > 20 ? 
-                                                    `${selectedIndustries[0].name.slice(0,20)} ...`
+                                                selectedIndustries[0].length > 20 ? 
+                                                    `${selectedIndustries[0].slice(0,20)} ...`
                                                 :
-                                                    selectedIndustries[0].name
+                                                    selectedIndustries[0]
                                         }
                                     </span>
                                     <div className={`${selectedIndustries.length > 0 && 'shrink'} list-action flex flex-ai-c`}>
                                         <span className={`${classificationDropdown && 'flip'} material-icons-outlined`}>expand_more</span>
-                                        <div className={`${selectedIndustries.length === 0 && 'hidden'} clear flex flex-ai-c`} onClick={() => dispatch(clearIndustries())}>
+                                        <div className={`${selectedIndustries.length === 0 && 'hidden'} clear flex flex-ai-c`} onClick={() => { removeParam('industry'); dispatch(clearIndustries()) }}>
                                             <span className="medium material-icons-outlined">clear</span>
                                         </div>
                                     </div>
@@ -166,8 +162,8 @@ function Search(props) {
                         </div>
                         <div className="where flex flex-col" ref={where}>
                             <label>Where</label>
-                            <input className="form-control" type="search" value={selectedLocation.length > 15 ? selectedLocation.slice(0, 25) + '...' : selectedLocation} onChange={handleChange} placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
-                            <div className={`${selectedLocation === '' && 'hidden'} clear-where flex flex-ai-c`} onClick={() => { dispatch(setLocation('')); setLocationDropdown(false); }}>
+                            <input className="form-control" type="search" value={location.length > 15 ? location.slice(0, 25) + '...' : location} onChange={handleChangeWhere} placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
+                            <div className={`${location === '' && 'hidden'} clear-where flex flex-ai-c`} onClick={() => { removeParam('location'); setLocationDropdown(false); }}>
                                 <span className="medium material-icons-outlined">clear</span>
                             </div>
                             {locationDropdown && displayedLocations.length > 0 && <Dropdown>
