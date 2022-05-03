@@ -4,7 +4,7 @@ import Options from './Options';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTitle, clearIndustries, setLocation, setJobs, setTotalJobs, toggleLoading } from '../job.slice';
+import { setTitle, clearIndustries, setLocation } from '../job.slice';
 import { getAllIndustries, getAllLocations } from '../job.api';
 
 function Search(props) {

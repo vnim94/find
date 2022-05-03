@@ -1,9 +1,8 @@
 import './Jobs.css'
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch  } from 'react-redux';
 import { getJobs } from '../job.api';
-import { toggleLoading, toggleSort, setJobs, setCurrentPage, setTotalJobs } from '../job.slice';
 import getTimeElapsed from '../../helpers/getTimeElapsed';
 
 function Jobs() {
@@ -11,11 +10,11 @@ function Jobs() {
     const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     
-    const jobs = useSelector(state => state.jobSearch.jobs);
-    const totalJobs = useSelector(state => state.jobSearch.totalJobs);
+    const [jobs, setJobs] = useState();
+    const [totalJobs, setTotalJobs] = useState();
     const page = parseInt(searchParams.get('page'));
     const sortByDate = searchParams.get('sortByDate') === 'true';
-    const loading = useSelector(state => state.jobSearch.loading);
+    const [loading, toggleLoading] = useState(false);
 
     const [displaySortOptions, setDisplaySortOptions] = useState(false);
     const [sortOption, setSortOption] = useState('relevance');
@@ -23,22 +22,20 @@ function Jobs() {
     const handleClick = async () => {
         if (sortByDate) {
             setSortOption('relevance');
-            setDisplaySortOptions(!displaySortOptions);
             searchParams.set('sortByDate', false);
-            searchParams.set('page', 1);
-            setSearchParams(searchParams);
         } else {
             setSortOption('date'); 
-            setDisplaySortOptions(!displaySortOptions);
             searchParams.set('sortByDate', true); 
-            searchParams.set('page', 1);
-            setSearchParams(searchParams);
         }
+
+        setDisplaySortOptions(!displaySortOptions);
+        searchParams.set('page', 1);
+        setSearchParams(searchParams);
     }
 
     useEffect(() => {
         async function fetchJobs() {
-            dispatch(toggleLoading(true));
+            toggleLoading(true);
 
             let query = {};
             searchParams.forEach((value, param) => {
@@ -57,11 +54,11 @@ function Jobs() {
             
             const response = await getJobs({ ...query, limit: 15 });
             if (response.data) {
-                dispatch(setJobs(response.data.getJobs.jobs));
-                dispatch(setTotalJobs(response.data.getJobs.totalJobs));
+                setJobs(response.data.getJobs.jobs);
+                setTotalJobs(response.data.getJobs.totalJobs);
             }
 
-            dispatch(toggleLoading(false));
+            toggleLoading(false);
         }
         fetchJobs();
     },[dispatch, searchParams, page, sortByDate])
@@ -171,20 +168,17 @@ function Paginator(props) {
 
     const { totalPages } = props;
     const [searchParams, setSearchParams] = useSearchParams(); 
-    // const dispatch = useDispatch();
     const currentPage = parseInt(searchParams.get('page'));
 
     const handleClick = (event) => {
         searchParams.set('page', parseInt(event.target.innerText));
         setSearchParams(searchParams)
-        // dispatch(setCurrentPage(parseInt(event.target.innerText)))
     }
 
     const handleNext = () => {
         if (currentPage < totalPages) {
             searchParams.set('page', currentPage + 1);
             setSearchParams(searchParams)
-            // dispatch(setCurrentPage(currentPage + 1));
         }
     }
 

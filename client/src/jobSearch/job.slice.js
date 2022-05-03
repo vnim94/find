@@ -3,12 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const jobSlice = createSlice({
     name: 'jobSearch',
     initialState: {
-        sortByDate: false,
         title: '',
-        jobs: null, 
-        totalJobs: null,
-        currentPage: 1,
-        totalPages: null,
         location: '',
         industries: [], 
         professions: [],
@@ -16,29 +11,10 @@ const jobSlice = createSlice({
         payBase: null,
         payCeiling: null,
         timeElapsed: null,
-        loading: false
     },
     reducers: {
-        toggleLoading(state, action) {
-            state.loading = action.payload;
-        },
-        toggleSort(state, action) {
-            state.sortByDate = action.payload;
-        },
         setTitle(state, action) {
             state.title = action.payload;
-        },
-        setCurrentPage(state, action) {
-            state.currentPage = action.payload;
-        },
-        setTotalPages(state, action) {
-            state.totalPages = action.payload;
-        },
-        setJobs(state, action) {
-            state.jobs = action.payload;
-        },
-        setTotalJobs(state, action) {
-            state.totalJobs = action.payload;
         },
         setLocation(state, action) {
             state.location = action.payload;
@@ -77,19 +53,13 @@ const jobSlice = createSlice({
 })
 
 export const { 
-    toggleLoading,
-    toggleSort,
     setTitle,
-    setCurrentPage,
-    setTotalPages,
     setLocation,
     addIndustry, 
     removeIndustry, 
     clearIndustries,
     addProfession, 
     removeProfession, 
-    setJobs,
-    setTotalJobs,
     addWorkType,
     removeWorkType,
     setPayBase,
