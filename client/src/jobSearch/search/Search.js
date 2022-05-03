@@ -4,7 +4,6 @@ import Options from './Options';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getJobs } from '../job.api';
 import { setTitle, clearIndustries, setLocation, setJobs, setTotalJobs, toggleLoading } from '../job.slice';
 import { getAllIndustries, getAllLocations } from '../job.api';
 
@@ -51,28 +50,17 @@ function Search(props) {
         if (selectedPayBase) searchParams.set('payBase', selectedPayBase);
         if (selectedPayCeiling) searchParams.set('payCeiling', selectedPayCeiling);
         if (selectedTimeElapsed) searchParams.set('added', selectedTimeElapsed); 
+        searchParams.set('page', 1);
+        searchParams.set('sortByDate', false);
 
         setSearchParams(searchParams);
         setClassificationDropdown(false);
         setLocationDropdown(false);
-        dispatch(toggleLoading(true));
 
         navigate({
             pathname: '/jobs',
             search: searchParams.toString()
         })
-
-        const query = { page: 1, limit: 15 };
-        searchParams.forEach((value, param) => { query[param] = value });
-        
-        const response = await getJobs(query);
-        if (response.data) {
-            dispatch(setJobs(response.data.getJobs.jobs));
-            dispatch(setTotalJobs(response.data.getJobs.totalJobs));
-        }
-
-        dispatch(toggleLoading(false));
-
     }
 
     const [displayedLocations, setDisplayedLocations] = useState();

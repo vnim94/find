@@ -1,19 +1,20 @@
 import './Jobs.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import { toggleLoading, toggleSort, setJobs, setCurrentPage } from '../job.slice';
+import { toggleLoading, toggleSort, setJobs, setCurrentPage, setTotalJobs } from '../job.slice';
 import getTimeElapsed from '../../helpers/getTimeElapsed';
 
 function Jobs() {
 
     const dispatch = useDispatch();
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     
     const jobs = useSelector(state => state.jobSearch.jobs);
     const totalJobs = useSelector(state => state.jobSearch.totalJobs);
-    const sortByDate = useSelector(state => state.jobSearch.sortByDate);
+    const page = parseInt(searchParams.get('page'));
+    const sortByDate = searchParams.get('sortByDate') === 'true';
     const loading = useSelector(state => state.jobSearch.loading);
 
     const [displaySortOptions, setDisplaySortOptions] = useState(false);
@@ -22,33 +23,48 @@ function Jobs() {
     const handleClick = async () => {
         if (sortByDate) {
             setSortOption('relevance');
-            dispatch(toggleSort(false));
-            dispatch(setCurrentPage(1));
             setDisplaySortOptions(!displaySortOptions);
-            fetchData(1, false);
+            searchParams.set('sortByDate', false);
+            searchParams.set('page', 1);
+            setSearchParams(searchParams);
         } else {
             setSortOption('date'); 
-            dispatch(toggleSort(true)); 
-            dispatch(setCurrentPage(1));
             setDisplaySortOptions(!displaySortOptions);
-            fetchData(1, true);
+            searchParams.set('sortByDate', true); 
+            searchParams.set('page', 1);
+            setSearchParams(searchParams);
         }
     }
 
-    const fetchData = async (page, sortByDate) => {
-        dispatch(toggleLoading(true));
+    useEffect(() => {
+        async function fetchJobs() {
+            dispatch(toggleLoading(true));
 
-        const query = {}
-        searchParams.forEach((param, value) => { query[param] = value });
+            let query = {};
+            searchParams.forEach((value, param) => {
+                if (!query[param] && searchParams.getAll(param).length > 1) {
+                    query[param] = searchParams.getAll(param);
+                } else if (!query[param]) {
+                    if (param === 'added' || param === 'payBase'|| param === 'payCeiling' || param === 'page') { 
+                        query[param] = parseInt(value);
+                    } else if (param === 'sortByDate') {
+                        value === 'false' ? query[param] = false : query[param] = true;
+                    } else {
+                        query[param] = value;
+                    }
+                }
+            });
+            
+            const response = await getJobs({ ...query, limit: 15 });
+            if (response.data) {
+                dispatch(setJobs(response.data.getJobs.jobs));
+                dispatch(setTotalJobs(response.data.getJobs.totalJobs));
+            }
 
-        const updatedQuery = { ...query, page, limit: 15, sortByDate }
-        
-        const response = await getJobs(updatedQuery);
-        if (response.data) {
-            dispatch(setJobs(response.data.getJobs.jobs));
+            dispatch(toggleLoading(false));
         }
-        dispatch(toggleLoading(false));
-    }
+        fetchJobs();
+    },[dispatch, searchParams, page, sortByDate])
 
     return (
         <div className="jobs">
@@ -77,7 +93,7 @@ function Jobs() {
                         <div className="job-listings">
                             {jobs.map((job, index) => { return <JobCard key={index} job={job} />})}
                         </div>
-                        {totalJobs > 0 && <Paginator fetchData={fetchData} totalPages={Math.ceil(totalJobs / 15)}/>}
+                        {totalJobs > 0 && <Paginator totalPages={Math.ceil(totalJobs / 15)}/>}
                     </>}
                 </>
                 : <Loading />}
@@ -153,20 +169,22 @@ function JobCard(props) {
 
 function Paginator(props) {
 
-    const { fetchData, totalPages } = props;
-    const dispatch = useDispatch();
-    const sortByDate = useSelector(state => state.jobSearch.sortByDate);
-    const currentPage = useSelector(state => state.jobSearch.currentPage);
+    const { totalPages } = props;
+    const [searchParams, setSearchParams] = useSearchParams(); 
+    // const dispatch = useDispatch();
+    const currentPage = parseInt(searchParams.get('page'));
 
     const handleClick = (event) => {
-        dispatch(setCurrentPage(parseInt(event.target.innerText)))
-        fetchData(parseInt(event.target.innerText), sortByDate);
+        searchParams.set('page', parseInt(event.target.innerText));
+        setSearchParams(searchParams)
+        // dispatch(setCurrentPage(parseInt(event.target.innerText)))
     }
 
     const handleNext = () => {
         if (currentPage < totalPages) {
-            dispatch(setCurrentPage(currentPage + 1));
-            fetchData(currentPage + 1, sortByDate);
+            searchParams.set('page', currentPage + 1);
+            setSearchParams(searchParams)
+            // dispatch(setCurrentPage(currentPage + 1));
         }
     }
 
