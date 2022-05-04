@@ -9,6 +9,10 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 .border {
     border: 1px solid black;
 }
@@ -38,6 +42,7 @@ select {
     --light-black: #3c3c3c;
     --black: #2c2c2c;
     --pale-green: #ecfad4;
+    --lighter-green: #dffab1;
     --light-green: #a4d454;
     --green: #80b24b;
     --darker-green: #539142;
@@ -64,7 +69,6 @@ select {
 
 .medium {
     font-size: 18px;
-    font-weight: 500;
 }
 
 .large {
@@ -180,6 +184,10 @@ select {
 
 .flex-row {
     flex-direction: row;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
 }
 
 .flex-ai-c {
