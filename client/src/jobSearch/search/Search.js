@@ -43,7 +43,7 @@ function Search(props) {
         event.preventDefault();
         
         searchParams.set('page', 1);
-        searchParams.set('sortByDate', false);
+        if (!searchParams.get('sortByDate')) searchParams.set('sortByDate', false);
 
         setSearchParams(searchParams);
         setClassificationDropdown(false);
@@ -127,7 +127,7 @@ function Search(props) {
                                 <div className={`${title.length === 0 ? 'hidden' : undefined} clear-what flex flex-ai-c`} onClick={() => removeParam('title')}>
                                     <span className="medium material-icons-outlined">clear</span>
                                 </div>
-                                <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} onClick={() => setClassificationDropdown(!classificationDropdown)}>
+                                <div className={`classification form-control flex flex-ai-c flex-jc-sb ${classificationDropdown && 'outlined'}`} onClick={() => allIndustries && setClassificationDropdown(!classificationDropdown)}>
                                     <span className="dark-grey">
                                         {selectedIndustries.length === 0 ? 
                                             'Any classification' 
