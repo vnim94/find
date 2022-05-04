@@ -19,20 +19,31 @@ export function Classification(props) {
     const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     const industries = searchParams.getAll('industry');
+    const selectedProfessions = searchParams.getAll('profession');
 
     const { industry, jobCount, professions } = props;
-    const [checked, setChecked] = useState(industries.some(code => code === industry.code));
+    const [checked, setChecked] = useState(industries.some(id => id === industry.id));
 
     const handleClick = () => {
         setChecked(!checked);
-        if (industries.some(code => code === industry.code)) {
+        if (industries.some(id => id === industry.id)) {
             dispatch(removeIndustry(industry.name));
-            let remaining = industries.filter(code => code !== industry.code);
+            let remaining = industries.filter(id => id !== industry.id);
             searchParams.delete('industry');
-            remaining.forEach(code => searchParams.append('industry', code));
+            remaining.forEach(id => searchParams.append('industry', id));
+
+            // TODO: optimise
+            let remainingProfessions = [];
+            selectedProfessions.forEach(selectedProfession => {
+                if (!professions.some(p => p.id === selectedProfession)) {
+                    remainingProfessions.push(selectedProfession);
+                }
+            })
+            searchParams.delete('profession');
+            remainingProfessions.forEach(id => searchParams.append('profession', id));
         } else {
             dispatch(addIndustry(industry.name));
-            searchParams.append('industry', industry.code); 
+            searchParams.append('industry', industry.id); 
         }
         setSearchParams(searchParams);
     }
@@ -54,15 +65,14 @@ export function Classification(props) {
 function SubClassification(props) {
     
     const [searchParams] = useSearchParams();
-    const selectedProfessions = searchParams.getAll('professions');
+    const selectedProfessions = searchParams.getAll('profession');
     const { industry, jobCount, professions } = props;
-    const [allChecked, setAllChecked] = useState(true);
 
     return (
         <div className="sub-items">
-            <div className="item-container flex flex-row flex-jc-sb flex-ai-c" onClick={() => setAllChecked(!allChecked)}>
+            <div className="item-container flex flex-row flex-jc-sb flex-ai-c">
                 <div className="item flex flex-ai-c">
-                    <span className={`${allChecked && selectedProfessions.length === 0 && 'checked'} checkbox`}></span>
+                    <span className={`${selectedProfessions.length === 0 && 'checked'} checkbox`}></span>
                     <span className="item-text">All {industry}</span>
                 </div>
                 <span>{jobCount}</span>
@@ -71,8 +81,6 @@ function SubClassification(props) {
             {professions && professions.map((profession, index) => {
                 return <CheckBoxItem 
                     key={index} 
-                    allChecked={allChecked} 
-                    setAllChecked={setAllChecked} 
                     profession={profession} 
                 />
             })}
@@ -82,22 +90,19 @@ function SubClassification(props) {
 
 function CheckBoxItem(props) {
 
-    const { allChecked, setAllChecked, profession } = props;
+    const { profession } = props;
     const [searchParams, setSearchParams] = useSearchParams();
     const selectedProfessions = searchParams.getAll('profession');
-    const [checked, setChecked] = useState(selectedProfessions.some(code => code === profession.code));
+    const [checked, setChecked] = useState(selectedProfessions.some(id => id === profession.id));
 
     const handleClick = () => {
         setChecked(!checked);
-        // TODO: check all when no professions selected
-        selectedProfessions.length === 1 && checked === false && allChecked === false ? setAllChecked(true) : setAllChecked(false);
-        
-        if (selectedProfessions.some(code => code === profession.code)) {
-            let remaining = selectedProfessions.filter(code => code !== profession.code);
+        if (selectedProfessions.some(id => id === profession.id)) {
+            let remaining = selectedProfessions.filter(id => id !== profession.id);
             searchParams.delete('profession');
-            remaining.forEach(code => searchParams.append('profession', code));
+            remaining.forEach(id => searchParams.append('profession', id));
         } else {
-            searchParams.append('profession', profession.code);
+            searchParams.append('profession', profession.id);
         }
         setSearchParams(searchParams);
     }
