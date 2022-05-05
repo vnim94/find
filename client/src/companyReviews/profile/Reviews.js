@@ -124,7 +124,7 @@ function Paginator(props) {
     )
 }
 
-function RatingDashboard({ rating }) {
+export function RatingDashboard({ rating }) {
     return (
         <div className="flex flex-jc-sa">
             <div className="rating-card">
@@ -182,7 +182,7 @@ function RatingCircle({ percent, children }) {
     </div>)
 }
 
-function RatingStars({ rating }) {
+export function RatingStars({ rating }) {
     return (
         <div>
             {Array(Math.floor(rating)).fill().map((_, index) => { return <span key={index} className="light-green medium material-icons-outlined">star</span> })}

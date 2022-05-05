@@ -37,13 +37,12 @@ function Companies(props) {
     )
 }
 
-function Tile(props) {
+function Tile({ company }) {
 
     const navigate = useNavigate();
-    const { company } = props;
 
     const handleClick = () => {
-        navigate(`/companies/${company.name.toLowerCase()}`)
+        navigate(`/companies/${company.name.toLowerCase()}-${company.id}`);
     }
 
     return (

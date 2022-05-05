@@ -95,7 +95,7 @@ function App() {
                         <Background heading="Company Directory Listing" />
                         <BrowseDirectory />
                     </>}/>
-                    <Route path="*" element={<>
+                    <Route path=":company" element={<>
                         <Directory />
                         <Background />
                         <CompanyProfile />
