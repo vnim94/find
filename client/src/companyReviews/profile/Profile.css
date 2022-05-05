@@ -72,38 +72,6 @@
     border-bottom: 2px solid var(--dark-green);
 }
 
-.company-ratings {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 80%;
-}
-
-.company-rating {
-    width: 30%;
-}
-
-.company-rating > * + * {
-    margin-top: 5px;
-}
-
-.company-rating > * > .bold {
-    margin-right: 5px;
-}
-
-.company-rating + .company-rating {
-    margin-bottom: 15px;
-}
-
-.company-review-rating {
-    margin-left: 15px;
-}
-
-.company-review-rating > * > * + * {
-    margin-left: 15px;
-}
-
 .section-card {
     display: flex;
     flex-direction: row;
@@ -114,51 +82,4 @@
 
 .section-card > * + * {
     margin-left: 10px;
-}
-
-.review-card {
-    display: flex;
-    flex-direction: row;
-    padding-top: 30px;
-    padding-bottom: 30px;
-}
-
-.review-card-details {
-    width: 25%;
-}
-
-.review-card-details > * + * {
-    margin-top: 10px;
-}
-
-.review-card-content {
-    width: 75%;
-}
-
-.review-card-content > * + * {
-    margin-top: 15px;
-}
-
-.helpful-btn {
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    cursor: pointer;
-    border: 1px solid transparent;
-    padding: 5px 15px;
-    font-size: 16px;
-    line-height: 1.5;
-    border-radius: 7px;
-}
-
-.helpful-btn:hover {
-    background-color: var(--lighter-green);
-}
-
-.helpful-btn > * + * {
-    margin-left: 5px;
-}
-
-.flag:hover {
-    cursor: pointer;
 }

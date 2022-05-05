@@ -1,19 +1,15 @@
+import './Review.css';
+
 function Reviews() {
     return (<>
         <div className="company-profile-section flex-col">
             <div>
                 <span className="medium">Working at Expedia Group</span>
-                <div className="flex flex-jc-sb">
-                    <div>average rating</div>
-                    <div>ratings overview</div>
-                    <div>salary rating %</div>
-                    <div>recommended %</div>
+                <RatingDashboard rating={3.3}/>
+                <div className="flex flex-jc-c">
+                    <span className="small">Your trust is our main concern so these ratings for Find are shared 'as is' from employees in line with our <a className="green" href="/">community guidelines</a></span>
                 </div>
                 <div>
-                    <span className="small">Your trust is our main concern so these ratings for Find are shared 'as is' from employees in line with our <a href="/">community guidelines</a></span>
-                </div>
-                <div>
-
                 </div>
             </div>
             <hr></hr>
@@ -36,9 +32,9 @@ function Reviews() {
                     <span className="material-icons-outlined">expand_more</span>
                 </div>
             </div>
-            <ReviewCard />
+            <ReviewCard rating={5.0}/>
             <hr></hr>
-            <ReviewCard />
+            <ReviewCard rating={5.0}/>
             <hr></hr>
             <Paginator />
             <div className="disclaimer">
@@ -53,27 +49,25 @@ function Reviews() {
 }
 
 function Rating(props) {
-
     const { text, rating } = props;
-
     return (
         <div className="company-rating flex flex-col">
             <span>{text}</span>
             <div className="flex flex-ai-c">
                 <span className="bold">{rating}</span>
-                {Array(5).fill().map((_, index) => { return <span key={index} className="medium material-icons-outlined">star</span> })}
+                <RatingStars rating={rating} />
             </div>
         </div>
     )
 }
 
-function ReviewCard(props) {
+function ReviewCard({ rating }) {
     return (
         <div className="review-card">
             <div className="review-card-details">
                 <div className="flex flex-ai-c">
-                    {Array(5).fill().map((_, index) => { return <span key={index} className="medium material-icons-outlined">star</span> })}
-                    <span className="medium">5.0</span>
+                    <RatingStars rating={rating} />
+                    <span className="medium">{rating}</span>
                     <span className="material-icons-outlined">expand_more</span>
                 </div>
                 <div className="flex flex-col">
@@ -126,6 +120,74 @@ function Paginator(props) {
                 <span>Next</span>
                 <span className="material-icons-outlined">navigate_next</span>
             </div>
+        </div>
+    )
+}
+
+function RatingDashboard({ rating }) {
+    return (
+        <div className="flex flex-jc-sa">
+            <div className="rating-card">
+                <span className="large">{rating}</span>
+                <RatingStars rating={3.3}/>
+                <span><b>21</b> ratings in total</span>
+            </div>
+            <div className="rating-card">
+                <RatingBar type="5" count={5} percent={5/7}/>
+                <RatingBar type="4" count={7} percent={7/7}/>
+                <RatingBar type="3" count={3} percent={3/7}/>
+                <RatingBar type="2" count={1} percent={1/7}/>
+                <RatingBar type="1" count={5} percent={5/7}/>
+            </div>
+            <div className="rating-card">
+                <RatingCircle percent={0.71}>
+                    <div className="dollar-overlay">
+                        <span className="material-icons-outlined">attach_money</span>
+                    </div>
+                </RatingCircle>
+                <div>
+                    <span className="small"><b>71%</b> rate salary as high or average</span>
+                </div>
+            </div>
+            <div className="rating-card">
+                <RatingCircle percent={0.66}/>
+                <div>
+                    <span className="small"><b>66%</b> employees recommend this employer to friends</span>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+function RatingBar({ type, percent, count }) {
+    return (
+        <div className="rating-bar flex flex-row flex-ai-c flex-jc-sb">
+            <span>{type}</span>
+            <div className="rating-bar-container">
+                <div className="rating-bar-fill" style={{width: `${percent * 100}%`}}></div>
+            </div>
+            <span className="small">{count}</span>
+        </div>
+    )
+}
+
+function RatingCircle({ percent, children }) {
+    return (<div className="relative">
+        <div className="rating-circle" style={{background: `conic-gradient(var(--dark-green) ${percent * 360}deg, var(--light-grey) 0deg)`}}>
+            <div className="rating-circle-overlay">
+                <span className="large">{percent * 100}%</span>
+            </div>
+            {children}
+        </div>
+    </div>)
+}
+
+function RatingStars({ rating }) {
+    return (
+        <div>
+            {Array(Math.floor(rating)).fill().map((_, index) => { return <span key={index} className="light-green medium material-icons-outlined">star</span> })}
+            {Array(Math.ceil(rating - Math.floor(rating))).fill().map((_, index) => { return <span key={index} className="light-green medium material-icons-outlined">star_half</span> })}
+            {Array(5 - Math.ceil(rating)).fill().map((_, index) => { return <span key={index} className="light-green medium material-icons-outlined">star_outline</span> })}
         </div>
     )
 }
