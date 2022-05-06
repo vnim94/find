@@ -1,6 +1,27 @@
+.clear-search {
+    border-radius: 50%;
+    padding: 5px;
+    position: absolute;
+    right: 110px;
+    top: 15px;
+}
+
+.clear-search:hover {
+    cursor: pointer;
+    background-color: var(--pale-green);
+}
+
+.company-jobs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 15px;
+    row-gap: 15px;
+}
+
 .company-job-search {
     display: flex;
     flex-direction: row;
+    position: relative;
     width: 50%;
 }
 
@@ -8,15 +29,11 @@
     border: 1px solid var(--light-grey);
     border-radius: 10px;
     padding: 25px;
-    width: 50%;
-}
-
-.company-job-card + .company-job-card {
-    margin-left: 15px;
+    width: 100%;
 }
 
 .company-job-card > * + * {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .company-profile {
@@ -72,14 +89,39 @@
     border-bottom: 2px solid var(--dark-green);
 }
 
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 20px;
+    row-gap: 20px;
+}
+
+.gallery > img {
+    height: 200px;
+    width: 100%;
+}
+
+.perks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+}
+
 .section-card {
     display: flex;
     flex-direction: row;
     margin-top: 15px;
     margin-bottom: 15px;
-    width: 50%;
+    width: 100%;
 }
 
 .section-card > * + * {
     margin-left: 10px;
+}
+
+.values {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 15px;
+    row-gap: 15px;
 }

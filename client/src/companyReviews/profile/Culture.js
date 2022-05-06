@@ -8,7 +8,7 @@ function Culture() {
 
                 </div>
             </div>
-            <div className="flex flex-row">
+            <div className="values flex flex-row">
                 <div className="values-card">
                     <span className="medium">1. We always...Seek better</span>
                     <p></p>
@@ -29,7 +29,7 @@ function Culture() {
         </div>
         <div className="company-profile-section flex-col">
             <span className="large">Perks and benefits</span>
-            <div className="flex flex-row flex-wrap">
+            <div className="perks">
                 <Card heading="Family focus" text="14 weeks paid primary carer leave with Parental coaching program Flexible working" />
                 <Card heading="Family focus" text="14 weeks paid primary carer leave with Parental coaching program Flexible working" />
                 <Card heading="Family focus" text="14 weeks paid primary carer leave with Parental coaching program Flexible working" />
@@ -47,8 +47,7 @@ function Culture() {
         </div>
         <div className="company-profile-section flex-col">
             <span className="large">Gallery</span>
-            <div className="flex flex-jc-sb flex-wrap">
-                <img></img>
+            <div className="gallery flex flex-jc-sb flex-wrap">
                 <img></img>
                 <img></img>
                 <img></img>

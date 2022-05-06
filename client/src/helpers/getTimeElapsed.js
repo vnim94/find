@@ -1,4 +1,4 @@
-const getTimeElapsed = (timestamp, now) => {
+const getTimeElapsed = (timestamp) => {
 
     const second = 1000;
     const minute = second * 60;
@@ -6,7 +6,7 @@ const getTimeElapsed = (timestamp, now) => {
     const day = hour * 24;
     const month = day * 30;
 
-    let currentDate = new Date(now);
+    let currentDate = Date.now();
     let date = new Date(timestamp);
     let timeElapsed = currentDate - date
     

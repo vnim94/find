@@ -139,7 +139,7 @@ function JobCard(props) {
                     <a className="medium" href="/">{title}</a>
                     <span>{company.name}</span>
                 </div>
-                <span>{getTimeElapsed(added, Date.now())}</span>
+                <span>{getTimeElapsed(added)}</span>
             </div>
             <div>
                 <div className="flex flex-row">
@@ -213,7 +213,7 @@ function Paginator(props) {
     )
 }
 
-function Loading() {
+export function Loading() {
     return (
         <div className="loading">
             <div className="dot"></div>
