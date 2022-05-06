@@ -20,9 +20,14 @@
 
 .company-job-search {
     display: flex;
+    align-items: center;
     flex-direction: row;
     position: relative;
     width: 50%;
+}
+
+.company-job-search > .btn {
+    margin-top: 5px;
 }
 
 .company-job-card {
