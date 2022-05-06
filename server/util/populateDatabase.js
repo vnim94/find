@@ -154,9 +154,9 @@ function createLocation(suburb, city, state, region, callback) {
     })
 }
 
-function createCompany(name, website, industry, headquarters, overview, averageRating, size, logo, callback) {
+function createCompany(name, website, industry, specialities, headquarters, overview, mission, culture, averageRating, size, logo, callback) {
 
-    let company = new Company({name, website, industry, headquarters, overview, averageRating, size, logo});
+    let company = new Company({name, website, industry, specialities, headquarters, overview, mission, culture, averageRating, size, logo});
     
     company.save((err) => {
         if (err) {
@@ -169,7 +169,6 @@ function createCompany(name, website, industry, headquarters, overview, averageR
         companies.push(company);
         callback(null, company);
     })
-
 }
 
 function createIndustry(name, code, callback) {
@@ -261,12 +260,20 @@ function populateCompanies(callback) {
 
     Object.keys(companyNamesAndLogos).forEach(company => {
         let website = `${company.toLowerCase()}.com`;
-        let logo = companyNamesAndLogos[company]
+        let logo = companyNamesAndLogos[company];
+        let specialities = Array(3).fill().map(i => { return faker.lorem.words(3) });
         let overview = faker.lorem.paragraph();
         let headquarters = `${faker.address.streetAddress()}, ${faker.address.cityName()}`
-        let averageRating = parseFloat((Math.random() * 5).toFixed(2));
+        let mission = faker.lorem.sentence();
+        let averageRating = parseFloat((Math.random() * 5).toFixed(1));
         let size = companySizes[getRandomIndex(companySizes.length)]
-        companiesToCreate.push(function(callback) { createCompany(company, website, industries[getRandomIndex(industries.length)], headquarters, overview, averageRating, size, logo, callback) });
+        let culture = {
+            keyMessage: { heading: faker.lorem.words(), text: faker.lorem.sentence() },
+            values: Array(Math.ceil(Math.random() * 6)).fill().map(_ => { return { heading: faker.lorem.words(), text: faker.lorem.sentence() } }),
+            perks: Array(Math.ceil(Math.random() * 6)).fill().map(_ => { return { heading: faker.lorem.words(), text: faker.lorem.sentence() } }),
+            diversity: faker.lorem.sentences(2)
+        }
+        companiesToCreate.push(function(callback) { createCompany(company, website, industries[getRandomIndex(industries.length)], specialities, headquarters, overview, mission, culture, averageRating, size, logo, callback) });
     })
 
     async.series(companiesToCreate, callback);

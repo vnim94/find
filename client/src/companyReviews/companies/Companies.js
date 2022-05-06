@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CompanySearch from './CompanySearch';
 import { getCompanies } from '../company.api';
+import { Loading } from '../../jobSearch/jobs/Jobs';
 
 function Companies(props) {
 
@@ -24,11 +25,12 @@ function Companies(props) {
                     <span className="large">Explore Company Profiles</span>
                     <button className="bg-dark-green white btn">Write a Review</button>
                 </div>}
-                <div className="tiles">
-                    {companies && companies.map((company, index) => {
+                {!companies && <Loading />}
+                {companies && <div className="tiles">
+                    {companies.map((company, index) => {
                         return <Tile key={index} company={company}/>
                     })}
-                </div>
+                </div>}
                 <div className="flex flex-jc-c">
                     <a className="bg-dark-green btn white" href="/companies/browse-reviews">See all companies</a>
                 </div>

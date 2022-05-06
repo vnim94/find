@@ -4,7 +4,7 @@ import { RatingDashboard } from './Reviews';
 function About() {
 
     const company = useSelector(state => state.company.details);    
-    const { averageRating, name, website, industry, headquarters, overview, size, logo } = company;
+    const { averageRating, name, website, industry, specialities, headquarters, overview, mission, size } = company;
 
     return (<>
         <div className="company-profile-section flex-col">
@@ -29,7 +29,7 @@ function About() {
                     </tr>
                     <tr>
                         <th>Specialities</th>
-                        <td>Online Employment Classifieds, Job Boards, Education</td>
+                        <td>{specialities.toString().replaceAll(',', ', ')}</td>
                     </tr>
                 </tbody>
             </table>
@@ -39,7 +39,7 @@ function About() {
         </div>
         <div className="company-profile-section flex-col">
             <span className="large">Our mission statement</span>
-            <p>We help people live more fulfilling and productive working lives and help organisations succeed.</p>
+            <p>{mission}</p>
         </div>
         <div className="company-profile-section flex-col">
             <div className="flex flex-ai-c flex-jc-sb">
@@ -62,7 +62,5 @@ function About() {
         </div>
     </>)
 }
-
-
 
 export default About;

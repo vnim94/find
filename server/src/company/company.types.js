@@ -7,9 +7,24 @@ const CompanyTypes = `
         specialities: [String]
         headquarters: String
         overview: String
+        mission: String
+        culture: Culture
         averageRating: Float
         size: String
         logo: String
+    }
+
+    type Culture {
+        image: String
+        keyMessage: Content
+        values: [Content]
+        perks: [Content]
+        diversity: String
+    }
+
+    type Content {
+        heading: String
+        text: String
     }
 
     type CompanyExists implements Error {

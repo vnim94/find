@@ -1,49 +1,33 @@
+import { useSelector } from 'react-redux';
+
 function Culture() {
+
+    const company = useSelector(state => state.company.details);
+    const { keyMessage, values, perks, diversity } = company.culture;
+
     return (<>
         <div className="company-profile-section flex-col">
             <span className="large">Culture and values</span>
             <div>
                 <img></img>
                 <div className="key-message">
-
+                    <span className="medium">{keyMessage.heading}</span>
+                    <p>{keyMessage.text}</p>
                 </div>
             </div>
             <div className="values flex flex-row">
-                <div className="values-card">
-                    <span className="medium">1. We always...Seek better</span>
-                    <p></p>
-                </div>
-                <div>
-                    <span className="medium">2. We always... Bite the bullet</span>
-                    <p></p>
-                </div>
-                <div>
-                    <span className="medium">3. We always... Think for tomorrow</span>
-                    <p></p>
-                </div>
-                <div>
-                    <span className="medium">4. We always... Share the good stuff</span>
-                    <p></p>
-                </div>
+                {company.culture && values.map((value,index) => <ValuesCard key={index} number={index+1}heading={value.heading} text={value.text}/>)}
             </div>
         </div>
         <div className="company-profile-section flex-col">
             <span className="large">Perks and benefits</span>
             <div className="perks">
-                <Card heading="Family focus" text="14 weeks paid primary carer leave with Parental coaching program Flexible working" />
-                <Card heading="Family focus" text="14 weeks paid primary carer leave with Parental coaching program Flexible working" />
-                <Card heading="Family focus" text="14 weeks paid primary carer leave with Parental coaching program Flexible working" />
-                <Card heading="Family focus" text="14 weeks paid primary carer leave with Parental coaching program Flexible working" />
-                <Card heading="Family focus" text="14 weeks paid primary carer leave with Parental coaching program Flexible working" />
-                <Card heading="Family focus" text="14 weeks paid primary carer leave with Parental coaching program Flexible working" />
+                {company.culture && perks.map((perk,index) => <PerkCard key={index} heading={perk.heading} text={perk.text}/>)}
             </div>
         </div>
         <div className="company-profile-section flex-col">
             <span className="large">Our approach to diversity, equity and inclusion</span>
-            <p>
-                We recognise and respect qualities which are unique to individuals such as gender, language, enthnicity, age, religion, disability and sexual orientation. 
-                We are recognised as having an approach to diversity and inclusion which is genuine and embedded within our culture.
-            </p>
+            <p>{diversity}</p>
         </div>
         <div className="company-profile-section flex-col">
             <span className="large">Gallery</span>
@@ -57,7 +41,16 @@ function Culture() {
     </>)
 }
 
-function Card(props) {
+function ValuesCard({ number, heading, text }) {
+    return (
+        <div className="values-card">
+            <span className="medium">{number}. {heading}</span>
+            <p>{text}</p>
+        </div>
+    )
+}
+
+function PerkCard(props) {
 
     const { heading, text } = props;
 

@@ -13,6 +13,23 @@ const getCompanyRequest = (id) => `
                 specialities
                 headquarters
                 overview
+                mission
+                culture {
+                    image
+                    keyMessage {
+                        heading
+                        text
+                    }
+                    values {
+                        heading
+                        text
+                    }
+                    perks {
+                        heading
+                        text
+                    }
+                    diversity
+                }
                 averageRating
                 size
                 logo
