@@ -18,9 +18,7 @@ const CompanySchema = new Schema({
     overview: String,
     mission: String,
     culture: {
-        image: {
-            type: String
-        },
+        image: String,
         keyMessage: {
             heading: String,
             text: String
