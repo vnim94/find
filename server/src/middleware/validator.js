@@ -90,3 +90,46 @@ exports.job = (job) => {
     
     return errors
 }
+
+exports.review = (review) => {
+    const errors = {}
+    const { title, good, bad, role, location, recommend, salary } = review;
+
+    if (validator.isEmpty(title)) {
+        errors['title'] = 'Title must be provided';
+    } else if (!validator.isLength(title, { min: 5, max: 30 })) {
+        errors['title'] = 'Title must be between 5 and 30 characters';
+    }
+
+    if (validator.isEmpty(good)) {
+        errors['good'] = 'Must not be empty';
+    } else if (!validator.isLength(good, { min: 5, max: 250 })) {
+        errors['good'] = 'Must be between 10 and 250 characters';
+    }
+
+    if (validator.isEmpty(bad)) {
+        errors['bad'] = 'Must not be empty';
+    } else if (!validator.isLength(bad, { min: 5, max: 250 })) {
+        errors['bad'] = 'Must be between 10 and 250 characters';
+    }
+
+    if (validator.isEmpty(role)) {
+        errors['role'] = 'Role must be provided';
+    } else if (!validator.isLength(role, { min: 5, max: 25 })) {
+        errors['role'] = 'Role must be between 5 and 25 characters';
+    }
+
+    if (validator.isEmpty(location)) {
+        errors['location'] = 'Location must be provided';
+    }
+
+    // if (!validator.isBoolean(recommend)) {
+    //     errors['recommend'] = 'Must not be empty';
+    // }
+
+    if (validator.isEmpty(salary)) {
+        errors['salary'] = 'Must not be empty';
+    }
+
+    return errors;
+}
