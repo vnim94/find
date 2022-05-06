@@ -10,6 +10,7 @@ const Company = require('../src/company/company.model');
 const Job = require('../src/job/job.model');
 const Industry = require('../src/job/industry.model');
 const Profession = require('../src/job/profession.model');
+const Review = require('../src/review/review.model');
 
 mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true });
 const database = mongoose.connection;
@@ -105,6 +106,7 @@ const professionTypes = {
 
 const payBases = Array(21).fill().map((value, index) => 10000 * index);
 
+let users = [];
 let locations = [];
 let companies = [];
 let industries = [];
@@ -133,6 +135,7 @@ function createUser(firstName, lastName, email, location, password, phone, callb
         }
 
         console.log(`[INFO] New user created: ${user.firstName} ${user.lastName}`);
+        users.push(user);
         callback(null, user);
 
     });
@@ -227,6 +230,21 @@ function createJob(details, callback) {
 
 }
 
+function createReview(details, callback) {
+    let review = new Review(details);
+    review.save((err) => {
+        if (err) {
+            console.log(`[ERROR] Error creating review: ${review._id} - ${err}`);
+            callback(err, null);
+            return;
+        }
+
+        console.log(`[INFO] New review created: ${review._id}`);
+        callback(null, review);
+    })
+    
+}
+
 function populateUsers(callback) {
 
     let usersToCreate = [];
@@ -297,7 +315,6 @@ function populateProfessions(callback) {
 }
 
 function populateJobs(callback) {
-
     let jobsToCreate = [];
     const industry = industries.find(industry => industry.code === '0017');
 
@@ -325,7 +342,35 @@ function populateJobs(callback) {
     }
 
     async.series(jobsToCreate, callback);
+}
 
+function populateReviews(callback) {
+    let reviewsToCreate = [];
+    for (let i = 0; i < 150; i++) {
+        let profession = Object.keys(professionTypes)[getRandomIndex(Object.keys(professionTypes).length)]
+        let details = {
+            title: faker.lorem.words(2),
+            user: users[getRandomIndex(users.length)]._id,
+            company: companies[getRandomIndex(companies.length)]._id,
+            ratings: {
+                benefits: parseFloat((Math.random() * 5).toFixed(1)),
+                career: parseFloat((Math.random() * 5).toFixed(1)),
+                balance: parseFloat((Math.random() * 5).toFixed(1)),
+                environment: parseFloat((Math.random() * 5).toFixed(1)),
+                management: parseFloat((Math.random() * 5).toFixed(1)),
+                diversity: parseFloat((Math.random() * 5).toFixed(1))
+            },
+            good: faker.lorem.sentences(3),
+            bad: faker.lorem.sentences(3),
+            role: professionTypes[profession][getRandomIndex(professionTypes[profession].length)],
+            location: locations[getRandomIndex(locations.length)]._id,
+            recommend: Math.round(Math.random) === 1 ? true : false,
+            salary: ['High', 'Average', 'Low'][getRandomIndex(3)]
+        }
+        reviewsToCreate.push(function(callback) { createReview(details, callback) });
+    }
+
+    async.series(reviewsToCreate, callback);
 }
 
 function getRandomIndex(length) {
@@ -334,7 +379,15 @@ function getRandomIndex(length) {
 
 console.log('[INFO] Populating database...');
 
-async.series([populateUsers, populateLocations, populateIndustries, populateCompanies, populateProfessions, populateJobs], (err) => {
+async.series([
+    populateUsers, 
+    populateLocations, 
+    populateIndustries, 
+    populateCompanies, 
+    populateProfessions, 
+    populateJobs, 
+    populateReviews
+], (err) => {
 
     if (err) {
         console.log(`[ERROR] ${err}`);
