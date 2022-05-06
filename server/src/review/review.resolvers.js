@@ -35,17 +35,7 @@ const ReviewResolvers = {
             const errors = validator.review(args);
             if (Object.keys(errors).length > 0) return { __typename: 'InvalidReviewInput', message: 'Invalid input', errors: errors }
 
-            const { id, title, rating, good, bad, role, location, recommend, salary } = args;
-            return await Review.findByIdAndUpdate(id, {
-                title: title,
-                rating: rating,
-                good: good,
-                bad: bad,
-                role: role,
-                location: location,
-                recommend: recommend,
-                salary: salary
-            }, { new: true })
+            return await Review.findByIdAndUpdate(args.id, args, { new: true });
         },
         deleteReview: async (_, { id }, context) => {
             if (!context.user) throw new Error('UNAUTHORISED');

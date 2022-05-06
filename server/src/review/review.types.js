@@ -5,6 +5,7 @@ const ReviewTypes = `
         user: User!
         company: Company!
         ratings: Rating!
+        averageRating: Int!
         good: String!
         bad: String!
         date: Date!
@@ -17,6 +18,15 @@ const ReviewTypes = `
     }
 
     type Rating {
+        benefits: Float!
+        career: Float!
+        balance: Float!
+        environment: Float!
+        management: Float!
+        diversity: Float!
+    }
+
+    input RatingInput {
         benefits: Float!
         career: Float!
         balance: Float!
@@ -50,22 +60,22 @@ const ReviewTypes = `
             title: String!, 
             user: ID!, 
             company: ID!,
-            rating: Rating!, 
+            ratings: RatingInput!, 
             good: String!, 
             bad: String!, 
             role: String!, 
-            location: String!, 
+            location: ID!, 
             recommend: Boolean!,
             salary: String!
         ): ReviewResult
         updateReview(
             id: ID!, 
             title: String, 
-            rating: Rating,
+            ratings: RatingInput,
             good: String, 
             bad: String, 
             role: String, 
-            location: String, 
+            location: ID, 
             recommend: Boolean, 
             salary: String
         ): ReviewResult
