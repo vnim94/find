@@ -99,7 +99,9 @@ function App() {
                         <Directory />
                         <Background />
                         <CompanyProfile />
-                    </>}/>
+                    </>}>
+                        <Route path=":tab" element={<CompanyProfile />} />
+                    </Route>
                 </Route>
                 <Route path="/jobs" element={jobs}/>
             </Routes>

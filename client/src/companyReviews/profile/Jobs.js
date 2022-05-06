@@ -1,4 +1,4 @@
-function Jobs() {
+function CompanyJobs() {
     return (<>
         <div className="company-profile-section flex-col">
             <div>
@@ -42,4 +42,4 @@ function JobCard() {
     )
 }
 
-export default Jobs;
+export default CompanyJobs;

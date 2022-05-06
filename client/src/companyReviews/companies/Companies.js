@@ -42,7 +42,7 @@ function Tile({ company }) {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/companies/${company.name.toLowerCase()}-${company.id}`);
+        navigate(`${company.name.toLowerCase()}-${company.id}`);
     }
 
     return (

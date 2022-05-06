@@ -39,6 +39,8 @@ const suburbs = [
     'Northern Suburbs'
 ]
 
+const companySizes = ['Less than 100', '100-500', '501-1,000', '1,001-5,000', '5,000-10,000', 'More than 10,001']
+
 const companyNamesAndLogos = {
     'Apple': "https://www.transparentpng.com/thumb/apple-logo/Ts2ZlF-apple-logo-free-png.png",
     'SEEK': "https://logosvector.net/wp-content/uploads/2013/12/seek-vector-logo.png",
@@ -152,10 +154,10 @@ function createLocation(suburb, city, state, region, callback) {
     })
 }
 
-function createCompany(name, website, industry, headquarters, overview, averageRating, logo, callback) {
+function createCompany(name, website, industry, headquarters, overview, averageRating, size, logo, callback) {
 
-    let company = new Company({name, website, industry, headquarters, overview, averageRating, logo});
-
+    let company = new Company({name, website, industry, headquarters, overview, averageRating, size, logo});
+    
     company.save((err) => {
         if (err) {
             console.log(`[ERROR] Error creating company: ${company.name} - ${err}`);
@@ -263,7 +265,8 @@ function populateCompanies(callback) {
         let overview = faker.lorem.paragraph();
         let headquarters = `${faker.address.streetAddress()}, ${faker.address.cityName()}`
         let averageRating = parseFloat((Math.random() * 5).toFixed(2));
-        companiesToCreate.push(function(callback) { createCompany(company, website, industries[getRandomIndex(industries.length)], headquarters, overview, averageRating, logo, callback) });
+        let size = companySizes[getRandomIndex(companySizes.length)]
+        companiesToCreate.push(function(callback) { createCompany(company, website, industries[getRandomIndex(industries.length)], headquarters, overview, averageRating, size, logo, callback) });
     })
 
     async.series(companiesToCreate, callback);
