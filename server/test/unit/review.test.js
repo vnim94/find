@@ -26,8 +26,8 @@ afterAll(async () => { await database.disconnect() });
 describe('review model', () => {
 
     test('average rating virtual', async () => {
-        expect(review.rating).toBeTruthy();
-        expect(review.rating).toBe(5.0);
+        expect(review.averageRating).toBeTruthy();
+        expect(review.averageRating).toBe(5.0);
     })
 
 })
@@ -43,7 +43,14 @@ describe('review queries', () => {
                         company {
                             name
                         }
-                        rating 
+                        rating {
+                            benefits
+                            career
+                            balance
+                            environment
+                            management
+                            diversity
+                        }
                         good
                         bad
                         role

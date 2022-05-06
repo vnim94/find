@@ -1,5 +1,10 @@
 const { Schema, model } = require('mongoose');
 
+const TextSchema = new Schema({
+    heading: String,
+    text: String
+})
+
 const CompanySchema = new Schema({
     name: {
         type: String,
@@ -19,18 +24,9 @@ const CompanySchema = new Schema({
     mission: String,
     culture: {
         image: String,
-        keyMessage: {
-            heading: String,
-            text: String
-        },
-        values: [{
-            heading: String,
-            text: String
-        }],
-        perks: [{
-            heading: String,
-            text: String
-        }],
+        keyMessage: TextSchema,
+        values: [TextSchema],
+        perks: [TextSchema],
         diversity: String
     },
     averageRating: {

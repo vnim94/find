@@ -1,22 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const ReviewSchema = Schema({
-    title: {
-        type: String,
-        minLength: 5,
-        maxLength: 30,
-        required: true        
-    },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    company: {
-        type: Schema.Types.ObjectId,
-        ref: 'Company',
-        required: true
-    },
+const RatingsSchema = new Schema({
     benefits: {
         type: Number,
         default: 0.0,
@@ -58,7 +42,27 @@ const ReviewSchema = Schema({
         min: 0.0,
         max: 5.0,
         required: true
+    }
+})
+
+const ReviewSchema = new Schema({
+    title: {
+        type: String,
+        minLength: 5,
+        maxLength: 30,
+        required: true        
     },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    company: {
+        type: Schema.Types.ObjectId,
+        ref: 'Company',
+        required: true
+    },
+    ratings: RatingsSchema,
     good: {
         type: String,
         minLength: 5,
@@ -82,17 +86,8 @@ const ReviewSchema = Schema({
         default: Date.now
     },
     location: {
-        type: String,
-        enum: [
-            'Australian Capital Territory', 
-            'New South Wales', 
-            'Northern Territory', 
-            'Queensland', 
-            'South Australia', 
-            'Tasmania',
-            'Victoria',
-            'Western Australia'
-        ],
+        type: Schema.Types.ObjectId,
+        ref: 'Location',
         required: true
     },
     recommend: {
@@ -105,17 +100,19 @@ const ReviewSchema = Schema({
         required: true
     },
     helpful: {
-        type: Boolean
+        type: Number,
+        default: 0
     },
     flagged: {
-        type: Boolean
+        type: Boolean,
+        default: false
     }
 },{
     toJSON: { virtuals: true }
 })
 
-ReviewSchema.virtual('rating').get(function() {
-    return (this.benefits + this.career + this.balance + this.environment + this.management + this.diversity) / 6
+ReviewSchema.virtual('averageRating').get(function() {
+    return (this.ratings.benefits + this.ratings.career + this.ratings.balance + this.ratings.environment + this.ratings.management + this.ratings.diversity) / 6
 })
 
 module.exports = model('Review', ReviewSchema);

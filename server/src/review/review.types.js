@@ -4,13 +4,7 @@ const ReviewTypes = `
         title: String!
         user: User!
         company: Company!
-        rating: Float!
-        benefits: Float!
-        career: Float!
-        balance: Float!
-        environment: Float!
-        management: Float!
-        diversity: Float!
+        ratings: Rating!
         good: String!
         bad: String!
         date: Date!
@@ -18,8 +12,17 @@ const ReviewTypes = `
         location: String!
         recommend: Boolean!
         salary: String!
-        helpful: Boolean
-        flagged: Boolean
+        helpful: Int!
+        flagged: Boolean!
+    }
+
+    type Rating {
+        benefits: Float!
+        career: Float!
+        balance: Float!
+        environment: Float!
+        management: Float!
+        diversity: Float!
     }
 
     type ReviewInputErrors {
@@ -46,13 +49,8 @@ const ReviewTypes = `
         createReview(
             title: String!, 
             user: ID!, 
-            company: ID!, 
-            benefits: Float!, 
-            career: Float!,
-            balance: Float!,
-            environment: Float!,
-            management: Float!,
-            diversity: Float!,
+            company: ID!,
+            rating: Rating!, 
             good: String!, 
             bad: String!, 
             role: String!, 
@@ -63,12 +61,7 @@ const ReviewTypes = `
         updateReview(
             id: ID!, 
             title: String, 
-            benefits: Float!, 
-            career: Float!,
-            balance: Float!,
-            environment: Float!,
-            management: Float!,
-            diversity: Float!, 
+            rating: Rating,
             good: String, 
             bad: String, 
             role: String, 

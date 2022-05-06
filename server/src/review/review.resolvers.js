@@ -35,15 +35,10 @@ const ReviewResolvers = {
             const errors = validator.review(args);
             if (Object.keys(errors).length > 0) return { __typename: 'InvalidReviewInput', message: 'Invalid input', errors: errors }
 
-            const { id, title, benefits, career, balance, environment, management, diversity, good, bad, role, location, recommend, salary } = args;
+            const { id, title, rating, good, bad, role, location, recommend, salary } = args;
             return await Review.findByIdAndUpdate(id, {
                 title: title,
-                benefits: benefits,
-                career: career,
-                balance: balance,
-                environment: environment,
-                management: management,
-                diversity: diversity,
+                rating: rating,
                 good: good,
                 bad: bad,
                 role: role,
