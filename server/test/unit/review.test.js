@@ -27,7 +27,7 @@ afterAll(async () => { await database.disconnect() });
 
 describe('review model', () => {
 
-    test('average rating', async () => {
+    test('average rating virtual', async () => {
         expect(review.averageRating).toBeTruthy();
         expect(review.averageRating).toBe(5.0);
     })
@@ -99,7 +99,7 @@ describe('review queries', () => {
     })
 })
 
-describe('review mutations', () => {
+describe.only('review mutations', () => {
     test('createReview', async () => {
         const createReview = `
             mutation {
@@ -192,7 +192,6 @@ describe('review mutations', () => {
         `
         const result = await tester.graphql(updateReview, {}, context, {});
         expect(result.data.updateReview.title).toBe('Not bad');
-        expect(result.data.updateReview.ratings.benefits).toBe(4.0);
         expect(result.data.updateReview.averageRating).toBe(4.0);
 
         const updatedReview = await Review.findById(review._id);

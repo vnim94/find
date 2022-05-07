@@ -63,13 +63,6 @@ const ReviewSchema = new Schema({
         required: true
     },
     ratings: RatingsSchema,
-    averageRating: {
-        type: Number,
-        default: function() { return (this.ratings.benefits + this.ratings.career + this.ratings.balance + this.ratings.environment + this.ratings.management + this.ratings.diversity) / 6 },
-        min: 0.0,
-        max: 5.0,
-        required: true
-    },
     good: {
         type: String,
         minLength: 5,
@@ -116,6 +109,10 @@ const ReviewSchema = new Schema({
     }
 },{
     toJSON: { virtuals: true }
+})
+
+ReviewSchema.virtual('averageRating').get(function() {
+    return (this.ratings.benefits + this.ratings.career + this.ratings.balance + this.ratings.environment + this.ratings.management + this.ratings.diversity) / 6
 })
 
 module.exports = model('Review', ReviewSchema);

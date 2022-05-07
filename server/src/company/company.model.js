@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const Review = require('../review/review.model');
 
 const TextSchema = new Schema({
     heading: String,
@@ -30,19 +29,16 @@ const CompanySchema = new Schema({
         perks: [TextSchema],
         diversity: String
     },
+    averageRating: {
+        type: Number,
+        min: 0.0,
+        max: 5.0
+    },
     size: {
         type: String,
         enum: ['Less than 100', '100-500', '501-1,000', '1,001-5,000', '5,000-10,000', 'More than 10,001']
     }, 
     logo: String
 })
-
-CompanySchema.methods.getAverageReviewRating = async function() {
-    const review = await Review.aggregate([
-        { $group: { _id: this._id, averageRating: { $avg: "$averageRating" } }}
-    ])
-
-    return review[0].averageRating.toFixed(1);
-}
 
 module.exports = model('Company', CompanySchema);
