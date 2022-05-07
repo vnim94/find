@@ -38,10 +38,11 @@ const CompanySchema = new Schema({
 })
 
 CompanySchema.methods.getAverageReviewRating = async function() {
-    // get reviews for company and calculate total average of review ratings
-    return await Review.aggregate([
+    const review = await Review.aggregate([
         { $group: { _id: this._id, averageRating: { $avg: "$averageRating" } }}
     ])
+
+    return review[0].averageRating;
 }
 
 module.exports = model('Company', CompanySchema);

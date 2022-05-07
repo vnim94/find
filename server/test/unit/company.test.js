@@ -20,10 +20,9 @@ beforeAll(async () => {
 afterAll(async () => { await database.disconnect() });
 
 describe('company model', () => {
-    test.only('averageRating method returns average of all review average ratings', async () => {
+    test('averageRating method returns average of all review average ratings', async () => {
         const averageRating = await company.getAverageReviewRating();
-        console.log(averageRating);
-        expect(averageRating).toBe(4);
+        expect(averageRating).toBe(5);
     })
 })
 
@@ -66,6 +65,7 @@ describe('company resolvers', () => {
                         }
                         headquarters
                         overview
+                        averageRating
                         size
                         logo
                     }
@@ -76,6 +76,7 @@ describe('company resolvers', () => {
         expect(result.data.company.name).toBe('McDonalds');
         expect(result.data.company.headquarters).toBe('123 ABC Street');
         expect(result.data.company.industry.code).toBe('0000')
+        expect(result.data.company.averageRating).toBe(5);
     })
 
     test('company not found', async () => {
