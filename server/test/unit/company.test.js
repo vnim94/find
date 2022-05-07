@@ -20,7 +20,7 @@ beforeAll(async () => {
 afterAll(async () => { await database.disconnect() });
 
 describe('company model', () => {
-    test.only('average rating', () => {
+    test('average rating', () => {
         expect(company.averageRating).toBe(5);
     });
 })

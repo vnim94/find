@@ -134,4 +134,10 @@ exports.seed = async () => {
         recommend: true,
         salary: 'Low'
     })
+
+    const reviews = await Review.aggregate([
+        { $match: { company: companyA._id } },
+        { $group: { _id: '$company' , averageRating: { $avg: '$averageRating' } } }
+    ])
+    if (reviews.length > 0) await Company.findByIdAndUpdate(companyA._id, { averageRating: reviews[0].averageRating });
 }

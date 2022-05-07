@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const Company = require('../company/company.model');
 
 const RatingsSchema = new Schema({
     benefits: {
@@ -113,12 +114,6 @@ const ReviewSchema = new Schema({
         type: Boolean,
         default: false
     }
-})
-
-ReviewSchema.post('findOneAndUpdate', async function() {
-    const review = await this.model.findOne(this.getQuery());
-    review.set({ averageRating: calculateAverageRating(review.ratings) });
-    await review.save();
 })
 
 function calculateAverageRating(ratings) {
