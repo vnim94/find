@@ -35,6 +35,8 @@ const ReviewResolvers = {
             const errors = validator.review(args);
             if (Object.keys(errors).length > 0) return { __typename: 'InvalidReviewInput', message: 'Invalid input', errors: errors }
 
+            args.averageRating = Object.values(args.ratings).reduce((a,b) => a + b, 0) / Object.keys(args.ratings).length;
+
             return await Review.findByIdAndUpdate(args.id, args, { new: true });
         },
         deleteReview: async (_, { id }, context) => {
