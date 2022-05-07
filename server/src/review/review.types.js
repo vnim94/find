@@ -5,7 +5,7 @@ const ReviewTypes = `
         user: User!
         company: Company!
         ratings: Rating!
-        averageRating: Int!
+        averageRating: Float!
         good: String!
         bad: String!
         date: Date!

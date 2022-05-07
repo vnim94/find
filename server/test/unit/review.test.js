@@ -148,7 +148,8 @@ describe('review mutations', () => {
         expect(newReview.title).toBeTruthy();
 
         const updatedCompany = await Company.findOne({ name: 'McDonalds' });
-        expect(updatedCompany.averageRating).toBe(4.5)
+        expect(updatedCompany.reviews.averageRating).toBe(4.5)
+        expect(updatedCompany.reviews.totalCount).toBe(2)
     })
 
     test('updateReview', async () => {
@@ -199,7 +200,8 @@ describe('review mutations', () => {
         expect(updatedReview.averageRating).toBe(4);
 
         const updatedCompany = await Company.findOne({ name: 'McDonalds' });
-        expect(updatedCompany.averageRating).toBe(4);
+        expect(updatedCompany.reviews.averageRating).toBe(4);
+        expect(updatedCompany.reviews.totalCount).toBe(2)
     })
 
     test('deleteReview', async () => {

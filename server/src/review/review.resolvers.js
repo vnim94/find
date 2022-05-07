@@ -31,9 +31,15 @@ const ReviewResolvers = {
             const review = await Review.create(args);
             const reviews = await Review.aggregate([
                 { $match: { company: new mongoose.Types.ObjectId(args.company) } },
-                { $group: { _id: '$company' , averageRating: { $avg: '$averageRating' } } }
+                { $group: { _id: '$company' , averageRating: { $avg: '$averageRating' } , totalCount: { $sum: 1 } } },
+                { $project: { _id: 0 } }
             ])
-            if (reviews.length > 0) await Company.findByIdAndUpdate(args.company, { averageRating: reviews[0].averageRating });
+            if (reviews.length > 0) await Company.findByIdAndUpdate(args.company, { 
+                reviews: {
+                    averageRating: reviews[0].averageRating,
+                    totalCount: reviews[0].totalCount 
+                }
+            });
 
             return review.populate('company');
         },
@@ -49,9 +55,15 @@ const ReviewResolvers = {
 
             const reviews = await Review.aggregate([
                 { $match: { company: review.company } },
-                { $group: { _id: '$company' , averageRating: { $avg: '$averageRating' } } }
+                { $group: { _id: '$company' , averageRating: { $avg: '$averageRating' }, totalCount: { $sum: 1 } } },
+                { $project: { _id: 0 } }
             ])
-            if (reviews.length > 0) await Company.findByIdAndUpdate(review.company, { averageRating: reviews[0].averageRating });
+            if (reviews.length > 0) await Company.findByIdAndUpdate(review.company, { 
+                reviews: {
+                    averageRating: reviews[0].averageRating,
+                    totalCount: reviews[0].totalCount 
+                }
+            });
 
             return review.populate('company');
         },

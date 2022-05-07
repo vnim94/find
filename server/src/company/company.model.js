@@ -29,11 +29,18 @@ const CompanySchema = new Schema({
         perks: [TextSchema],
         diversity: String
     },
-    averageRating: {
-        type: Number,
-        min: 0.0,
-        max: 5.0,
-        default: 0.0
+    reviews: {
+        averageRating: {
+            type: Number,
+            min: 0.0,
+            max: 5.0,
+            default: 0.0
+        },
+        totalCount: {
+            type: Number,
+            default: 0,
+            required: true
+        }
     },
     size: {
         type: String,

@@ -9,7 +9,7 @@ const CompanyTypes = `
         overview: String
         mission: String
         culture: Culture
-        averageRating: Float
+        reviews: Review
         size: String
         logo: String
     }
@@ -25,6 +25,11 @@ const CompanyTypes = `
     type Content {
         heading: String
         text: String
+    }
+
+    type Review {
+        averageRating: Float
+        totalCount: Int
     }
 
     type CompanyExists implements Error {

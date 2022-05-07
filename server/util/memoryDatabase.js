@@ -72,7 +72,6 @@ exports.seed = async () => {
         industry: industryA._id,
         headquarters: '987 XYZ Street',
         overview: "overview",
-        averageRating: 3.4,
         size: 'More than 10,001'
     })
 
@@ -137,7 +136,13 @@ exports.seed = async () => {
 
     const reviews = await Review.aggregate([
         { $match: { company: companyA._id } },
-        { $group: { _id: '$company' , averageRating: { $avg: '$averageRating' } } }
+        { $group: { _id: '$company' , averageRating: { $avg: '$averageRating' }, totalCount: { $sum: 1 } } },
+        { $project: { _id: 0 } }
     ])
-    if (reviews.length > 0) await Company.findByIdAndUpdate(companyA._id, { averageRating: reviews[0].averageRating });
+    if (reviews.length > 0) await Company.findByIdAndUpdate(companyA._id, { 
+        reviews: {
+            averageRating: reviews[0].averageRating,
+            totalCount: reviews[0].totalCount 
+        }
+    });
 }
