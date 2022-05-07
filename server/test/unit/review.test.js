@@ -108,12 +108,12 @@ describe('review mutations', () => {
                     user: "${user._id}", 
                     company: "${company._id}",
                     ratings: {
-                        benefits: 5.0,
-                        career: 5.0,
-                        balance: 5.0,
-                        environment: 5.0,
-                        management: 5.0,
-                        diversity: 5.0
+                        benefits: 4.0,
+                        career: 4.0,
+                        balance: 4.0,
+                        environment: 4.0,
+                        management: 4.0,
+                        diversity: 4.0
                     },
                     good: "good work/life balance", 
                     bad: "short staffed", 
@@ -142,10 +142,13 @@ describe('review mutations', () => {
         `
         const result = await tester.graphql(createReview, {}, context, {});
         expect(result.data.createReview.title).toBe('Pretty good');
-        expect(result.data.createReview.averageRating).toBe(5.0);
-
+        expect(result.data.createReview.averageRating).toBe(4.0);
+        
         const newReview = await Review.findOne({ title: 'Pretty good' });
         expect(newReview.title).toBeTruthy();
+
+        const updatedCompany = await Company.findOne({ name: 'McDonalds' });
+        expect(updatedCompany.averageRating).toBe(4.5)
     })
 
     test('updateReview', async () => {
@@ -190,10 +193,13 @@ describe('review mutations', () => {
                 }
             }
         `
-        const result = await tester.graphql(updateReview, {}, context, {});
+        await tester.graphql(updateReview, {}, context, {});
         const updatedReview = await Review.findById(review._id);
         expect(updatedReview.title).toBe('Not bad');
         expect(updatedReview.averageRating).toBe(4);
+
+        const updatedCompany = await Company.findOne({ name: 'McDonalds' });
+        expect(updatedCompany.averageRating).toBe(4);
     })
 
     test('deleteReview', async () => {

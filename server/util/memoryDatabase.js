@@ -63,7 +63,6 @@ exports.seed = async () => {
         industry: industryA._id,
         headquarters: '123 ABC Street',
         overview: "overview",
-        averageRating: 3.4,
         size: 'More than 10,001'
     })
 

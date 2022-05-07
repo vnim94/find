@@ -32,7 +32,8 @@ const CompanySchema = new Schema({
     averageRating: {
         type: Number,
         min: 0.0,
-        max: 5.0
+        max: 5.0,
+        default: 0.0
     },
     size: {
         type: String,

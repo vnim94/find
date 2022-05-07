@@ -2,6 +2,29 @@ const { typeDefs, resolvers } = require('../../src/api/schema');
 const EasyGraphQLTester = require('easygraphql-tester');
 const tester = new EasyGraphQLTester(typeDefs, resolvers);
 
+const database = require('../../util/memoryDatabase');
+const Company = require('../../src/company/company.model');
+const Industry = require('../../src/job/industry.model');
+let context;
+let company;
+let industry;
+
+beforeAll(async () => {
+    await database.connect();
+    await database.seed();
+    company = await Company.findOne();
+    industry = await Industry.findOne({ code: '0000' })
+    context = { user: 'abc' };
+});
+
+afterAll(async () => { await database.disconnect() });
+
+describe('company model', () => {
+    test.only('average rating', () => {
+        expect(company.averageRating).toBe(5);
+    });
+})
+
 describe('company queries', () => {
     test('company', () => {
 
@@ -27,23 +50,6 @@ describe('company mutations', () => {
 })
 
 describe('company resolvers', () => {
-
-    const database = require('../../util/memoryDatabase');
-    const Company = require('../../src/company/company.model');
-    const Industry = require('../../src/job/industry.model');
-    let context;
-    let company;
-    let industry;
-
-    beforeAll(async () => {
-        await database.connect();
-        await database.seed();
-        company = await Company.findOne();
-        industry = await Industry.findOne({ code: '0000' })
-        context = { user: 'abc' };
-    });
-
-    afterAll(async () => { await database.disconnect() });
 
     test('company', async () => {
         const companyQuery = `
