@@ -63,6 +63,12 @@ const ReviewSchema = new Schema({
         required: true
     },
     ratings: RatingsSchema,
+    averageRating: {
+        type: Number,
+        min: 0.0,
+        max: 5.0,
+        default: function() { return calculateAverageRating(this.ratings) }
+    },
     good: {
         type: String,
         minLength: 5,
@@ -107,12 +113,18 @@ const ReviewSchema = new Schema({
         type: Boolean,
         default: false
     }
-},{
-    toJSON: { virtuals: true }
 })
 
-ReviewSchema.virtual('averageRating').get(function() {
-    return (this.ratings.benefits + this.ratings.career + this.ratings.balance + this.ratings.environment + this.ratings.management + this.ratings.diversity) / 6
+ReviewSchema.post('findOneAndUpdate', async function() {
+    const review = await this.model.findOne(this.getQuery());
+    review.set({ averageRating: calculateAverageRating(review.ratings) });
+    await review.save();
 })
+
+function calculateAverageRating(ratings) {
+    const { benefits, career, balance, environment, management, diversity } = ratings;
+    let averageRating = (benefits + career + balance + environment + management + diversity) / 6;
+    return Math.round(averageRating * 10) / 10;
+}
 
 module.exports = model('Review', ReviewSchema);
