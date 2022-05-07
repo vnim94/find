@@ -42,7 +42,7 @@ CompanySchema.methods.getAverageReviewRating = async function() {
         { $group: { _id: this._id, averageRating: { $avg: "$averageRating" } }}
     ])
 
-    return review[0].averageRating;
+    return review[0].averageRating.toFixed(1);
 }
 
 module.exports = model('Company', CompanySchema);

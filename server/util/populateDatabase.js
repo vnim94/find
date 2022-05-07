@@ -349,7 +349,7 @@ function populateReviews(callback) {
     for (let i = 0; i < 150; i++) {
         let profession = Object.keys(professionTypes)[getRandomIndex(Object.keys(professionTypes).length)]
         let details = {
-            title: faker.lorem.words(2),
+            title: faker.lorem.words(3).slice(0,30),
             user: users[getRandomIndex(users.length)]._id,
             company: companies[getRandomIndex(companies.length)]._id,
             ratings: {

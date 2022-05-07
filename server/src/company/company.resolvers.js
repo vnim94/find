@@ -16,6 +16,7 @@ const CompanyResolvers = {
             const company = await Company.findById(id).populate('industry');
             if (!company) return { __typename: 'NotFound', message: 'Company not found', id: id }
             company.averageRating = await company.getAverageReviewRating();
+            
             return company
         },
         companies: async () => {
