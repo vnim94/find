@@ -238,29 +238,31 @@ function createReview(details, callback) {
             return;
         }
 
-        Review.aggregate([
-            { $match: { company: details.company } },
-            { $group: { _id: '$company', averageRating: { $avg: '$averageRating' }, totalCount: { $sum: 1 } } },
-            { $project: { _id: 0 } }
-        ], function(err, reviews) {
-            if (err) {
-                console.log(`[ERROR] Error aggregating reviews for ${details.company} - ${err}`)
-            } else {
-                Company.findByIdAndUpdate(details.company, {
-                    reviews: {
-                        averageRating: Math.round(reviews[0].averageRating * 10) / 10,
-                        totalCount: reviews[0].totalCount
-                    }
-                },function(err, result) {
-                    console.log(`[INFO] Updated ${details.company} reviews average rating and totalCount`)
-                })
-            }
-        })
-
         console.log(`[INFO] New review created: ${review._id}`);
         callback(null, review);
     })
     
+}
+
+function updateAverageRating(company, callback) {
+    Review.aggregate([
+        { $match: { company: company._id } },
+        { $group: { _id: '$company', averageRating: { $avg: '$ratings.average' }, totalCount: { $count: {} } } },
+    ], function(err, reviews) {
+        if (err) {
+            console.log(`[ERROR] Error aggregating reviews for ${company.name} - ${err}`)
+        } else {
+            Company.findByIdAndUpdate(company._id, {
+                reviews: {
+                    averageRating: Math.round(reviews[0].averageRating * 10) / 10,
+                    totalCount: reviews[0].totalCount
+                }
+            },function(err, result) {
+                console.log(`[INFO] Updated ${company.name} reviews average rating and totalCount`)
+            })
+        }
+        callback(null, reviews)
+    })
 }
 
 function populateUsers(callback) {
@@ -390,6 +392,14 @@ function populateReviews(callback) {
     async.series(reviewsToCreate, callback);
 }
 
+function populateAverageRatings(callback) {
+    let updates = [];
+    companies.forEach(company => {
+        updates.push(function(callback) { updateAverageRating(company, callback) });
+    })
+    async.series(updates, callback);
+}
+
 function getRandomIndex(length) {
     return Math.floor(Math.random() * length);
 }
@@ -403,7 +413,8 @@ async.series([
     populateCompanies, 
     populateProfessions, 
     populateJobs, 
-    populateReviews
+    populateReviews,
+    populateAverageRatings
 ], (err) => {
     if (err) {
         console.log(`[ERROR] ${err}`);

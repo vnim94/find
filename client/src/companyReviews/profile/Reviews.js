@@ -1,11 +1,28 @@
 import './Review.css';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getCompanyReviews } from '../company.api';
 
 function Reviews() {
+
+    const company = useSelector(state => state.company.details);
+    const reviewsSummary = useSelector(state => state.company.reviewsSummary);
+    const { benefits, career, balance, environment, management, diversity } = reviewsSummary.ratings
+    const [reviews, setReviews] = useState();
+
+    useEffect(() => {
+        async function fetchCompanyReviews(id) {
+            const response = await getCompanyReviews(id);
+            if (response.data.reviews) setReviews(response.data.reviews);
+        }
+        fetchCompanyReviews(company.id)
+    },[company])
+
     return (<>
         <div className="company-profile-section flex-col">
             <div>
-                <span className="medium">Working at Expedia Group</span>
-                <RatingDashboard rating={3.3}/>
+                <span className="medium">Working at {company.name}</span>
+                <RatingsDashboard summary={reviewsSummary}/>
                 <div className="flex flex-jc-c">
                     <span className="small">Your trust is our main concern so these ratings for Find are shared 'as is' from employees in line with our <a className="green" href="/">community guidelines</a></span>
                 </div>
@@ -15,27 +32,27 @@ function Reviews() {
             <hr></hr>
             <div className="flex flex-row flex-jc-c">
                 <div className="company-ratings">
-                    <Rating text="Work/Life balance" rating={3.2}/>
-                    <Rating text="Career development" rating={3.2}/>
-                    <Rating text="Benefits &amp; perks" rating={3.2}/>
-                    <Rating text="Management" rating={3.2}/>
-                    <Rating text="Working environment" rating={3.2}/>
-                    <Rating text="Diversity &amp; equal opportunity" rating={3.2}/>
+                    <Rating text="Work/Life balance" rating={balance}/>
+                    <Rating text="Career development" rating={career}/>
+                    <Rating text="Benefits &amp; perks" rating={benefits}/>
+                    <Rating text="Management" rating={management}/>
+                    <Rating text="Working environment" rating={environment}/>
+                    <Rating text="Diversity &amp; equal opportunity" rating={diversity}/>
                 </div>
             </div>
         </div>
         <div className="company-profile-section flex-col">
             <div className="flex flex-jc-sb">
-                <span>Showing <b>19</b> reviews sorted by <b>Most helpful</b></span>
+                <span>Showing <b>{reviewsSummary.totalCount}</b> reviews sorted by <b>Most helpful</b></span>
                 <div className="flex flex-row">
                     <span>Sort by <b>Most helpful</b></span>
                     <span className="material-icons-outlined">expand_more</span>
                 </div>
             </div>
-            <ReviewCard rating={5.0}/>
-            <hr></hr>
-            <ReviewCard rating={5.0}/>
-            <hr></hr>
+            {reviews && reviews.map((review, index) => <>
+                <ReviewCard key={index} review={review} />
+                <hr></hr>
+            </>)}
             <Paginator />
             <div className="disclaimer">
                 <p className="small">
@@ -48,8 +65,7 @@ function Reviews() {
     </>)
 }
 
-function Rating(props) {
-    const { text, rating } = props;
+function Rating({ text, rating }) {
     return (
         <div className="company-rating flex flex-col">
             <span>{text}</span>
@@ -61,18 +77,22 @@ function Rating(props) {
     )
 }
 
-function ReviewCard({ rating }) {
+function ReviewCard({ review }) {
+
+    const { date, title, ratings, good, bad, role, helpful, flagged } = review;
+    const reviewDate = new Date(date).toDateString().split(' ')
+
     return (
         <div className="review-card">
             <div className="review-card-details">
                 <div className="flex flex-ai-c">
-                    <RatingStars rating={rating} />
-                    <span className="medium">{rating}</span>
+                    <RatingStars rating={ratings.average} />
+                    <span className="medium">{ratings.average}</span>
                     <span className="material-icons-outlined">expand_more</span>
                 </div>
                 <div className="flex flex-col">
-                    <span>Expedia</span>
-                    <span className="grey">Apr 2021</span>
+                    <span>{role}</span>
+                    <span className="grey">{`${reviewDate[1]} ${reviewDate[3]}`}</span>
                 </div>
                 <div className="flex flex-col">
                     <span className="small">New South Wales, Australia</span>
@@ -81,15 +101,15 @@ function ReviewCard({ rating }) {
             </div>
             <div className="review-card-content">
                 <div>
-                    <span className="medium">More a family than a job</span>
+                    <span className="medium">{title}</span>
                 </div>
                 <div>
                     <b>The good things</b>
-                    <p>It has been a tough year but the team is what makes the company great! The perks are awesome as well.</p>
+                    <p>{good}</p>
                 </div>
                 <div>
                     <b>The challenges</b>
-                    <p>Covid has been a massive challenge which has upended the company but we are coming out the other side now.</p>
+                    <p>{bad}</p>
                 </div>
                 <div className="flex flex-jc-sb flex-ai-c">
                     <button className="bg-pale-green green helpful-btn flex flex-ai-c">
@@ -124,17 +144,17 @@ function Paginator(props) {
     )
 }
 
-export function RatingDashboard({ summary }) {
+export function RatingsDashboard({ summary }) {
     
-    const { averageRating, totalCount, ratingsCount, salary, recommend } = summary;
+    const { ratings, totalCount, ratingsCount, salary, recommend } = summary;
     const { one, two, three, four, five } = ratingsCount;
     const mostFrequentRating = Math.max(...Object.values(ratingsCount));
 
     return (
         <div className="flex flex-jc-sa">
             <div className="rating-card">
-                <span className="large">{averageRating}</span>
-                <RatingStars rating={averageRating}/>
+                <span className="large">{ratings.average}</span>
+                <RatingStars rating={ratings.average}/>
                 <span><b>{totalCount}</b> ratings in total</span>
             </div>
             <div className="rating-card">
@@ -157,7 +177,7 @@ export function RatingDashboard({ summary }) {
             <div className="rating-card">
                 <RatingCircle percent={recommend}/>
                 <div>
-                    <span className="small"><b>{recommend * 100}%</b> employees recommend this employer to friends</span>
+                    <span className="small"><b>{recommend}%</b> employees recommend this employer to friends</span>
                 </div>
             </div>
         </div>

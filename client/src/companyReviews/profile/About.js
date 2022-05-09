@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { RatingDashboard } from './Reviews';
+import { RatingsDashboard } from './Reviews';
 import { useNavigate } from 'react-router-dom';
 
 function About() {
@@ -53,7 +53,7 @@ function About() {
                 <span className="large">Reviews</span>
                 <span className="green underline" onClick={handleClick}>See all reviews</span>
             </div>
-            <RatingDashboard summary={reviewsSummary}/>
+            <RatingsDashboard summary={reviewsSummary}/>
             <div>
                 <span className="small">Your trust is our main concern so these ratings for Find are shared 'as is' from employees in line with our <a href="/">community guidelines</a></span>
             </div>

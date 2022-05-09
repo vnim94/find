@@ -13,7 +13,7 @@ const ReviewResolvers = {
     },
     Query: {
         review: async (_, { id }) => {
-            const review = await Review.findById(id).populate('company');
+            const review = await Review.findById(id);
             if (!review) return { __typename: 'NotFound', message: 'Review not found', id: id }
             return review;
         },

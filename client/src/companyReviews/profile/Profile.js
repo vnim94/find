@@ -23,17 +23,17 @@ function CompanyProfile() {
     }
 
     useEffect(() => {
-        async function fetchCompany() {
-            const response = await getCompany(companyId);
+        async function fetchCompany(id) {
+            const response = await getCompany(id);
             if (response.data.company) dispatch(setCompany(response.data.company));
         }
-        async function fetchCompanyReviewsSummary() {
-            const response = await getCompanyReviewSummary(companyId);
+        async function fetchCompanyReviewsSummary(id) {
+            const response = await getCompanyReviewSummary(id);
             if (response.data.reviewsSummary) dispatch(setReviewsSummary(response.data.reviewsSummary));
         }
-        fetchCompany();
-        fetchCompanyReviewsSummary();
-    },[])
+        fetchCompany(companyId);
+        fetchCompanyReviewsSummary(companyId);
+    },[dispatch, companyId])
 
     return (
         <div className="company-profile">

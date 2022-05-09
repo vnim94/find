@@ -46,8 +46,8 @@ const getCompanyReviewsRequest = (id) => `
         reviews(company: "${id}") {
             ... on Review {
                 title
-                user
                 ratings {
+                    average
                     benefits
                     career
                     balance
@@ -55,7 +55,6 @@ const getCompanyReviewsRequest = (id) => `
                     management
                     diversity
                 }
-                averageRating
                 good
                 bad
                 date
@@ -73,7 +72,15 @@ const getCompanyReviewsRequest = (id) => `
 const getCompanyReviewsSummaryRequest = (id) => `
     {
         reviewsSummary(company: "${id}") {
-            averageRating
+            ratings {
+                average
+                benefits
+                career
+                balance
+                environment
+                management
+                diversity
+            }
             totalCount
             ratingsCount {
                 one
@@ -120,4 +127,8 @@ export const getCompany = async (id) => {
 
 export const getCompanyReviewSummary = async (id) => {
     return await request(getCompanyReviewsSummaryRequest(id));
+}
+
+export const getCompanyReviews = async (id) => {
+    return await request(getCompanyReviewsRequest(id));
 }
