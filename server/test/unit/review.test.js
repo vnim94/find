@@ -35,7 +35,6 @@ describe('review model', () => {
 })
 
 describe('review queries', () => {
-
     test('review', async () => {
         const reviewQuery = `
             {
@@ -96,6 +95,34 @@ describe('review queries', () => {
         expect(result.data.reviews.length).toBe(1);
         expect(result.data.reviews[0].title).toBe('Great place to work');
         expect(result.data.reviews[0].averageRating).toBe(5.0)
+    })
+
+    test('reviewsSummary', async () => {
+        const reviewsSummaryQuery = `
+            {
+                reviewsSummary(company: "${company._id}") {
+                    averageRating
+                    totalCount
+                    ratingsCount {
+                        one
+                        two
+                        three
+                        four
+                        five
+                    }
+                    salary
+                    recommend
+                }
+            }
+        `
+        const result = await tester.graphql(reviewsSummaryQuery, {}, {}, {});
+        
+        expect(result.data.reviewsSummary).toBeTruthy();
+        expect(result.data.reviewsSummary.averageRating).toBe(5);
+        expect(result.data.reviewsSummary.totalCount).toBe(1);
+        expect(result.data.reviewsSummary.ratingsCount.five).toBe(1);
+        expect(result.data.reviewsSummary.salary).toBe(1);
+        expect(result.data.reviewsSummary.recommend).toBe(1);
     })
 })
 

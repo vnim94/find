@@ -17,6 +17,22 @@ const ReviewTypes = `
         flagged: Boolean!
     }
 
+    type ReviewsSummary {
+        averageRating: Float!
+        totalCount: Int!
+        ratingsCount: Ratings!
+        salary: Float!
+        recommend: Float!
+    }
+
+    type Ratings {
+        one: Int
+        two: Int
+        three: Int
+        four: Int
+        five: Int
+    }
+
     type Rating {
         benefits: Float!
         career: Float!
@@ -53,6 +69,7 @@ const ReviewTypes = `
     type Query {
         review(id: ID!): ReviewResult!
         reviews(company: ID): [Review]!
+        reviewsSummary(company: ID): ReviewsSummary!
     }
 
     type Mutation {

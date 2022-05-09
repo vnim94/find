@@ -112,7 +112,6 @@ let companies = [];
 let industries = [];
 let professions = [];
 
-
 function createUser(firstName, lastName, email, location, password, phone, callback) {
 
     let details = {
@@ -157,9 +156,9 @@ function createLocation(suburb, city, state, region, callback) {
     })
 }
 
-function createCompany(name, website, industry, specialities, headquarters, overview, mission, culture, averageRating, size, logo, callback) {
+function createCompany(name, website, industry, specialities, headquarters, overview, mission, culture, size, logo, callback) {
 
-    let company = new Company({name, website, industry, specialities, headquarters, overview, mission, culture, averageRating, size, logo});
+    let company = new Company({name, website, industry, specialities, headquarters, overview, mission, culture, size, logo});
     
     company.save((err) => {
         if (err) {
@@ -239,6 +238,25 @@ function createReview(details, callback) {
             return;
         }
 
+        Review.aggregate([
+            { $match: { company: details.company } },
+            { $group: { _id: '$company', averageRating: { $avg: '$averageRating' }, totalCount: { $sum: 1 } } },
+            { $project: { _id: 0 } }
+        ], function(err, reviews) {
+            if (err) {
+                console.log(`[ERROR] Error aggregating reviews for ${details.company} - ${err}`)
+            } else {
+                Company.findByIdAndUpdate(details.company, {
+                    reviews: {
+                        averageRating: Math.round(reviews[0].averageRating * 10) / 10,
+                        totalCount: reviews[0].totalCount
+                    }
+                },function(err, result) {
+                    console.log(`[INFO] Updated ${details.company} reviews average rating and totalCount`)
+                })
+            }
+        })
+
         console.log(`[INFO] New review created: ${review._id}`);
         callback(null, review);
     })
@@ -283,7 +301,6 @@ function populateCompanies(callback) {
         let overview = faker.lorem.paragraph();
         let headquarters = `${faker.address.streetAddress()}, ${faker.address.cityName()}`
         let mission = faker.lorem.sentence();
-        let averageRating = parseFloat((Math.random() * 5).toFixed(1));
         let size = companySizes[getRandomIndex(companySizes.length)]
         let culture = {
             keyMessage: { heading: faker.lorem.words(), text: faker.lorem.sentence() },
@@ -291,7 +308,7 @@ function populateCompanies(callback) {
             perks: Array(Math.ceil(Math.random() * 6)).fill().map(_ => { return { heading: faker.lorem.words(), text: faker.lorem.sentence() } }),
             diversity: faker.lorem.sentences(2)
         }
-        companiesToCreate.push(function(callback) { createCompany(company, website, industries[getRandomIndex(industries.length)], specialities, headquarters, overview, mission, culture, averageRating, size, logo, callback) });
+        companiesToCreate.push(function(callback) { createCompany(company, website, industries[getRandomIndex(industries.length)], specialities, headquarters, overview, mission, culture, size, logo, callback) });
     })
 
     async.series(companiesToCreate, callback);
@@ -353,12 +370,12 @@ function populateReviews(callback) {
             user: users[getRandomIndex(users.length)]._id,
             company: companies[getRandomIndex(companies.length)]._id,
             ratings: {
-                benefits: parseFloat((Math.random() * 5).toFixed(1)),
-                career: parseFloat((Math.random() * 5).toFixed(1)),
-                balance: parseFloat((Math.random() * 5).toFixed(1)),
-                environment: parseFloat((Math.random() * 5).toFixed(1)),
-                management: parseFloat((Math.random() * 5).toFixed(1)),
-                diversity: parseFloat((Math.random() * 5).toFixed(1))
+                benefits: Math.round(Math.random() * 5 * 10) / 10,
+                career: Math.round(Math.random() * 5 * 10) / 10,
+                balance: Math.round(Math.random() * 5 * 10) / 10,
+                environment: Math.round(Math.random() * 5 * 10) / 10,
+                management: Math.round(Math.random() * 5 * 10) / 10,
+                diversity: Math.round(Math.random() * 5 * 10) / 10
             },
             good: faker.lorem.sentences(3),
             bad: faker.lorem.sentences(3),
@@ -388,13 +405,12 @@ async.series([
     populateJobs, 
     populateReviews
 ], (err) => {
-
     if (err) {
         console.log(`[ERROR] ${err}`);
     }
     else {
         console.log('[INFO] Data successfully loaded!');
     }
-    mongoose.connection.close();
-
+    // mongoose.connection.close();
 });
+

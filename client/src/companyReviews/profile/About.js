@@ -1,10 +1,17 @@
 import { useSelector } from "react-redux";
 import { RatingDashboard } from './Reviews';
+import { useNavigate } from 'react-router-dom';
 
 function About() {
 
-    const company = useSelector(state => state.company.details);    
-    const { averageRating, name, website, industry, specialities, headquarters, overview, mission, size } = company;
+    const navigate = useNavigate();
+    const company = useSelector(state => state.company.details); 
+    const reviewsSummary = useSelector(state => state.company.reviewsSummary);   
+    const { name, website, industry, specialities, headquarters, overview, mission, size } = company;
+
+    const handleClick = () => {
+        navigate('reviews');
+    }
 
     return (<>
         <div className="company-profile-section flex-col">
@@ -44,9 +51,9 @@ function About() {
         <div className="company-profile-section flex-col">
             <div className="flex flex-ai-c flex-jc-sb">
                 <span className="large">Reviews</span>
-                <a href="/">See all reviews</a>
+                <span className="green underline" onClick={handleClick}>See all reviews</span>
             </div>
-            <RatingDashboard rating={averageRating}/>
+            <RatingDashboard summary={reviewsSummary}/>
             <div>
                 <span className="small">Your trust is our main concern so these ratings for Find are shared 'as is' from employees in line with our <a href="/">community guidelines</a></span>
             </div>

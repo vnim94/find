@@ -131,7 +131,7 @@ exports.seed = async () => {
         role: 'burger flipper',
         location: locationA._id,
         recommend: true,
-        salary: 'Low'
+        salary: 'Average'
     })
 
     const reviews = await Review.aggregate([

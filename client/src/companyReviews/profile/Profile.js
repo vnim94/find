@@ -1,14 +1,14 @@
 import './Profile.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCompany } from '../company.api';
+import { getCompany, getCompanyReviewSummary } from '../company.api';
 import About from './About';
 import Culture from './Culture';
 import CompanyJobs from './Jobs';
 import Reviews from './Reviews';
 import { RatingStars } from './Reviews';
-import { setCompany } from '../company.slice';
+import { setCompany, setReviewsSummary } from '../company.slice';
 
 function CompanyProfile() {
 
@@ -27,7 +27,12 @@ function CompanyProfile() {
             const response = await getCompany(companyId);
             if (response.data.company) dispatch(setCompany(response.data.company));
         }
+        async function fetchCompanyReviewsSummary() {
+            const response = await getCompanyReviewSummary(companyId);
+            if (response.data.reviewsSummary) dispatch(setReviewsSummary(response.data.reviewsSummary));
+        }
         fetchCompany();
+        fetchCompanyReviewsSummary();
     },[])
 
     return (
@@ -42,8 +47,8 @@ function CompanyProfile() {
                             <div className="company-review-rating">
                                 <span>{company.name}</span>
                                 <div className="flex flex-row">
-                                    <RatingStars rating={company.averageRating} />
-                                    <span>{company.averageRating} total rating from <a href="/">266 reviews</a></span>
+                                    <RatingStars rating={company.reviews.averageRating} />
+                                    <span>{company.reviews.averageRating} total rating from <a href="/">{company.reviews.totalCount} reviews</a></span>
                                 </div>
                             </div>
                             <div>

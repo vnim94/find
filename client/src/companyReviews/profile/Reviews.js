@@ -124,35 +124,40 @@ function Paginator(props) {
     )
 }
 
-export function RatingDashboard({ rating }) {
+export function RatingDashboard({ summary }) {
+    
+    const { averageRating, totalCount, ratingsCount, salary, recommend } = summary;
+    const { one, two, three, four, five } = ratingsCount;
+    const mostFrequentRating = Math.max(...Object.values(ratingsCount));
+
     return (
         <div className="flex flex-jc-sa">
             <div className="rating-card">
-                <span className="large">{rating}</span>
-                <RatingStars rating={3.3}/>
-                <span><b>21</b> ratings in total</span>
+                <span className="large">{averageRating}</span>
+                <RatingStars rating={averageRating}/>
+                <span><b>{totalCount}</b> ratings in total</span>
             </div>
             <div className="rating-card">
-                <RatingBar type="5" count={5} percent={5/7}/>
-                <RatingBar type="4" count={7} percent={7/7}/>
-                <RatingBar type="3" count={3} percent={3/7}/>
-                <RatingBar type="2" count={1} percent={1/7}/>
-                <RatingBar type="1" count={5} percent={5/7}/>
+                <RatingBar type="5" count={five} percent={five/mostFrequentRating}/>
+                <RatingBar type="4" count={four} percent={four/mostFrequentRating}/>
+                <RatingBar type="3" count={three} percent={three/mostFrequentRating}/>
+                <RatingBar type="2" count={two} percent={two/mostFrequentRating}/>
+                <RatingBar type="1" count={one} percent={one/mostFrequentRating}/>
             </div>
             <div className="rating-card">
-                <RatingCircle percent={0.71}>
+                <RatingCircle percent={salary}>
                     <div className="dollar-overlay">
                         <span className="material-icons-outlined">attach_money</span>
                     </div>
                 </RatingCircle>
                 <div>
-                    <span className="small"><b>71%</b> rate salary as high or average</span>
+                    <span className="small"><b>{salary}%</b> rate salary as high or average</span>
                 </div>
             </div>
             <div className="rating-card">
-                <RatingCircle percent={0.66}/>
+                <RatingCircle percent={recommend}/>
                 <div>
-                    <span className="small"><b>66%</b> employees recommend this employer to friends</span>
+                    <span className="small"><b>{recommend * 100}%</b> employees recommend this employer to friends</span>
                 </div>
             </div>
         </div>
@@ -160,6 +165,7 @@ export function RatingDashboard({ rating }) {
 }
 
 function RatingBar({ type, percent, count }) {
+    
     return (
         <div className="rating-bar flex flex-row flex-ai-c flex-jc-sb">
             <span>{type}</span>
@@ -175,7 +181,7 @@ function RatingCircle({ percent, children }) {
     return (<div className="relative">
         <div className="rating-circle" style={{background: `conic-gradient(var(--dark-green) ${percent * 360}deg, var(--light-grey) 0deg)`}}>
             <div className="rating-circle-overlay">
-                <span className="large">{percent * 100}%</span>
+                <span className="large">{Math.round(percent * 100 * 100) / 100}%</span>
             </div>
             {children}
         </div>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import CompanySearch from './CompanySearch';
 import { getCompanies } from '../company.api';
 import { Loading } from '../../jobSearch/jobs/Jobs';
+import { RatingStars } from '../profile/Reviews';
 
 function Companies(props) {
 
@@ -42,7 +43,6 @@ function Companies(props) {
 function Tile({ company }) {
 
     const navigate = useNavigate();
-
     const handleClick = () => {
         navigate(`${company.name.toLowerCase()}-${company.id}`);
     }
@@ -58,9 +58,9 @@ function Tile({ company }) {
             <div className="company-details">
                 <span><b>{company.name}</b></span>
                 <div className="rating">
-                    {Array(5).fill().map((_,index) => { return <span key={index} className="medium material-icons-outlined">star</span> })}
+                    <RatingStars rating={company.reviews.averageRating} />
                 </div>
-                <span className="small">3,471 ratings</span>
+                <span className="small">{company.reviews.totalCount} ratings</span>
             </div>
         </div>
     )

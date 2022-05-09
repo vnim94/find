@@ -30,10 +30,60 @@ const getCompanyRequest = (id) => `
                     }
                     diversity
                 }
-                averageRating
+                reviews {
+                    averageRating
+                    totalCount
+                }
                 size
                 logo
             }
+        }
+    }
+`
+
+const getCompanyReviewsRequest = (id) => `
+    {
+        reviews(company: "${id}") {
+            ... on Review {
+                title
+                user
+                ratings {
+                    benefits
+                    career
+                    balance
+                    environment
+                    management
+                    diversity
+                }
+                averageRating
+                good
+                bad
+                date
+                role
+                location
+                recommend
+                salary
+                helpful
+                flagged
+            }
+        }
+    }
+`
+
+const getCompanyReviewsSummaryRequest = (id) => `
+    {
+        reviewsSummary(company: "${id}") {
+            averageRating
+            totalCount
+            ratingsCount {
+                one
+                two
+                three
+                four
+                five
+            }
+            salary
+            recommend
         }
     }
 `
@@ -50,7 +100,10 @@ const getCompaniesRequest = `
             specialities
             headquarters
             overview
-            averageRating
+            reviews {
+                averageRating
+                totalCount
+            }
             size
             logo
         }
@@ -63,4 +116,8 @@ export const getCompanies = async () => {
 
 export const getCompany = async (id) => {
     return await request(getCompanyRequest(id));
+}
+
+export const getCompanyReviewSummary = async (id) => {
+    return await request(getCompanyReviewsSummaryRequest(id));
 }
