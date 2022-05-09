@@ -5,7 +5,6 @@ const ReviewTypes = `
         user: User!
         company: Company!
         ratings: Rating!
-        averageRating: Float!
         good: String!
         bad: String!
         date: Date!
@@ -18,14 +17,14 @@ const ReviewTypes = `
     }
 
     type ReviewsSummary {
-        averageRating: Float!
+        ratings: Rating!
         totalCount: Int!
-        ratingsCount: Ratings!
+        ratingsCount: RatingStars!
         salary: Float!
         recommend: Float!
     }
 
-    type Ratings {
+    type RatingStars {
         one: Int
         two: Int
         three: Int
@@ -34,6 +33,7 @@ const ReviewTypes = `
     }
 
     type Rating {
+        average: Float
         benefits: Float!
         career: Float!
         balance: Float!
@@ -43,6 +43,7 @@ const ReviewTypes = `
     }
 
     input RatingInput {
+        average: Float
         benefits: Float!
         career: Float!
         balance: Float!

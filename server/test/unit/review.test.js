@@ -26,12 +26,10 @@ beforeAll(async () => {
 afterAll(async () => { await database.disconnect() });
 
 describe('review model', () => {
-
     test('average rating', async () => {
-        expect(review.averageRating).toBeTruthy();
-        expect(review.averageRating).toBe(5.0);
+        expect(review.ratings.average).toBeTruthy();
+        expect(review.ratings.average).toBe(5.0);
     })
-
 })
 
 describe('review queries', () => {
@@ -45,6 +43,7 @@ describe('review queries', () => {
                             name
                         }
                         ratings {
+                            average
                             benefits
                             career
                             balance
@@ -52,7 +51,6 @@ describe('review queries', () => {
                             management
                             diversity
                         }
-                        averageRating
                         good
                         bad
                         role
@@ -65,7 +63,7 @@ describe('review queries', () => {
         `
         const result = await tester.graphql(reviewQuery, {}, {}, {});
         expect(result.data.review.title).toBe('Great place to work')
-        expect(result.data.review.averageRating).toBe(5.0)
+        expect(result.data.review.ratings.average).toBe(5.0)
     })
 
     test('reviews', async () => {
@@ -74,6 +72,7 @@ describe('review queries', () => {
                 reviews(company: "${company._id}") {
                     title
                     ratings {
+                        average
                         benefits
                         career
                         balance
@@ -81,7 +80,6 @@ describe('review queries', () => {
                         management
                         diversity
                     }
-                    averageRating
                     good
                     bad
                     role
@@ -94,14 +92,22 @@ describe('review queries', () => {
         const result = await tester.graphql(reviewsQuery, {}, {}, {});
         expect(result.data.reviews.length).toBe(1);
         expect(result.data.reviews[0].title).toBe('Great place to work');
-        expect(result.data.reviews[0].averageRating).toBe(5.0)
+        expect(result.data.reviews[0].ratings.average).toBe(5.0)
     })
 
     test('reviewsSummary', async () => {
         const reviewsSummaryQuery = `
             {
                 reviewsSummary(company: "${company._id}") {
-                    averageRating
+                    ratings {
+                        average
+                        benefits
+                        career
+                        balance
+                        environment
+                        management
+                        diversity
+                    }
                     totalCount
                     ratingsCount {
                         one
@@ -117,8 +123,7 @@ describe('review queries', () => {
         `
         const result = await tester.graphql(reviewsSummaryQuery, {}, {}, {});
         
-        expect(result.data.reviewsSummary).toBeTruthy();
-        expect(result.data.reviewsSummary.averageRating).toBe(5);
+        expect(result.data.reviewsSummary.ratings).toBeTruthy();
         expect(result.data.reviewsSummary.totalCount).toBe(1);
         expect(result.data.reviewsSummary.ratingsCount.five).toBe(1);
         expect(result.data.reviewsSummary.salary).toBe(1);
@@ -154,7 +159,9 @@ describe('review mutations', () => {
                         company {
                             name
                         }
-                        averageRating 
+                        ratings {
+                            average
+                        } 
                         good
                         bad
                         date
@@ -169,7 +176,7 @@ describe('review mutations', () => {
         `
         const result = await tester.graphql(createReview, {}, context, {});
         expect(result.data.createReview.title).toBe('Pretty good');
-        expect(result.data.createReview.averageRating).toBe(4.0);
+        expect(result.data.createReview.ratings.average).toBe(4.0);
         
         const newReview = await Review.findOne({ title: 'Pretty good' });
         expect(newReview.title).toBeTruthy();
@@ -203,6 +210,7 @@ describe('review mutations', () => {
                     ... on Review {
                         title
                         ratings {
+                            average
                             benefits
                             career
                             balance
@@ -210,7 +218,6 @@ describe('review mutations', () => {
                             management
                             diversity
                         }
-                        averageRating
                         good
                         bad
                         role
@@ -224,7 +231,7 @@ describe('review mutations', () => {
         await tester.graphql(updateReview, {}, context, {});
         const updatedReview = await Review.findById(review._id);
         expect(updatedReview.title).toBe('Not bad');
-        expect(updatedReview.averageRating).toBe(4);
+        expect(updatedReview.ratings.average).toBe(4);
 
         const updatedCompany = await Company.findOne({ name: 'McDonalds' });
         expect(updatedCompany.reviews.averageRating).toBe(4);

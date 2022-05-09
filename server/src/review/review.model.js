@@ -1,7 +1,15 @@
 const { Schema, model } = require('mongoose');
-const Company = require('../company/company.model');
 
 const RatingsSchema = new Schema({
+    average: {
+        type: Number,
+        min: 0.0,
+        max: 5.0,
+        default: function() { 
+            let averageRating = (this.benefits + this.career + this.balance + this.environment + this.management + this.diversity) / 6;
+            return Math.round(averageRating * 10) / 10;
+        }
+    },
     benefits: {
         type: Number,
         default: 0.0,
@@ -64,12 +72,6 @@ const ReviewSchema = new Schema({
         required: true
     },
     ratings: RatingsSchema,
-    averageRating: {
-        type: Number,
-        min: 0.0,
-        max: 5.0,
-        default: function() { return calculateAverageRating(this.ratings) }
-    },
     good: {
         type: String,
         minLength: 5,
@@ -115,11 +117,5 @@ const ReviewSchema = new Schema({
         default: false
     }
 })
-
-function calculateAverageRating(ratings) {
-    const { benefits, career, balance, environment, management, diversity } = ratings;
-    let averageRating = (benefits + career + balance + environment + management + diversity) / 6;
-    return Math.round(averageRating * 10) / 10;
-}
 
 module.exports = model('Review', ReviewSchema);
