@@ -93,7 +93,7 @@ function Rating({ text, hide, rating }) {
 
 function ReviewCard({ review }) {
 
-    const { date, title, ratings, good, bad, role, helpful, flagged } = review;
+    const { date, title, ratings, good, bad, role, helpful } = review;
     const reviewDate = new Date(date).toDateString().split(' ')
     const [showRatingDropdown, setShowRatingDropdown] = useState(false);
 

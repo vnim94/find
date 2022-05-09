@@ -9,7 +9,7 @@ function Culture() {
         <div className="company-profile-section flex-col">
             <span className="large">Culture and values</span>
             <div>
-                <img></img>
+                <img alt="company-culture-values"></img>
                 <div className="key-message">
                     <span className="medium">{keyMessage.heading}</span>
                     <p>{keyMessage.text}</p>
@@ -32,10 +32,7 @@ function Culture() {
         <div className="company-profile-section flex-col">
             <span className="large">Gallery</span>
             <div className="gallery flex flex-jc-sb flex-wrap">
-                <img></img>
-                <img></img>
-                <img></img>
-                <img></img>
+                <img alt="company-gallery"></img>
             </div>
         </div>
     </>)

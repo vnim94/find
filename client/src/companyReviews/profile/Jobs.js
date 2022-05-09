@@ -28,12 +28,12 @@ function CompanyJobs() {
     }
 
     useEffect(() => {
-        async function fetchJobs() {
-            const response = await getJobs({ company: company.id, limit: 5 });
+        async function fetchJobs(id) {
+            const response = await getJobs({ company: id, limit: 5 });
             if (response.data) { setJobs(response.data.getJobs.jobs); setTotalJobs(response.data.getJobs.totalJobs)};
         }
-        fetchJobs();
-    },[])
+        fetchJobs(company.id);
+    },[company.id])
     
     return (<>
         <div className="company-profile-section flex-col">
