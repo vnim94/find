@@ -39,9 +39,7 @@ describe('review queries', () => {
                 review(id: "${review._id}") {
                     ... on Review {
                         title
-                        company {
-                            name
-                        }
+                        company
                         ratings {
                             average
                             benefits
@@ -156,9 +154,7 @@ describe('review mutations', () => {
                 ) {
                     ... on Review {
                         title
-                        company {
-                            name
-                        }
+                        company
                         ratings {
                             average
                         } 

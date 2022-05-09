@@ -84,6 +84,10 @@ select {
     font-weight: 600;
 }
 
+.cursor {
+    cursor: pointer;
+}
+
 /* colours */
 .bg-white {
     background-color: var(--white);

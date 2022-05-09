@@ -1,25 +1,12 @@
 .company-ratings {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 5px;
     width: 80%;
-}
-
-.company-rating {
-    width: 30%;
-}
-
-.company-rating > * + * {
-    margin-top: 5px;
 }
 
 .company-rating > * > .bold {
     margin-right: 5px;
-}
-
-.company-rating + .company-rating {
-    margin-bottom: 15px;
 }
 
 .company-review-rating {
@@ -129,6 +116,30 @@
     align-items: center;
     height: 90px;
     width: 90px;
+}
+
+.rating-dropdown {
+    background-color: var(--white);
+    border: 1px solid var(--grey);
+    border-radius: 5px;
+    box-shadow: 0 0 5px var(--grey);
+    padding: 15px;
+    position: absolute;
+    top: 35px;
+    width: 205px;
+    z-index: 2;
+}
+
+.rating-dropdown::after {
+    background-color: var(--white);
+    box-shadow: 1px 1px 0px var(--grey);
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: 69px;
+    height: 20px;
+    width: 20px;
+    transform: rotate(225deg);
 }
 
 .dollar-overlay {

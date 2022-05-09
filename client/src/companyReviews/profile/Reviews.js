@@ -2,6 +2,7 @@ import './Review.css';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getCompanyReviews } from '../company.api';
+import { formatNumber, formatPercent } from '../../helpers'; 
 
 function Reviews() {
 
@@ -9,6 +10,7 @@ function Reviews() {
     const reviewsSummary = useSelector(state => state.company.reviewsSummary);
     const { benefits, career, balance, environment, management, diversity } = reviewsSummary.ratings
     const [reviews, setReviews] = useState();
+    const [page, setPage] = useState();
 
     useEffect(() => {
         async function fetchCompanyReviews(id) {
@@ -53,7 +55,7 @@ function Reviews() {
                 <ReviewCard key={index} review={review} />
                 <hr></hr>
             </>)}
-            <Paginator />
+            <Paginator page={page} setPage={setPage}/>
             <div className="disclaimer">
                 <p className="small">
                     Company Reviews published on our site are the views and opinions of their authors and do not represent the views and opinions of Find.com.au or its personnel. 
@@ -65,12 +67,12 @@ function Reviews() {
     </>)
 }
 
-function Rating({ text, rating }) {
+function Rating({ text, hide, rating }) {
     return (
         <div className="company-rating flex flex-col">
-            <span>{text}</span>
-            <div className="flex flex-ai-c">
-                <span className="bold">{rating}</span>
+            <span className={hide && 'small'}>{text}</span>
+            <div className="flex">
+                {!hide && <span className="bold">{formatNumber(rating)}</span>}
                 <RatingStars rating={rating} />
             </div>
         </div>
@@ -81,14 +83,16 @@ function ReviewCard({ review }) {
 
     const { date, title, ratings, good, bad, role, helpful, flagged } = review;
     const reviewDate = new Date(date).toDateString().split(' ')
+    const [showRatingDropdown, setShowRatingDropdown] = useState(false);
 
     return (
         <div className="review-card">
             <div className="review-card-details">
-                <div className="flex flex-ai-c">
+                <div className="cursor relative flex flex-ai-c" onMouseOver={() => setShowRatingDropdown(true)} onMouseLeave={() => setShowRatingDropdown(false)}>
                     <RatingStars rating={ratings.average} />
-                    <span className="medium">{ratings.average}</span>
+                    <span className="medium">{formatNumber(ratings.average)}</span>
                     <span className="material-icons-outlined">expand_more</span>
+                    {showRatingDropdown && <RatingDropdown ratings={ratings}/>}
                 </div>
                 <div className="flex flex-col">
                     <span>{role}</span>
@@ -123,6 +127,22 @@ function ReviewCard({ review }) {
     )
 }
 
+function RatingDropdown({ ratings }) {
+
+    const { benefits, career, balance, environment, management, diversity } = ratings
+
+    return (
+        <div className="rating-dropdown">
+            <Rating text="Benefits &amp; perks" hide={true} rating={benefits}/>
+            <Rating text="Career development" hide={true} rating={career}/>
+            <Rating text="Work/Life balance" hide={true} rating={balance}/>
+            <Rating text="Working environment" hide={true} rating={environment}/>
+            <Rating text="Management" hide={true} rating={management}/>
+            <Rating text="Diversity &amp; equal opportunity" hide={true} rating={diversity}/>
+        </div>
+    )
+}
+
 function Paginator(props) {
 
     const handleClick = (event) => {
@@ -153,31 +173,31 @@ export function RatingsDashboard({ summary }) {
     return (
         <div className="flex flex-jc-sa">
             <div className="rating-card">
-                <span className="large">{ratings.average}</span>
+                <span className="large">{formatNumber(ratings.average)}</span>
                 <RatingStars rating={ratings.average}/>
                 <span><b>{totalCount}</b> ratings in total</span>
             </div>
             <div className="rating-card">
-                <RatingBar type="5" count={five} percent={five/mostFrequentRating}/>
-                <RatingBar type="4" count={four} percent={four/mostFrequentRating}/>
-                <RatingBar type="3" count={three} percent={three/mostFrequentRating}/>
-                <RatingBar type="2" count={two} percent={two/mostFrequentRating}/>
-                <RatingBar type="1" count={one} percent={one/mostFrequentRating}/>
+                <RatingBar type="5" count={five} percent={formatPercent(five/mostFrequentRating)}/>
+                <RatingBar type="4" count={four} percent={formatPercent(four/mostFrequentRating)}/>
+                <RatingBar type="3" count={three} percent={formatPercent(three/mostFrequentRating)}/>
+                <RatingBar type="2" count={two} percent={formatPercent(two/mostFrequentRating)}/>
+                <RatingBar type="1" count={one} percent={formatPercent(one/mostFrequentRating)}/>
             </div>
             <div className="rating-card">
-                <RatingCircle percent={salary}>
+                <RatingCircle percent={formatPercent(salary)}>
                     <div className="dollar-overlay">
                         <span className="material-icons-outlined">attach_money</span>
                     </div>
                 </RatingCircle>
                 <div>
-                    <span className="small"><b>{salary}%</b> rate salary as high or average</span>
+                    <span className="small"><b>{formatPercent(salary)}%</b> rate salary as high or average</span>
                 </div>
             </div>
             <div className="rating-card">
-                <RatingCircle percent={recommend}/>
+                <RatingCircle percent={formatPercent(recommend)}/>
                 <div>
-                    <span className="small"><b>{recommend}%</b> employees recommend this employer to friends</span>
+                    <span className="small"><b>{formatPercent(recommend)}%</b> employees recommend this employer to friends</span>
                 </div>
             </div>
         </div>
@@ -185,12 +205,11 @@ export function RatingsDashboard({ summary }) {
 }
 
 function RatingBar({ type, percent, count }) {
-    
     return (
         <div className="rating-bar flex flex-row flex-ai-c flex-jc-sb">
             <span>{type}</span>
             <div className="rating-bar-container">
-                <div className="rating-bar-fill" style={{width: `${percent * 100}%`}}></div>
+                <div className="rating-bar-fill" style={{width: `${percent}%`}}></div>
             </div>
             <span className="small">{count}</span>
         </div>
@@ -199,9 +218,9 @@ function RatingBar({ type, percent, count }) {
 
 function RatingCircle({ percent, children }) {
     return (<div className="relative">
-        <div className="rating-circle" style={{background: `conic-gradient(var(--dark-green) ${percent * 360}deg, var(--light-grey) 0deg)`}}>
+        <div className="rating-circle" style={{background: `conic-gradient(var(--dark-green) ${percent / 100 * 360}deg, var(--light-grey) 0deg)`}}>
             <div className="rating-circle-overlay">
-                <span className="large">{Math.round(percent * 100 * 100) / 100}%</span>
+                <span className="large">{percent}%</span>
             </div>
             {children}
         </div>

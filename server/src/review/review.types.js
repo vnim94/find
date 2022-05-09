@@ -3,7 +3,7 @@ const ReviewTypes = `
         id: ID!
         title: String!
         user: User!
-        company: Company!
+        company: ID!
         ratings: Rating!
         good: String!
         bad: String!

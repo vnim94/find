@@ -6,8 +6,7 @@ const RatingsSchema = new Schema({
         min: 0.0,
         max: 5.0,
         default: function() { 
-            let averageRating = (this.benefits + this.career + this.balance + this.environment + this.management + this.diversity) / 6;
-            return Math.round(averageRating * 10) / 10;
+            return (this.benefits + this.career + this.balance + this.environment + this.management + this.diversity) / 6;
         }
     },
     benefits: {

@@ -383,7 +383,7 @@ function populateReviews(callback) {
             bad: faker.lorem.sentences(3),
             role: professionTypes[profession][getRandomIndex(professionTypes[profession].length)],
             location: locations[getRandomIndex(locations.length)]._id,
-            recommend: Math.round(Math.random) === 1 ? true : false,
+            recommend: Math.round(Math.random()) === 1 ? true : false,
             salary: ['High', 'Average', 'Low'][getRandomIndex(3)]
         }
         reviewsToCreate.push(function(callback) { createReview(details, callback) });

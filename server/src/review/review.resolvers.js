@@ -59,31 +59,26 @@ const ReviewResolvers = {
                 }
             }])
 
-            let ratings = {
-                average: Math.round(summary[0].ratings[0].average * 10) / 10,
-                benefits: Math.round(summary[0].ratings[0].benefits * 10) / 10,
-                career: Math.round(summary[0].ratings[0].career * 10) / 10,
-                balance: Math.round(summary[0].ratings[0].balance * 10) / 10,
-                environment: Math.round(summary[0].ratings[0].environment * 10) / 10,
-                management: Math.round(summary[0].ratings[0].management * 10) / 10,
-                diversity: Math.round(summary[0].ratings[0].diversity * 10) / 10
-            }
+            const { ratings, count, ratingsCount, salary, recommend } = summary[0]
 
-            let ratingsCount = { one: 0, two: 0, three: 0, four: 0, five: 0 };
-            summary[0].ratingsCount.forEach(rating => {
-                if (rating._id === 1) ratingsCount.one = rating.count;
-                if (rating._id === 2) ratingsCount.two = rating.count;
-                if (rating._id === 3) ratingsCount.three = rating.count;
-                if (rating._id === 4) ratingsCount.four = rating.count;
-                if (rating._id === 5) ratingsCount.five = rating.count;
+            const { average, benefits, career, balance, environment, management, diversity } = ratings[0];
+            const allRatings = { average, benefits, career, balance, environment, management, diversity };
+
+            const allRatingsCount = { one: 0, two: 0, three: 0, four: 0, five: 0 };
+            ratingsCount.forEach(rating => {
+                if (rating._id === 1) allRatingsCount.one = rating.count;
+                if (rating._id === 2) allRatingsCount.two = rating.count;
+                if (rating._id === 3) allRatingsCount.three = rating.count;
+                if (rating._id === 4) allRatingsCount.four = rating.count;
+                if (rating._id === 5) allRatingsCount.five = rating.count;
             })
             
             return { 
-                ratings,
-                totalCount: summary[0].count[0].total,
-                ratingsCount,
-                salary: Math.round((summary[0].salary[0].count / summary[0].count[0].total) * 100) / 100,
-                recommend: summary[0].recommend.length > 0 ? Math.round((summary[0].recommend[0].count / summary[0].count[0].total) * 100) / 100 : 0
+                ratings: allRatings,
+                totalCount: count[0].total,
+                ratingsCount: allRatingsCount,
+                salary: salary[0].count / count[0].total,
+                recommend: recommend.length > 0 ? recommend[0].count / count[0].total : 0
             }
         }
     },
@@ -106,7 +101,7 @@ const ReviewResolvers = {
                 }
             });
 
-            return review.populate('company');
+            return review;
         },
         updateReview: async (_, args, context) => {
             if (!context.user) throw new Error('UNAUTHORISED');
@@ -140,8 +135,7 @@ const ReviewResolvers = {
 
 function calculateAverageRating(ratings) {
     const { benefits, career, balance, environment, management, diversity } = ratings;
-    let averageRating = (benefits + career + balance + environment + management + diversity) / 6;
-    return Math.round(averageRating * 10) / 10;
+    return (benefits + career + balance + environment + management + diversity) / 6;
 }
 
 module.exports = ReviewResolvers;

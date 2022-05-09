@@ -51,7 +51,7 @@ function About() {
         <div className="company-profile-section flex-col">
             <div className="flex flex-ai-c flex-jc-sb">
                 <span className="large">Reviews</span>
-                <span className="green underline" onClick={handleClick}>See all reviews</span>
+                <span className="green cursor" onClick={handleClick}>See all reviews</span>
             </div>
             <RatingsDashboard summary={reviewsSummary}/>
             <div>
