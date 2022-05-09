@@ -88,6 +88,10 @@ select {
     cursor: pointer;
 }
 
+.material-icons-outlined {
+    transition: 0.6s;
+}
+
 /* colours */
 .bg-white {
     background-color: var(--white);

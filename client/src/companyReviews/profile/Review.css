@@ -56,6 +56,10 @@
     background-color: var(--lighter-green);
 }
 
+.helpful-btn + * {
+    margin-left: 10px;
+}
+
 .helpful-btn > * + * {
     margin-left: 5px;
 }

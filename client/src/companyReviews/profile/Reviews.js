@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getCompanyReviews } from '../company.api';
 import { formatNumber, formatPercent } from '../../helpers'; 
+import { Loading } from '../../jobSearch/jobs/Jobs';
 
 function Reviews() {
 
@@ -12,6 +13,7 @@ function Reviews() {
     const [reviews, setReviews] = useState();
     const [totalReviews, setTotalReviews] = useState();
     const [page, setPage] = useState(1);
+    const [displaySortOptions, setDisplaySortOptions] = useState(false);
 
     useEffect(() => {
         async function fetchCompanyReviews(id, page) {
@@ -50,16 +52,22 @@ function Reviews() {
         <div className="company-profile-section flex-col">
             <div className="flex flex-jc-sb">
                 <span>Showing <b>{reviewsSummary.totalCount}</b> reviews sorted by <b>Most helpful</b></span>
-                <div className="flex flex-row">
+                <div className="cursor relative flex flex-row" onClick={() => setDisplaySortOptions(!displaySortOptions)}>
                     <span>Sort by <b>Most helpful</b></span>
-                    <span className="material-icons-outlined">expand_more</span>
+                    <span className={`${displaySortOptions && 'expand'} material-icons-outlined`}>expand_more</span>
+                    {displaySortOptions && <div className="sort-options">
+                    <ul>
+                        <li>Most helpful</li>
+                        <li>Most recent</li>
+                    </ul>    
+                </div>}
                 </div>
             </div>
-            {reviews && reviews.map((review, index) => <>
+            {reviews ? reviews.map((review, index) => <>
                 <ReviewCard key={index} review={review} />
                 <hr></hr>
-            </>)}
-            <Paginator page={page} totalPages={Math.ceil(totalReviews / 10)} setPage={setPage}/>
+            </>) : <Loading />}
+            {totalReviews && <Paginator page={page} totalPages={Math.ceil(totalReviews / 10)} setPage={setPage}/>}
             <div className="disclaimer">
                 <p className="small">
                     Company Reviews published on our site are the views and opinions of their authors and do not represent the views and opinions of Find.com.au or its personnel. 
@@ -120,10 +128,13 @@ function ReviewCard({ review }) {
                     <p>{bad}</p>
                 </div>
                 <div className="flex flex-jc-sb flex-ai-c">
-                    <button className="bg-pale-green green helpful-btn flex flex-ai-c">
-                        <span className="small material-icons-outlined">thumb_up</span>
-                        <span className="small">Helpful?</span>
-                    </button>
+                    <div className="flex flex-ai-c">
+                        <button className="bg-pale-green green helpful-btn flex flex-ai-c">
+                            <span className="small material-icons-outlined">thumb_up</span>
+                            <span className="small">Helpful?</span>
+                        </button>
+                        {helpful > 0 && <span className="small">{helpful} people found this helpful</span>}
+                    </div>
                     <span className="flag material-icons-outlined">flag</span>
                 </div>
             </div>

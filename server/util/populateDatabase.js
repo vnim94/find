@@ -384,7 +384,8 @@ function populateReviews(callback) {
             role: professionTypes[profession][getRandomIndex(professionTypes[profession].length)],
             location: locations[getRandomIndex(locations.length)]._id,
             recommend: Math.round(Math.random()) === 1 ? true : false,
-            salary: ['High', 'Average', 'Low'][getRandomIndex(3)]
+            salary: ['High', 'Average', 'Low'][getRandomIndex(3)],
+            helpful: Math.round(Math.random() * 10)
         }
         reviewsToCreate.push(function(callback) { createReview(details, callback) });
     }
