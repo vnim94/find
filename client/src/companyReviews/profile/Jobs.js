@@ -2,7 +2,7 @@ import { getJobs } from '../../jobSearch/job.api';
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import getTimeElapsed from '../../helpers/getTimeElapsed';
+import { getTimeElapsed } from '../../helpers';
 import { Loading } from '../../jobSearch/jobs/Jobs';
 
 function CompanyJobs() {

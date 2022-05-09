@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getJobs } from '../job.api';
-import getTimeElapsed from '../../helpers/getTimeElapsed';
+import { getTimeElapsed } from '../../helpers';
 
 function Jobs() {
 
@@ -32,8 +32,6 @@ function Jobs() {
         searchParams.set('page', 1);
         setSearchParams(searchParams);
     }
-
-    
 
     useEffect(() => {
         function findLocation (location) {

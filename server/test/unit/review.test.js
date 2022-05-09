@@ -67,30 +67,33 @@ describe('review queries', () => {
     test('reviews', async () => {
         const reviewsQuery = `
             {
-                reviews(company: "${company._id}") {
-                    title
-                    ratings {
-                        average
-                        benefits
-                        career
-                        balance
-                        environment
-                        management
-                        diversity
+                companyReviews(company: "${company._id}") {
+                    reviews {
+                        title
+                        ratings {
+                            average
+                            benefits
+                            career
+                            balance
+                            environment
+                            management
+                            diversity
+                        }
+                        good
+                        bad
+                        role
+                        date
+                        location
+                        recommend
                     }
-                    good
-                    bad
-                    role
-                    date
-                    location
-                    recommend
+                    totalReviews
                 }
             }
         `
         const result = await tester.graphql(reviewsQuery, {}, {}, {});
-        expect(result.data.reviews.length).toBe(1);
-        expect(result.data.reviews[0].title).toBe('Great place to work');
-        expect(result.data.reviews[0].ratings.average).toBe(5.0)
+        expect(result.data.companyReviews.totalReviews).toBe(1);
+        expect(result.data.companyReviews.reviews[0].title).toBe('Great place to work');
+        expect(result.data.companyReviews.reviews[0].ratings.average).toBe(5.0)
     })
 
     test('reviewsSummary', async () => {

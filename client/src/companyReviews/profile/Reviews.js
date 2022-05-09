@@ -10,15 +10,19 @@ function Reviews() {
     const reviewsSummary = useSelector(state => state.company.reviewsSummary);
     const { benefits, career, balance, environment, management, diversity } = reviewsSummary.ratings
     const [reviews, setReviews] = useState();
-    const [page, setPage] = useState();
+    const [totalReviews, setTotalReviews] = useState();
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
-        async function fetchCompanyReviews(id) {
-            const response = await getCompanyReviews(id);
-            if (response.data.reviews) setReviews(response.data.reviews);
+        async function fetchCompanyReviews(id, page) {
+            const response = await getCompanyReviews(id, page);
+            if (response.data) {
+                setReviews(response.data.companyReviews.reviews);
+                setTotalReviews(response.data.companyReviews.totalReviews);
+            }
         }
-        fetchCompanyReviews(company.id)
-    },[company])
+        fetchCompanyReviews(company.id, page)
+    },[company, page])
 
     return (<>
         <div className="company-profile-section flex-col">
@@ -55,7 +59,7 @@ function Reviews() {
                 <ReviewCard key={index} review={review} />
                 <hr></hr>
             </>)}
-            <Paginator page={page} setPage={setPage}/>
+            <Paginator page={page} totalPages={Math.ceil(totalReviews / 10)} setPage={setPage}/>
             <div className="disclaimer">
                 <p className="small">
                     Company Reviews published on our site are the views and opinions of their authors and do not represent the views and opinions of Find.com.au or its personnel. 
@@ -143,20 +147,13 @@ function RatingDropdown({ ratings }) {
     )
 }
 
-function Paginator(props) {
-
-    const handleClick = (event) => {
-    }
-
-    const handleNext = () => {
-    }
-
+function Paginator({ page, setPage, totalPages }) {
     return (
         <div className="paginator">
-            {Array(5).fill().map((_,index) => {
-                return <span key={index} className={`current-page paginator-item`} onClick={handleClick}>{index + 1}</span>
+            {Array(totalPages).fill().map((_,index) => {
+                return <span key={index} className={`${page === index + 1 && 'current-page'} paginator-item`} onClick={() => setPage(index + 1)}>{index + 1}</span>
             })}
-            <div className="paginator-next" onClick={handleNext}>
+            <div className="paginator-next" onClick={() => { page < totalPages && setPage(page + 1) }}>
                 <span>Next</span>
                 <span className="material-icons-outlined">navigate_next</span>
             </div>

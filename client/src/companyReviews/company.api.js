@@ -41,10 +41,10 @@ const getCompanyRequest = (id) => `
     }
 `
 
-const getCompanyReviewsRequest = (id) => `
+const getCompanyReviewsRequest = (id, page) => `
     {
-        reviews(company: "${id}") {
-            ... on Review {
+        companyReviews(company: "${id}", page: ${page}) {
+            reviews {
                 title
                 ratings {
                     average
@@ -65,6 +65,7 @@ const getCompanyReviewsRequest = (id) => `
                 helpful
                 flagged
             }
+            totalReviews
         }
     }
 `
@@ -129,6 +130,6 @@ export const getCompanyReviewSummary = async (id) => {
     return await request(getCompanyReviewsSummaryRequest(id));
 }
 
-export const getCompanyReviews = async (id) => {
-    return await request(getCompanyReviewsRequest(id));
+export const getCompanyReviews = async (id, page) => {
+    return await request(getCompanyReviewsRequest(id, page));
 }

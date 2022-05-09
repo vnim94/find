@@ -17,8 +17,11 @@ const ReviewResolvers = {
             if (!review) return { __typename: 'NotFound', message: 'Review not found', id: id }
             return review;
         },
-        reviews: async (_, { company }) => {
-            return await Review.find({ company });
+        companyReviews: async (_, { company, page }) => {
+            const reviews = await Review.find({ company }).limit(10).skip((page - 1) * 10);
+            const totalReviews = await Review.find({ company }).countDocuments();
+
+            return { reviews, totalReviews };
         },
         reviewsSummary: async (_, { company }) => {
             let companyId = new mongoose.Types.ObjectId(company);

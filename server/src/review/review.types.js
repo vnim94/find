@@ -16,6 +16,11 @@ const ReviewTypes = `
         flagged: Boolean!
     }
 
+    type ReviewsResult {
+        reviews: [Review]!
+        totalReviews: Int!
+    }
+
     type ReviewsSummary {
         ratings: Rating!
         totalCount: Int!
@@ -69,7 +74,7 @@ const ReviewTypes = `
 
     type Query {
         review(id: ID!): ReviewResult!
-        reviews(company: ID): [Review]!
+        companyReviews(company: ID, page: Int): ReviewsResult!
         reviewsSummary(company: ID): ReviewsSummary!
     }
 
