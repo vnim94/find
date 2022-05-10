@@ -382,6 +382,7 @@ function populateReviews(callback) {
             good: faker.lorem.sentences(3),
             bad: faker.lorem.sentences(3),
             role: professionTypes[profession][getRandomIndex(professionTypes[profession].length)],
+            date: Date.now() - getRandomIndex(365) * 24 * 60 * 60 * 1000,
             location: locations[getRandomIndex(locations.length)]._id,
             recommend: Math.round(Math.random()) === 1 ? true : false,
             salary: ['High', 'Average', 'Low'][getRandomIndex(3)],

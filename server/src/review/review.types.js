@@ -74,7 +74,7 @@ const ReviewTypes = `
 
     type Query {
         review(id: ID!): ReviewResult!
-        companyReviews(company: ID, page: Int): ReviewsResult!
+        companyReviews(company: ID, page: Int, sortByDate: Boolean): ReviewsResult!
         reviewsSummary(company: ID): ReviewsSummary!
     }
 

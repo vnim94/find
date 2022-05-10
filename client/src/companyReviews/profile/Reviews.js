@@ -13,18 +13,19 @@ function Reviews() {
     const [reviews, setReviews] = useState();
     const [totalReviews, setTotalReviews] = useState();
     const [page, setPage] = useState(1);
+    const [sortByDate, setSortByDate] = useState(false);
     const [displaySortOptions, setDisplaySortOptions] = useState(false);
 
     useEffect(() => {
-        async function fetchCompanyReviews(id, page) {
-            const response = await getCompanyReviews(id, page);
+        async function fetchCompanyReviews(id, page, sortByDate) {
+            const response = await getCompanyReviews(id, page, sortByDate);
             if (response.data) {
                 setReviews(response.data.companyReviews.reviews);
                 setTotalReviews(response.data.companyReviews.totalReviews);
             }
         }
-        fetchCompanyReviews(company.id, page)
-    },[company, page])
+        fetchCompanyReviews(company.id, page, sortByDate);
+    },[company, page, sortByDate])
 
     return (<>
         <div className="company-profile-section flex-col">
@@ -53,12 +54,12 @@ function Reviews() {
             <div className="flex flex-jc-sb">
                 <span>Showing <b>{reviewsSummary.totalCount}</b> reviews sorted by <b>Most helpful</b></span>
                 <div className="cursor relative flex flex-row" onClick={() => setDisplaySortOptions(!displaySortOptions)}>
-                    <span>Sort by <b>Most helpful</b></span>
+                    <span>Sort by <b>{sortByDate ? 'Most recent' : 'Most helpful'}</b></span>
                     <span className={`${displaySortOptions && 'expand'} material-icons-outlined`}>expand_more</span>
                     {displaySortOptions && <div className="sort-options">
                     <ul>
-                        <li>Most helpful</li>
-                        <li>Most recent</li>
+                        <li onClick={() => { setSortByDate(false); setDisplaySortOptions(false) }}>Most helpful</li>
+                        <li onClick={() => { setSortByDate(true); setDisplaySortOptions(false) }}>Most recent</li>
                     </ul>    
                 </div>}
                 </div>

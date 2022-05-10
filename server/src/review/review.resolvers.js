@@ -17,8 +17,11 @@ const ReviewResolvers = {
             if (!review) return { __typename: 'NotFound', message: 'Review not found', id: id }
             return review;
         },
-        companyReviews: async (_, { company, page }) => {
-            const reviews = await Review.find({ company }).limit(10).skip((page - 1) * 10);
+        companyReviews: async (_, { company, page, sortByDate }) => {
+            const reviews = await Review.find({ company })
+                .sort(sortByDate ? { date: 'desc' } : { helpful: 'desc' })
+                .limit(10)
+                .skip((page - 1) * 10);
             const totalReviews = await Review.find({ company }).countDocuments();
 
             return { reviews, totalReviews };
