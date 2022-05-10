@@ -94,7 +94,7 @@ function Rating({ text, hide, rating }) {
 
 function ReviewCard({ review }) {
 
-    const { date, title, ratings, good, bad, role, helpful } = review;
+    const { date, title, ratings, good, bad, role, location, current, length, helpful } = review;
     const reviewDate = new Date(date).toDateString().split(' ')
     const [showRatingDropdown, setShowRatingDropdown] = useState(false);
 
@@ -112,8 +112,8 @@ function ReviewCard({ review }) {
                     <span className="grey">{`${reviewDate[1]} ${reviewDate[3]}`}</span>
                 </div>
                 <div className="flex flex-col">
-                    <span className="small">New South Wales, Australia</span>
-                    <span className="small">5 to 6 years in the role, current employee</span>
+                    <span className="small">{location}, Australia</span>
+                    <span className="small">{length} in the role{current && ', current employee'}</span>
                 </div>
             </div>
             <div className="review-card-content">

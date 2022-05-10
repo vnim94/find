@@ -94,9 +94,16 @@ const ReviewSchema = new Schema({
         default: Date.now
     },
     location: {
-        type: Schema.Types.ObjectId,
-        ref: 'Location',
+        type: String,
         required: true
+    },
+    current: {
+        type: Boolean,
+        default: true
+    },
+    length: {
+        type: String,
+        enum: ['Less than 1 year', '1 - 2 years', '3 - 4 years', '5 - 6 years', '7 - 8 years', '9 - 10 years', '11 - 12 years', 'Over 12 years']
     },
     recommend: {
         type: Boolean,

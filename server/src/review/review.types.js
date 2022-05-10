@@ -10,6 +10,8 @@ const ReviewTypes = `
         date: Date!
         role: String!
         location: String!
+        current: Boolean!
+        length: String!
         recommend: Boolean!
         salary: String!
         helpful: Int!

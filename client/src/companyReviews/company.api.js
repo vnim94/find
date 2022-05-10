@@ -60,6 +60,8 @@ const getCompanyReviewsRequest = (id, page, sortByDate) => `
                 date
                 role
                 location
+                current
+                length
                 recommend
                 salary
                 helpful

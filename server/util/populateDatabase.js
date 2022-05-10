@@ -18,13 +18,13 @@ database.once('open', () => console.log('[INFO] Successfully connected to databa
 database.on('error', console.error.bind(console, 'Error connecting to database'));
 
 const states = {
-    'VIC':'Melbourne',
-    'NSW':'Sydney',
-    'QLD':'Brisbane',
-    'WA':'Perth',
-    'TAS':'Hobart',
-    'NT':'Darwin',
-    'SA':'Adelaide'
+    'Victoria':'Melbourne',
+    'New South Wales':'Sydney',
+    'Queensland':'Brisbane',
+    'Western Australia':'Perth',
+    'Tasmania':'Hobart',
+    'Northern Territory':'Darwin',
+    'South Australia':'Adelaide'
 };
 
 const suburbs = [
@@ -105,6 +105,8 @@ const professionTypes = {
 };
 
 const payBases = Array(21).fill().map((value, index) => 10000 * index);
+
+const roleLengths = ['Less than 1 year', '1 - 2 years', '3 - 4 years', '5 - 6 years', '7 - 8 years', '9 - 10 years', '11 - 12 years', 'Over 12 years'];
 
 let users = [];
 let locations = [];
@@ -383,7 +385,9 @@ function populateReviews(callback) {
             bad: faker.lorem.sentences(3),
             role: professionTypes[profession][getRandomIndex(professionTypes[profession].length)],
             date: Date.now() - getRandomIndex(365) * 24 * 60 * 60 * 1000,
-            location: locations[getRandomIndex(locations.length)]._id,
+            current: Math.round(Math.random()) === 1 ? true : false,
+            length: roleLengths[getRandomIndex(roleLengths.length)],
+            location: Object.keys(states)[getRandomIndex(Object.keys(states).length)],
             recommend: Math.round(Math.random()) === 1 ? true : false,
             salary: ['High', 'Average', 'Low'][getRandomIndex(3)],
             helpful: Math.round(Math.random() * 10)
