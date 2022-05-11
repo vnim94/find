@@ -5,7 +5,7 @@ function CareerSearch() {
 
     const [cancel, setCancel] = useState(false);
 
-    return (
+    return (<>
         <div className="career-search">
             <div className="page">
                 <div className="form-group flex flex-row flex-ai-c">
@@ -18,6 +18,35 @@ function CareerSearch() {
                 </div>
             </div>
         </div>
+        {cancel && <div className="overlay"></div>}
+        <Tabs />
+    </>)
+}
+
+function Tabs() {
+
+    const [selectedPage, setSelectedPage] = useState();
+
+    return (
+        <div className="pages">
+            <nav className="page">
+                <ul className="tabs flex flex-row flex-jc-sb">
+                </ul>
+            </nav>
+        </div>
+    )
+}
+
+function Tab({ id, text, type, selected }) {
+
+    const handleClick = () => {
+
+    }
+
+    return (
+        <li id={id} className={`${type} ${selected === id && 'selected'}`} onClick={handleClick}>
+            <span>{text}</span>
+        </li>
     )
 }
 

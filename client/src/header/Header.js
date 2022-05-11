@@ -76,7 +76,7 @@ function Header(props) {
     )
 }
 
-function ListItem(props) {
+export function ListItem(props) {
 
     const navigate = useNavigate();
     const { id, type, text, selected, setSelected } = props;

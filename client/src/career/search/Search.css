@@ -36,3 +36,12 @@
 .search-glass {
     font-size: 35px;
 }
+
+.overlay {
+    background-color: var(--black);
+    opacity: 0.7;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
