@@ -25,6 +25,7 @@ function CompanyProfile() {
     useEffect(() => {
         async function fetchCompany(id) {
             const response = await getCompany(id);
+            console.log(response);
             if (response.data.company) dispatch(setCompany(response.data.company));
         }
         async function fetchCompanyReviewsSummary(id) {

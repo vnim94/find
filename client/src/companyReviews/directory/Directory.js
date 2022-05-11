@@ -1,6 +1,8 @@
 import './Directory.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { SearchBar } from '../companies/CompanySearch';
+import { getCompanies } from '../company.api';
 
 function Directory(props) {
     return (
@@ -17,9 +19,22 @@ function Directory(props) {
 
 export function BrowseDirectory() {
 
+    const navigate = useNavigate();
     const [letter, setLetter] = useState();
+    const [companies, setCompanies] = useState();
 
-    const companies = ['CompanyA','CompanyB','CompanyC','CompanyD']
+    const handleClick = (event) => {
+        setLetter(event.target.innerText);
+        navigate(`/companies/browse-${event.target.innerText.toLowerCase()}`);
+    }
+
+    useEffect(() => {
+        async function fetchCompanies() {
+            const response = await getCompanies();
+            if (response.data) setCompanies(response.data.companies);
+        }
+        fetchCompanies();
+    })
 
     return (
         <div className="directory-browse">
@@ -36,15 +51,17 @@ export function BrowseDirectory() {
                     <span><b>Browse by name</b></span>
                     <div className="directory-listings">
                         {'#ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((l, i) => {
-                            return <span key={i} className="directory-listing" onClick={() => setLetter(l)}>{l}</span>
+                            return <span key={i} className="directory-listing" onClick={handleClick}>{l}</span>
                         })}
                     </div>
                 </div>
                 {letter && <div className="listings">
-                    {companies.map((c,i) => {
-                        return <div key={i} className="company-listing">
-                            <span>{c}</span>
-                        </div>
+                    {companies && companies.map((company,index) => {
+                        if (company.name.toUpperCase().startsWith(letter)) {
+                            return <div key={index} className="company-listing">
+                                <Link to={`/companies/${company.name.toLowerCase()}-${company.id}`} key={index}>{company.name}</Link>
+                            </div>
+                        } 
                     })}
                 </div>}
             </div>

@@ -1,0 +1,38 @@
+.career-search {
+    display: flex;
+    justify-content: center;
+    background-color: var(--light-green);
+}
+
+.search-btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    padding-left: 75px;
+    padding-right: 75px;
+    margin-right: 10px;
+}
+
+.career-search-bar {
+    margin: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.career-search-bar.form-control {
+    font-size: 18px;
+    border: none;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    transition: 0.6s;
+}
+
+.search-cancel {
+    display: none;
+    transition: 0.6s;
+}
+
+.search-glass {
+    font-size: 35px;
+}
