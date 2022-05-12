@@ -75,6 +75,10 @@ select {
     font-size: 26px;
 }
 
+.font-size-xl {
+    font-size: 32px;
+}
+
 /* styling */
 .underlined {
     text-decoration: underline;
@@ -232,6 +236,39 @@ select {
 
 .flex-jc-fs {
     justify-content: flex-start;
+}
+
+/* grid */
+.grid {
+    display: grid;
+}
+
+.grid-col-1 {
+    grid-template-columns: 1fr;
+}
+
+.grid-col-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-col-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.col-gap-10 {
+    column-gap: 10px;
+}
+
+.col-gap-15 {
+    column-gap: 15px;
+}
+
+.row-gap-10 {
+    row-gap: 10px;
+}
+
+.row-gap-15 {
+    row-gap: 15px;
 }
 
 /* input */

@@ -88,7 +88,7 @@
     z-index: -1;
 }
 
-.tab[id="career"]:hover > .panda {
+.tab[id="career-advice"]:hover > .panda {
     transition: 0.7s;
     cursor: pointer;
     top: -90px;
@@ -106,6 +106,10 @@
 .tab > span {
     color: var(--white);
     line-height: 48px;
+}
+
+.tabs {
+    width: 100%;
 }
 
 .tabs > .selected {

@@ -23,6 +23,7 @@ import CompanyProfile from './companyReviews/profile/Profile';
 import { Disclaimer } from './companyReviews/content/Content';
 import Jobs from './jobSearch/jobs/Jobs';
 import CareerSearch from './career/search/Search';
+import Personal from './career/discover/Discovery';
 
 function App() {
     const dispatch = useDispatch();
@@ -58,6 +59,8 @@ function App() {
     const career = 
     <>
         <Header page="career"/>
+        <CareerSearch />
+        <Personal />
         <Outlet />
         <Footer />
     </>
@@ -110,11 +113,10 @@ function App() {
                         <Route path=":tab" element={<CompanyProfile />} />
                     </Route>
                 </Route>
-                <Route path="career" element={career}>
+                <Route path="career-advice" element={career}>
                     <Route path="explore-careers" />
                     <Route path="job-hunting" />
                     <Route path="working-life" />
-                    <Route path="" element={<CareerSearch />} />
                 </Route>
                 <Route path="/jobs" element={jobs}/>
             </Routes>

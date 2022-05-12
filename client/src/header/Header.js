@@ -67,7 +67,7 @@ function Header(props) {
                     <ul className="tabs flex flex-row flex-jc-sb">
                         <ListItem id="jobs" type="tab" text="Job Search" selected={selectedPage} setSelected={setSelectedPage}/>
                         <ListItem id="profile" type="tab" text="Profile" selected={selectedPage} setSelected={setSelectedPage}/>
-                        <ListItem id="career" type="tab" text="Career Advice" selected={selectedPage} setSelected={setSelectedPage}/>
+                        <ListItem id="career-advice" type="tab" text="Career Advice" selected={selectedPage} setSelected={setSelectedPage}/>
                         <ListItem id="companies" type="tab" text="Company Reviews" selected={selectedPage} setSelected={setSelectedPage}/>
                     </ul>
                 </nav>
@@ -88,7 +88,7 @@ export function ListItem(props) {
 
     return (
         <li id={id} className={`${type} ${selected === id && 'selected'}`} onClick={handleClick}>
-            {id === 'career' && <img className="panda" src="/panda.png" alt="panda"></img>}
+            {id === 'career-advice' && <img className="panda" src="/panda.png" alt="panda"></img>}
             <span>{text}</span>
         </li>
     )

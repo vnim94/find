@@ -1,0 +1,54 @@
+.border-left {
+    border-left: 2px solid var(--dark-green);
+    padding: 10px;
+}
+
+.card-icon {
+    padding: 0px;
+    padding-right: 10px;
+}
+
+.discovery {
+    display: flex;
+    justify-content: center;
+}
+
+.discovery-card {
+    align-items: center;
+    background-color: var(--white);
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+    padding: 15px;
+}
+
+.discovery-card:hover {
+    box-shadow: 10px 10px 15px var(--light-grey);
+    transform: translateY(-3px);
+    transition: 0.3s;
+}
+
+.discovery-dropdown {
+    display: grid;
+    background-color: var(--pale-green);
+    grid-template-columns: 2fr 3fr;
+    padding: 25px;
+}
+
+.discovery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--light-green);
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 25px;
+    padding-right: 25px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.expanded {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
