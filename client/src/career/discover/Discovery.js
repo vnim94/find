@@ -8,7 +8,7 @@ function Discovery() {
     const [expanded, setExpanded] = useState(false)
 
     return (
-        <div className="discovery">
+        <div className="bg-pale-grey discovery">
             <div className="page">
                 <div className={`cursor discovery-header ${expanded && 'expanded'}`} onClick={() => setExpanded(!expanded)}>
                     <span className="medium"><b>Hi {user ? user.firstName : 'there'},</b> ready to explore advice and career options tailored to you?</span>

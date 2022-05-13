@@ -58,6 +58,10 @@ select {
     position: relative;
 }
 
+.absolute {
+    position: absolute;
+}
+
 .underline {
     text-decoration: underline;
 }

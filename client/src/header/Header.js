@@ -6,6 +6,7 @@ import { setUser } from '../profile/user.slice';
 
 function Header(props) {
 
+    const navigate = useNavigate();
     const [selectedSite, setSelectedSite] = useState('jobs');
     const [selectedPage, setSelectedPage] = useState(props.page); 
     const [selectedRegion, setSelectedRegion] = useState('AU');
@@ -35,10 +36,10 @@ function Header(props) {
             </div>
             <div className="banner flex flex-jc-c">
                 <div className="page flex flex-jc-sb flex-ai-c">
-                    <a className="logo flex flex-ai-c" href="/">
+                    <div className="cursor logo flex flex-ai-c" onClick={() => navigate('/')}>
                         <img src="/magnifying-glass.png" alt="logo"></img>
                         <span className="logo-heading">find</span>
-                    </a>
+                    </div>
                     <nav className="flex flex-row">
                         <div className="banner-link">
                             {user ?
