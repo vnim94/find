@@ -1,3 +1,44 @@
+.banner-bubble {
+    background-color: var(--white);
+    border-radius: 10rem;
+}
+
+.banner-bubble > .material-icons-outlined {
+    background-color: var(--light-green);
+    border-radius: 50%;
+    color: var(--black);
+    padding: 10px;
+    margin-right: 10px;
+}
+
+.bubble {
+    background-color: var(--white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 10rem;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    transition: 0.3s;
+    height: 65px;
+    max-width: 225px;
+}
+
+.bubble:hover {
+    cursor: pointer;
+    box-shadow: 0px 5px 10px var(--grey);
+    transform: translateY(-5px);
+}
+
+.bubbles {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
 .carousel {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -55,4 +96,46 @@
 .slides {
     overflow-x: hidden;
     scroll-behavior: smooth;
+}
+
+.section {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.section-heading {
+    padding-bottom: 25px;
+}
+
+.section-tile {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    height: 325px;
+    max-width: 300px;
+    transition: 0.3s;
+}
+
+.section-tile > img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    max-width: 300px;
+}
+
+.section-tile > div {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    height: 100%;
+    padding: 15px;
+}
+
+.section-tile:hover {
+    cursor: pointer;
+    box-shadow: 0px 5px 10px var(--grey);
+    transform: translateY(-5px);
+}
+
+.test {
+    height: 250px;
+    width: 250px;
 }

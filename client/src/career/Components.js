@@ -50,7 +50,7 @@ function CarouselCard({ card, selected }) {
     const { img, heading, text, time } = card;
 
     useEffect(() => {
-        if (selected === img && ref.current) ref.current.scrollIntoView();
+        if (selected === img && ref.current) ref.current.scrollIntoView({ block: "nearest" });
     },[selected])
 
     return (
@@ -71,8 +71,15 @@ function CarouselCard({ card, selected }) {
 
 export function Tile() {
     return (
-        <div className="tile">
-
+        <div className="section-tile">
+            <img src="/talk.jpg"></img>
+            <div className="bg-white flex flex-col flex-jc-sb">
+                <span className="bold">How to talk to your boss about hybrid working</span>
+                <div className="flex flex-col">
+                    <span className="small grey">3.5 min read</span>
+                    <span className="small">Workplace tips &amp; wellbeing</span>
+                </div>
+            </div>
         </div>
     )
 }
@@ -81,10 +88,10 @@ export function Card() {
 
 }
 
-export function Bubble() {
+export function Bubble({ text, link }) {
     return (
         <div className="bubble">
-
+            <a className="green" href={link}>{text}</a>
         </div>
     )
 }
@@ -97,10 +104,43 @@ export function SectionSummary() {
     )
 }
 
-export function Section() {
+export function Section({ children, heading, link, text }) {
     return (
-        <div>
+        <div className="section flex flex-col">
+            <div className="section-heading flex flex-row flex-ai-c flex-jc-sb">
+                <span className="bold font-size-xl">{heading}</span>
+                {link && <a className="bold medium" href="/">See all</a>}
+            </div>
+            <span className="medium">{text}</span>
+            {children}
+        </div>
+    )
+}
 
+export function Banner({ children, heading }) {
+    return (
+        <div classname="grid grid-col-2">
+            <div className="border grid grid-col-2 col-gap-15 row-gap-15">
+                <div>
+                    <span>TOOLS</span>
+                </div>
+                <div>
+                    <span>{heading}</span>
+                </div>
+                <div className="flex-wrap">
+                    {children}
+                </div>
+            </div>
+            {/* <img className="test" src="/career.svg"></img> */}
+        </div>
+    )
+}
+
+export function BannerBubble({ text, icon }) {
+    return (
+        <div className="banner-bubble flex flex-row flex-ai-c">
+            <span className="material-icons-outlined">{icon}</span>
+            <span className="bold medium">{text}</span>
         </div>
     )
 }
