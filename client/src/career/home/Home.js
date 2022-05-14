@@ -98,6 +98,7 @@ function Home() {
                         } else {
                             return <Bubble key={index} text={industry.name} />
                         }
+                        return null;
                     })}
                 </div>
                 <div className="flex flex-row flex-jc-c">

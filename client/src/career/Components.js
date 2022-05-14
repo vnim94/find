@@ -130,7 +130,7 @@ export function Banner({ children, heading }) {
                         {children}
                     </div>
                 </div>
-                <img className="banner-img" src="/career.svg"></img>
+                <img className="banner-img" src="/career.svg" alt="career"></img>
             </div>
         </div>
     )

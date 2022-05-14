@@ -20,7 +20,7 @@ function Discovery() {
                             <span className="medium">Let's get started...</span>
                             <span className="bold font-size-xl">What's your goal today?</span>
                         </div>
-                        <img src="/career.svg"></img>
+                        <img src="/career.svg" alt="career"></img>
                     </div>
                     <div className="grid row-gap-15">
                         <Card icon="explore" text="Explore how I can put my skills to work" />
@@ -42,7 +42,7 @@ function Discovery() {
 function Card({ icon, text }) {
     return (
         <div className="discovery-card">
-            <img className="card-icon" src={`/${icon}.svg`}></img>
+            <img className="card-icon" src={`/${icon}.svg`} alt="card"></img>
             <span>{text}</span>
         </div>
     )
