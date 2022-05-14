@@ -1,53 +1,23 @@
 import './Components.css';
 import { useEffect, useState, useRef } from 'react';
+import { getAllIndustries } from '../jobSearch/job.api';
 
-export function Carousel() {
-
-    const [selected, setSelected] = useState();
-    const cards = [
-        {
-            img: 'start-again', 
-            heading: '6 tips for starting a new career from scratch', 
-            text:"Dreaming of a whole new career? Here's how to start making the move.",
-            time: 3.5
-        },
-        {
-            img: 'hybrid',
-            heading: 'The best way to ask about hybrid working in an interview',
-            text: "Not sure how to ask about hybrid working in your next interview? Here's how to go about it.",
-            time: 3.5
-        },
-        {
-            img: 'cover-letter',
-            heading: '7 cover letter openers to land you an interview',
-            text: "Struggling with writing a cover letter? Here's how to start strong to score that interview",
-            time: 3.5
-        },
-        {
-            img: 'resume-template',
-            heading: 'Free resume template',
-            text: "Craft a winning resume with Find's free resume template"
-        }
-    ]
-
+export function Carousel({ cards, children, selected, setSelected }) {
     return (
         <div className="carousel page">
-            <div className="slides flex flex-row">
-                {cards.map((card, index) => <CarouselCard key={index} card={card} selected={selected}/>)}
-            </div>
+            <div className="slides flex flex-row">{children}</div>
             <div className="flex flex-jc-fe">
-                {cards.map((card,index) => {
-                    return <div key={index} className={`${selected === card.img && 'selected'} bg-grey circle`} onClick={() => setSelected(card.img)}></div>
+                {cards && cards.map((card,index) => {
+                    return <div key={index} className={`${selected === card.img ? 'selected' : !selected ? index === 0 && 'selected': undefined} bg-grey circle`} onClick={() => setSelected(card.img)}></div>
                 })}
             </div>
         </div>
     )
 }
 
-function CarouselCard({ card, selected }) {
-
+export function CarouselCard({ card, children, selected }) {
     const ref = useRef();
-    const { img, heading, text, time } = card;
+    const { img, heading } = card;
 
     useEffect(() => {
         if (selected === img && ref.current) ref.current.scrollIntoView({ block: "nearest" });
@@ -55,15 +25,12 @@ function CarouselCard({ card, selected }) {
 
     return (
         <div ref={ref} className="carousel-card">
-            <img className="carousel-card-img" src={`/${img}.png`} alt={img}></img>
+            <img className="carousel-card-img" src={`/${img}`} alt={img}></img>
             <div className="carousel-card-content">
                 <div className="carousel-card-heading">
                     <span className="bold large">{heading}</span>
                 </div>
-                <div className="carousel-card-text flex flex-col flex-jc-sb">
-                    <span className="medium">{text}</span>
-                    <span>{time && `${time} min read`}</span>
-                </div>
+                {children}
             </div>
         </div>
     )
@@ -88,6 +55,14 @@ export function Card() {
 
 }
 
+export function CardSection() {
+    return (
+        <div>
+
+        </div>
+    )
+}
+
 export function Bubble({ text, link }) {
     return (
         <div className="bubble">
@@ -96,10 +71,20 @@ export function Bubble({ text, link }) {
     )
 }
 
-export function SectionSummary() {
+export function SectionSummary({ children, img }) {
     return (
-        <div>
-            
+        <div className="page flex flex-col">
+            <span className="bold large">In this section</span>
+            <div className="section-summary flex flex-ai-c flex-jc-c">
+                <img className="section-summary-img" src={img}></img>
+                <div className="grid grid-col-3 col-gap-15 row-gap-15">
+                    <span>High job satisfaction careers</span>
+                    <span>High salary careers</span>
+                    <span>Changing careers</span>
+                    <span>Job &amp; salary trends</span>
+                    <span>Resources &amp; templates</span>
+                </div>
+            </div>
         </div>
     )
 }
@@ -142,5 +127,59 @@ export function BannerBubble({ text, icon }) {
             <span className="material-icons-outlined">{icon}</span>
             <span className="bold medium">{text}</span>
         </div>
+    )
+}
+
+export function IndustrySection() {
+
+    const [expandIndustry, setExpandIndustry] = useState();
+    const [industries, setIndustries] = useState();
+
+    useEffect(() => {
+        async function fetchIndustries() {
+            const response = await getAllIndustries();
+            if (response.data.allIndustries) setIndustries(response.data.allIndustries);
+        }
+        fetchIndustries();
+    },[])
+
+    return (
+        <Section heading="Browse careers by industry" text="Salaries, job satisfaction, jobs on Find, courses and in-demand skills">
+            <div className="bubbles grid grid-col-4 col-gap-15 row-gap-15">
+                {industries && industries.map((industry, index) => {
+                    if (!expandIndustry) {
+                        if (index < 8) return <Bubble key={index} text={industry.name} />
+                    } else {
+                        return <Bubble key={index} text={industry.name} />
+                    }
+                    return null;
+                })}
+            </div>
+            <div className="flex flex-row flex-jc-c">
+                <div className="cursor flex flex-ai-c" onClick={() => setExpandIndustry(!expandIndustry)}>
+                    <span className="bold medium">See {expandIndustry ? 'less' : 'all'} industries</span>
+                    <span className={`${expandIndustry && 'expand'} material-icons-outlined`}>expand_more</span>
+                </div>
+            </div>
+        </Section>
+    )
+}
+
+export function CareerSection() {
+    
+    const interests = [
+        'Being creative', 'Working with children', 'Helping people',
+        'Working with numbers', 'Working with computers', 'Using my hands',
+        'Being outdoors', 'Interacting with customers', 'Less work with tools', 'Working with animals'
+    ]
+    
+    return (
+        <Section heading="Explore careers by interest" text="Select your area of interest to browse related careers">
+            <div className="bubbles grid grid-col-5 col-gap-15 row-gap-15">
+                {interests.map((interest, index) => {
+                    return <Bubble key={index} text={interest} />
+                })}
+            </div>
+        </Section>
     )
 }

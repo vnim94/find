@@ -34,7 +34,7 @@
 
 .banner-img {
     position: absolute;
-    right: -250px;
+    right: -200px;
     height: 550px;
     width: 550px;
 }
@@ -146,6 +146,23 @@
 
 .section-heading {
     padding-bottom: 25px;
+}
+
+.section-summary {
+    background-color: var(--white);
+    border-radius: 10px;
+    height: 150px;
+    padding-left: 100px;
+    position: relative;
+}
+
+.section-summary-img {
+    border-radius: 50%;
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    left: 0;
+    margin-right: 25px;
 }
 
 .section-tile {

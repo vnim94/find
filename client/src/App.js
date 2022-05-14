@@ -24,7 +24,8 @@ import { Disclaimer } from './companyReviews/content/Content';
 import Jobs from './jobSearch/jobs/Jobs';
 import CareerSearch from './career/search/Search';
 import Personal from './career/discover/Discovery';
-import Home from './career/home/Home';
+import Home from './career/pages/Home';
+import Explore from './career/pages/Explore';
 
 function App() {
     const dispatch = useDispatch();
@@ -116,7 +117,7 @@ function App() {
                 </Route>
                 <Route path="career-advice" element={career}>
                     <Route index element={<Home/>} />
-                    <Route path="explore-careers" />
+                    <Route path="explore-careers" element={<Explore />}/>
                     <Route path="job-hunting" />
                     <Route path="working-life" />
                 </Route>
