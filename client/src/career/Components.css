@@ -1,6 +1,22 @@
+.banner-btn {
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .banner-bubble {
     background-color: var(--white);
     border-radius: 10rem;
+    padding-right: 15px;
+    transition: 0.3s;
+}
+
+.banner-bubble:hover {
+    cursor: pointer;
+    box-shadow: 0px 5px 10px var(--light-green);
+    transform: translateY(-5px);
 }
 
 .banner-bubble > .material-icons-outlined {
@@ -9,6 +25,31 @@
     color: var(--black);
     padding: 10px;
     margin-right: 10px;
+}
+
+.banner-content > * {
+    margin-top: 15px;
+    margin-bottom: 15px;;
+}
+
+.banner-img {
+    position: absolute;
+    right: -250px;
+    height: 550px;
+    width: 550px;
+}
+
+.career-banner {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    position: relative;
+    width: 100vw;
 }
 
 .bubble {
@@ -133,9 +174,4 @@
     cursor: pointer;
     box-shadow: 0px 5px 10px var(--grey);
     transform: translateY(-5px);
-}
-
-.test {
-    height: 250px;
-    width: 250px;
 }

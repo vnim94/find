@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 
 export function Carousel() {
 
-    const [selected, setSelected] = useState('start-again');
+    const [selected, setSelected] = useState();
     const cards = [
         {
             img: 'start-again', 
@@ -31,7 +31,7 @@ export function Carousel() {
     ]
 
     return (
-        <div className="carousel">
+        <div className="carousel page">
             <div className="slides flex flex-row">
                 {cards.map((card, index) => <CarouselCard key={index} card={card} selected={selected}/>)}
             </div>
@@ -51,11 +51,11 @@ function CarouselCard({ card, selected }) {
 
     useEffect(() => {
         if (selected === img && ref.current) ref.current.scrollIntoView({ block: "nearest" });
-    },[selected])
+    },[selected,img])
 
     return (
         <div ref={ref} className="carousel-card">
-            <img className="carousel-card-img" src={`/${img}.png`}></img>
+            <img className="carousel-card-img" src={`/${img}.png`} alt={img}></img>
             <div className="carousel-card-content">
                 <div className="carousel-card-heading">
                     <span className="bold large">{heading}</span>
@@ -72,7 +72,7 @@ function CarouselCard({ card, selected }) {
 export function Tile() {
     return (
         <div className="section-tile">
-            <img src="/talk.jpg"></img>
+            <img src="/talk.jpg" alt="talk"></img>
             <div className="bg-white flex flex-col flex-jc-sb">
                 <span className="bold">How to talk to your boss about hybrid working</span>
                 <div className="flex flex-col">
@@ -106,7 +106,7 @@ export function SectionSummary() {
 
 export function Section({ children, heading, link, text }) {
     return (
-        <div className="section flex flex-col">
+        <div className="section page flex flex-col">
             <div className="section-heading flex flex-row flex-ai-c flex-jc-sb">
                 <span className="bold font-size-xl">{heading}</span>
                 {link && <a className="bold medium" href="/">See all</a>}
@@ -119,19 +119,19 @@ export function Section({ children, heading, link, text }) {
 
 export function Banner({ children, heading }) {
     return (
-        <div classname="grid grid-col-2">
-            <div className="border grid grid-col-2 col-gap-15 row-gap-15">
-                <div>
-                    <span>TOOLS</span>
+        <div className="bg-light-black career-banner flex flex-row flex-ai-c">
+            <div className="page flex flex-row flex-ai-c">
+                <div className="banner-content">
+                    <div>
+                        <span className="bold bg-dark-green white banner-btn">TOOLS</span>
+                    </div>
+                    <span className="bold white large">{heading}</span>
+                    <div className="grid grid-col-2 col-gap-15 row-gap-15">
+                        {children}
+                    </div>
                 </div>
-                <div>
-                    <span>{heading}</span>
-                </div>
-                <div className="flex-wrap">
-                    {children}
-                </div>
+                <img className="banner-img" src="/career.svg"></img>
             </div>
-            {/* <img className="test" src="/career.svg"></img> */}
         </div>
     )
 }
