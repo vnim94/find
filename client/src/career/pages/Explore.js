@@ -1,9 +1,9 @@
 import { useState } from 'react'; 
-import { Carousel, CarouselCard, CareerSection, IndustrySection, SectionSummary, Section, Card, Tile  } from '../Components';
+import { Carousel, CarouselCard, CareerSection, IndustrySection, SectionSummary, Section, Tile  } from '../Components';
 
 function Explore() {
     
-    const [selectedCard, setSelectedCard] = useState(); 
+    const [selectedCard] = useState(); 
 
     const cards = [
         {
@@ -32,24 +32,50 @@ function Explore() {
     return (
         <div className="bg-pale-grey flex flex-col flex-ai-c">
             <Carousel cards={cards} selected={selectedCard}>
-                {cards.map((card,index) => {
+                {cards.map((card,index) => 
                     <CarouselCard>
 
                     </CarouselCard>
-                })}
+                )}
             </Carousel>
             <IndustrySection />
             <SectionSummary img="/explore-section.svg"/>
             <Section heading="High job satisfaction careers" text="Roles with a 4+ rating for job satisfaction" link={true}>
-
+                <div className="grid grid-col-3 col-gap-15 row-gap-15">
+                    <Tile/>
+                    <Tile/>
+                    <Tile/>
+                </div>
             </Section>
             <CareerSection/>
             <Section heading="High salary careers" text="Roles with typical annual salary over $100k" link={true}>
-
+                <div className="grid grid-col-3 col-gap-15 row-gap-15">
+                    <Tile/>
+                    <Tile/>
+                    <Tile/>
+                </div>
             </Section>
-            <Section heading="Changing careers" link={true}></Section>
-            <Section heading="Job &amp; salary trends" link={true}></Section>
-            <Section heading="Resources &amp; templates" link={true}></Section>
+            <Section heading="Changing careers" link={true}>
+                <div className="grid grid-col-3 col-gap-15 row-gap-15">
+                    <Tile/>
+                    <Tile/>
+                    <Tile/>
+                </div>
+            </Section>
+            <Section heading="Job &amp; salary trends" link={true}>
+                <div className="grid grid-col-3 col-gap-15 row-gap-15">
+                    <Tile/>
+                    <Tile/>
+                    <Tile/>
+                </div>
+            </Section>
+            <Section heading="Resources &amp; templates" link={true}>
+                <div className="grid grid-col-3 col-gap-15 row-gap-15">
+                    <Tile/>
+                    <Tile/>
+                    <Tile/>
+                </div>
+            </Section>
         </div>
     )
 }

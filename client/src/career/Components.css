@@ -153,15 +153,17 @@
     border-radius: 10px;
     height: 150px;
     padding-left: 100px;
+    margin-top: 50px;
     position: relative;
 }
 
 .section-summary-img {
+    background-color: var(--pale-green);
     border-radius: 50%;
-    height: 200px;
-    width: 200px;
+    height: 250px;
+    width: 250px;
     position: absolute;
-    left: 0;
+    left: -50px;
     margin-right: 25px;
 }
 
