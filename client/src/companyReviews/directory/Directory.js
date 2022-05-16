@@ -62,6 +62,7 @@ export function BrowseDirectory() {
                                 <Link to={`/companies/${company.name.toLowerCase()}-${company.id}`} key={index}>{company.name}</Link>
                             </div>
                         } 
+                        return null;
                     })}
                 </div>}
             </div>

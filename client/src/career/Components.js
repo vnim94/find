@@ -76,7 +76,7 @@ export function SectionSummary({ children, img }) {
         <div className="section page flex flex-col">
             <span className="bold font-size-xl">In this section</span>
             <div className="section-summary flex flex-ai-c flex-jc-c">
-                <img className="section-summary-img" src={img}></img>
+                <img className="section-summary-img" src={img} alt="section"></img>
                 <div className="grid grid-col-3 col-gap-15 row-gap-15">
                     <span>High job satisfaction careers</span>
                     <span>High salary careers</span>
