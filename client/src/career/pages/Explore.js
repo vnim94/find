@@ -33,7 +33,7 @@ function Explore() {
         <div className="bg-pale-grey flex flex-col flex-ai-c">
             <Carousel cards={cards} selected={selectedCard}>
                 {cards.map((card,index) => 
-                    <CarouselCard>
+                    <CarouselCard key={index} card={card}>
 
                     </CarouselCard>
                 )}
