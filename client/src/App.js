@@ -43,8 +43,8 @@ function App() {
         {/* <Recent />
         <Dashboard />
         <Content />
-        <Shortcut /> 
-        <Footer /> */}
+        <Shortcut />  */}
+        <Footer />
     </>
     const profile = 
     <>
