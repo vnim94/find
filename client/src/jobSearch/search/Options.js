@@ -1,4 +1,3 @@
-import './Options.css';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -85,19 +84,19 @@ function Options() {
 
     return (
         <>
-        <div className="options flex flex-jc-c">
-            <div className="page flex flex-row">
-                <span className="light-black">|</span>
+        <div className="bg-green-6 flex justify-center">
+            <div className="py-3 w-[992px] flex flex-row">
+                <div className="border-l border-grey-3"></div>
                 <Option id="workType" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} 
                     text={selectedWorkTypes.length === 0 || selectedWorkTypes.length === workTypes.length ? 'All work types' : (selectedWorkTypes.length > 1 ? `${selectedWorkTypes.length} work types` : selectedWorkTypes[0])} 
                 />
-                <span className="light-black">|</span>
+                <div className="border-l border-grey-3"></div>
                 <Option id="payBase" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="paying" value={displayedPayBase.startsWith('$') ? displayedPayBase : `$${displayedPayBase}`}/>
-                <span className="light-black">|</span>
+                <div className="border-l border-grey-3"></div>
                 <Option id="payCeiling" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="to" value={displayedPayCeiling.startsWith('$') ? displayedPayCeiling : `$${displayedPayCeiling}`} />
-                <span className="light-black">|</span>
+                <div className="border-l border-grey-3"></div>
                 <Option id="time" selected={selected} setSelected={setSelected} expanded={expanded} setExpanded={setExpanded} text="listed" value={displayedTime.toLowerCase()} />
-                <span className="light-black">|</span>
+                <div className="border-l border-grey-3"></div>
             </div>
         </div>
         {selected === "workType" ? <ExpandedOption>{workTypes.map((value,index) => { return <MultiSubOption key={index} text={value} /> })}</ExpandedOption> : undefined}
@@ -142,18 +141,18 @@ function Option(props) {
     }
 
     return (
-        <div className="option flex flex-row flex-jc-c" onClick={handleClick}>
-            <div className="flex">
+        <div className="px-2 py-1 flex flex-row justify-center hover:cursor-pointer" onClick={handleClick}>
+            <div className="flex space-x-2">
                 {!value ? 
                 <>
-                    <span className={selected !== undefined && selected !== id ? 'black' : 'white'}>{text}</span>
-                    <span className={`${expanded !== undefined ? 'flip' : undefined} ${selected !== undefined && selected !== id ? 'black' : 'white'} material-icons-outlined`}>expand_more</span>
+                    <span className={selected !== undefined && selected !== id ? 'text-black-1' : 'text-white'}>{text}</span>
+                    <span className={`${expanded !== undefined && expanded === id ? 'rotate-180' : undefined} ${selected !== undefined && selected !== id ? 'text-black-1' : 'text-white'} transition material-icons-outlined`}>expand_more</span>
                 </>
                 :
                 <>
-                    <span className={selected !== undefined && selected !== id ? 'black' : 'grey'}>{text}</span>
-                    <span className={selected !== undefined && selected !== id ? 'black' : 'white'}>{value}</span>
-                    <span className={`${expanded !== undefined && expanded === id ? 'flip' : undefined} ${selected !== undefined && selected !== id ? 'black' : 'white'} material-icons-outlined`}>expand_more</span>
+                    <span className={selected !== undefined && selected !== id ? 'text-black-1' : 'text-grey-3'}>{text}</span>
+                    <span className={selected !== undefined && selected !== id ? 'text-black-1' : 'text-white'}>{value}</span>
+                    <span className={`${expanded !== undefined && expanded === id ? 'rotate-180' : undefined} ${selected !== undefined && selected !== id ? 'text-black-1' : 'text-white'} transition material-icons-outlined`}>expand_more</span>
                 </>
                 }
             </div>
@@ -161,15 +160,12 @@ function Option(props) {
     )
 }
 
-function ExpandedOption(props) {
-
-    const { toggle, setToggle, type } = props;
-    
+function ExpandedOption({ children, toggle, setToggle, type }) {
     return (
-        <div className="expanded-option flex flex-jc-c">
-            <nav className="page">
-                <ul className="expanded-sub-options flex flex-row flex-jc-sb">
-                    {props.children}
+        <div className="bg-green-6 flex justify-center">
+            <nav className="w-[992px]">
+                <ul className="mt-1 mb-3 flex flex-row justify-between rounded-md border border-white text-white divide-x">
+                    {children}
                 </ul>
                 {type && type === 'toggle' && <ScaleToggle toggle={toggle} setToggle={setToggle}/>}
             </nav>
@@ -195,7 +191,7 @@ function MultiSubOption(props) {
     }
 
     return (
-        <li className={selectedWorkTypes.includes(text) ? 'selected-sub-option' :  undefined} onClick={handleClick}>
+        <li className={`${selectedWorkTypes.includes(text) ? 'bg-white text-black-1' : undefined} py-2 flex flex-grow justify-center hover:cursor-pointer`} onClick={handleClick}>
             <span>{text}</span>
         </li>
     )
@@ -215,7 +211,7 @@ function SingleSubOption(props) {
     }
 
     return (
-        <li className={`${selectedSubOption === text ? 'selected-sub-option' :  undefined} ${disabled && 'disabled'}`} onClick={!disabled && handleClick}>
+        <li className={`${selectedSubOption === text ? 'bg-white text-black-1' :  undefined} ${disabled && 'text-grey-3 hover:cursor-default'} py-2 flex flex-grow justify-center hover:cursor-pointer`} onClick={!disabled && handleClick}>
             <span>{text}</span>
         </li>        
     )
@@ -226,9 +222,9 @@ function ScaleToggle(props) {
     const { setToggle, toggle } = props;
 
     return (
-        <div className="scale-toggle flex flex-jc-c">
-            <span className={toggle === 'annually' ? 'selected' : undefined} onClick={() => setToggle('annually')}>Annually</span>
-            <span className={toggle === 'hourly' ? 'selected' : undefined} onClick={() => setToggle('hourly')}>Hourly</span>
+        <div className="mb-3 flex justify-center">
+            <span className={`${toggle === 'annually' ? 'text-white border-b-2 border-white' : undefined} p-2 hover:cursor-pointer`} onClick={() => setToggle('annually')}>Annually</span>
+            <span className={`${toggle === 'hourly' ? 'text-white border-b-2 border-white' : undefined} p-2 hover:cursor-pointer`} onClick={() => setToggle('hourly')}>Hourly</span>
         </div>
     )
 }
