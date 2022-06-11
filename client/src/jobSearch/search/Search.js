@@ -122,14 +122,17 @@ function Search(props) {
                         <div className="w-full flex flex-row space-x-2">
                             <div className="w-2/3 flex flex-col flex-grow">
                                 <label className="font-bold">What</label>
-                                <div className="flex flex-row space-x-2" ref={selectClassification}>
-                                    <div className="w-full">
-                                        <input className="w-full p-3 rounded-md outline-none" type="text" value={title} onChange={handleChangeWhat} placeholder="Enter Keywords"/>
-                                        <div className={`${title.length === 0 ? 'hidden' : undefined} clear-what flex flex-ai-c`} onClick={() => removeParam('title')}>
-                                            <span className="medium material-icons-outlined">clear</span>
+                                <div className="flex flex-row space-x-2">
+                                    <div className="relative w-full">
+                                        <input className="w-full p-3 rounded-md outline-hidden focus:outline outline-[3px]" type="text" value={title} onChange={handleChangeWhat} placeholder="Enter Keywords"/>
+                                        <div className={`${title.length === 0 && 'invisible'} absolute top-2 right-2 px-2 py-1 rounded-full hover:bg-green-1 hover:cursor-pointer`} onClick={() => removeParam('title')}>
+                                            <span className="text-base material-icons-outlined">clear</span>
                                         </div>
                                     </div>
-                                    <div className={`w-full bg-white p-3 rounded-md flex items-center justify-between ${classificationDropdown && 'outlined'}`} onClick={() => allIndustries && setClassificationDropdown(!classificationDropdown)}>
+                                    <div className={`relative w-full bg-white p-3 rounded-md flex items-center justify-between hover:cursor-pointer ${classificationDropdown && 'outline'}`} 
+                                        onClick={() => allIndustries && setClassificationDropdown(!classificationDropdown)}
+                                        ref={selectClassification}
+                                    >
                                         <span className="text-grey-3">
                                             {selectedIndustries.length === 0 ? 
                                                 'Any classification' 
@@ -143,26 +146,27 @@ function Search(props) {
                                                         selectedIndustries[0]
                                             }
                                         </span>
-                                        <div className={`${selectedIndustries.length > 0 && 'shrink'} list-action flex flex-ai-c`}>
-                                            <span className={`${classificationDropdown && 'flip'} material-icons-outlined`}>expand_more</span>
-                                            <div className={`${selectedIndustries.length === 0 && 'hidden'} clear flex flex-ai-c`} onClick={() => { removeParam('industry'); dispatch(clearIndustries()) }}>
-                                                <span className="medium material-icons-outlined">clear</span>
+                                        <div className={`${selectedIndustries.length > 0 ? 'right-0' : '-right-10'} h-full absolute flex items-center`}>
+                                            <span className={`${classificationDropdown && 'rotate-180'} transition material-icons-outlined`}>expand_more</span>
+                                            <div className={`${selectedIndustries.length === 0 && 'invisible'} h-full ml-3 mr-1.5 border border-grey-2`}></div>
+                                            <div className={`${selectedIndustries.length === 0 && 'invisible'} flex mr-1.5 px-2 py-1 rounded-full hover:bg-green-1 hover:cursor-pointer`} onClick={() => { removeParam('industry'); dispatch(clearIndustries()) }}>
+                                                <span className="text-base material-icons-outlined">clear</span>
                                             </div>
                                         </div>
+                                        {classificationDropdown && <Dropdown>
+                                            {allIndustries && allIndustries.map((industry,index) => { 
+                                                return <Classification 
+                                                    key={index} 
+                                                    industry={industry} 
+                                                    jobCount={industry.jobCount}
+                                                    professions={industry.professions}
+                                                />
+                                            })}    
+                                        </Dropdown>}
                                     </div>
-                                    {classificationDropdown && <Dropdown>
-                                        {allIndustries && allIndustries.map((industry,index) => { 
-                                            return <Classification 
-                                                key={index} 
-                                                industry={industry} 
-                                                jobCount={industry.jobCount}
-                                                professions={industry.professions}
-                                            />
-                                        })}    
-                                    </Dropdown>}
                                 </div>
                             </div>
-                            <div className="w-1/3 flex flex-col flex-grow" ref={where}>
+                            <div className="w-1/3 flex flex-col flex-grow z-10" ref={where}>
                                 <label className="font-bold">Where</label>
                                 <input className="p-3 rounded-md flex flex-grow outline-none" type="search" value={location.length > 15 ? location.slice(0, 25) + '...' : location} onChange={handleChangeWhere} placeholder="Enter suburb, city, or region" onFocus={() => setLocationDropdown(!locationDropdown)}/>
                                 <div className={`${location === '' && 'hidden'} clear-where flex flex-ai-c`} onClick={() => { removeParam('location'); setLocationDropdown(false); }}>

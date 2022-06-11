@@ -5,7 +5,7 @@ import { addIndustry, removeIndustry } from '../job.slice';
 
 function Dropdown(props) {
     return (
-        <div className="dropdown">
+        <div className="absolute w-full left-0 top-14 bg-white">
             <ul className="dropdown-list">
                 {props.children}
             </ul>
