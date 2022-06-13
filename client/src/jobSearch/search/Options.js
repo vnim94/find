@@ -147,7 +147,7 @@ function Option(props) {
                 {!value ? 
                 <>
                     <span className={selected !== undefined && selected !== id ? 'black' : 'white'}>{text}</span>
-                    <span className={`${expanded !== undefined ? 'flip' : undefined} ${selected !== undefined && selected !== id ? 'black' : 'white'} material-icons-outlined`}>expand_more</span>
+                    <span className={`${expanded !== undefined && expanded === id ? 'flip' : undefined} ${selected !== undefined && selected !== id ? 'black' : 'white'} material-icons-outlined`}>expand_more</span>
                 </>
                 :
                 <>
