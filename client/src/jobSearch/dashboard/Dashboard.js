@@ -1,9 +1,9 @@
-import './Dashboard.css';
 import { useSelector } from 'react-redux';
 
 function Dashboard() {
 
-    const user = useSelector(state => state.user.details);
+    // const user = useSelector(state => state.user.details);
+    const user = {};
     const recommended = [{
         title: 'Web Developer',
         company: 'Company'
@@ -23,58 +23,64 @@ function Dashboard() {
     }];
 
     return (
-        <div className={`${user && 'signed-in'} dashboard flex flex-jc-c flex-ai-c`}>
+        <div className={`border-t border-t-grey-2 py-7 flex justify-center items-center`}>
             {!user && 
-            <div className="page flex flex-row flex-jc-c flex-ai-c">
+            <div className="py-12 w-[992px] flex flex-row justify-center">
                 <span className="material-icons-outlined">person_outlined</span>
-                <div className="medium">
+                <div className="font-semibold text-lg">
                     <span>
-                        <a className="green banner-link" href="/login">Sign in</a> or <a className="green banner-link" href="/register">Register</a> to see your saved searches and saved jobs on all your devices
+                        <a className="text-green-4 hover:underline" href="/login">Sign in</a> or <a className="text-green-4 hover:underline" href="/register">Register</a> to see your saved searches and saved jobs on all your devices
                     </span>
                 </div>
             </div>}
             {user && 
-            <div className="page flex flex-row flex-jc-sb">
-                <div className="dashboard-tile">
-                    <div className="dashboard-tile-heading flex">
-                        <span className="dark-green material-icons-outlined">thumb_up</span>
-                        <span className="medium dark-green">50</span>
-                        <span className="medium">Recommended jobs</span>
-                    </div>
+            <div className="w-[992px] grid grid-cols-3 gap-x-2">
+                <DashboardTile count={50} icon="thumb_up" heading="Recommended jobs">
                     {recommended.map((job,index) => { 
-                        return <div key={index} className="dashboard-tile-item flex flex-col">
-                            <a href="/">{job.title}</a>
-                            <span>{job.company}</span>
+                        return <div key={index} className="text-sm flex flex-col">
+                            <a className="text-green-4 hover:underline" href="/">{job.title}</a>
+                            <span className="text-grey-3">{job.company}</span>
                         </div>
                     })}
-                </div>
-                <div className="dashboard-tile">
-                    <div className="dashboard-tile-heading flex">
-                        <span className="green material-icons-outlined">star_outline</span>
-                        <span className="medium green">1</span>
-                        <span className="medium">Saved job</span>
-                    </div>
+                </DashboardTile>
+                <DashboardTile count={1} icon="star_outline" heading="Saved job">
                     {saved.map((job,index) => { 
-                        return <div key={index} className="dashboard-tile-item flex flex-col">
-                            <a href="/">{job.title}</a>
-                            <span>{job.company}</span>
+                        return <div key={index} className="text-sm flex flex-col">
+                            <a className="text-green-4 hover:underline" href="/">{job.title}</a>
+                            <span className="text-grey-3">{job.company}</span>
                         </div>
                     })}
-                </div>
-                <div className="dashboard-tile">
-                    <div className="dashboard-tile-heading flex">
-                        <span className="light-green material-icons-outlined">favorite_border</span>
-                        <span className="medium green">0</span>
-                        <span className="medium">Saved search</span>
-                    </div>
+                </DashboardTile>
+                <DashboardTile count={0} icon="favorite_border" heading="Saved search">
                     {searches.map((search,index) => { 
-                        return <div key={index} className="dashboard-tile-item flex flex-row flex-jc-sa">
-                            <span>{search.new} new</span>
+                        return <div key={index} className="text-sm flex space-x-2">
+                            <span className="text-green-4">{search.new} new</span>
                             <a href="/">{search.what} in {search.where}</a>
                         </div>
                     })}
-                </div>
+                </DashboardTile>
             </div>}
+        </div>
+    )
+}
+
+function DashboardTile({ children, count, icon, heading }) {
+    return (
+        <div className="grid grid-rows-[1fr_5fr_1fr] space-y-3">
+            <div className="flex items-center space-x-2">
+                <span className="dark-green material-icons-outlined">{icon}</span>
+                <span className="text-lg">{heading}</span>
+                <div className="w-6 bg-green-3 text-green-6 text-sm font-semibold rounded-md flex justify-center">
+                    <span>{count}</span>
+                </div>
+            </div>
+            <div className="flex flex-col flex-grow space-y-3">
+                {children}
+            </div>
+            <div className="flex items-center text-green-4">
+                <a className="hover:underline" href="/">View all</a>
+                <span className="material-icons-outlined">navigate_next</span>
+            </div>
         </div>
     )
 }

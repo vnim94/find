@@ -40,10 +40,10 @@ function App() {
     <>
         <Header page="jobs"/>
         <Search />
-        {/* <Recent />
+        <Recent />
         <Dashboard />
         <Content />
-        <Shortcut />  */}
+        <Shortcut /> 
         <Footer />
     </>
     const profile = 

@@ -1,4 +1,3 @@
-import './Shortcut.css';
 import { useState } from 'react';
 
 function Shortcut() {
@@ -63,52 +62,52 @@ function Shortcut() {
     }
 
     return (
-        <div className="shortcuts">
-            <div className="page">
+        <div className="bg-grey-2 flex justify-center">
+            <div className="w-[992px] py-5">
                 <div>
                     <span><b>Quick search</b></span>
                 </div>
-                <div className="shortcut flex">
-                    <div className="shortcut-link-type">
+                <div className="grid grid-cols-[1fr_6fr] items-center">
+                    <div className="text-sm">
                         <span>Classifications</span>
                     </div>
-                    <div className="shortcut-links flex flex-row">
-                        <a href="/">Accounting</a>
-                        <a href="/">Education &amp; Training</a>
-                        <a href="/">Government &amp; Defence</a>
-                        <a href="/">Healthcare &amp; Medical</a>
-                        <a href="/">Sales</a>
-                        <div className="all flex flex-ai-c" onClick={handleClick}>
-                            <span>View all</span>
-                            <span className={`${expanded && 'expand'} medium material-icons-outlined`}>expand_more</span>
+                    <div className="text-sm text-green-4 flex flex-row items-center space-x-10">
+                        <a className="hover:underline" href="/">Accounting</a>
+                        <a className="hover:underline" href="/">Education &amp; Training</a>
+                        <a className="hover:underline" href="/">Government &amp; Defence</a>
+                        <a className="hover:underline" href="/">Healthcare &amp; Medical</a>
+                        <a className="hover:underline" href="/">Sales</a>
+                        <div className="all flex items-center hover:cursor-pointer" onClick={handleClick}>
+                            <span className="text-green-4 hover:underline">View all</span>
+                            <span className={`${expanded && 'rotate-180'} transition material-icons-outlined`}>expand_more</span>
                         </div>
                     </div>
                 </div>
                 {visible && 
-                <div className="all-shortcuts-links flex flex-row">
+                <div className="grid grid-cols-3 my-2">
                     {classifications.map((classification, index) => {
-                        return <a key={index} className="shortcut-link" href="/">{classification}</a>
+                        return <a key={index} className="my-1 text-sm text-green-4 hover:underline" href="/">{classification}</a>
                     })}
                 </div>
                 }
-                <div className="shortcut flex">
-                    <div className="shortcut-link-type">
+                <div className="grid grid-cols-[1fr_6fr]">
+                    <div className="text-sm">
                         <span>Major cities</span>
                     </div>
-                    <div className="shortcut-links">
-                    {cities.map((city, index) => {
-                        return <a key={index} href="/">{city}</a>
-                    })}
+                    <div className="text-sm flex space-x-10">
+                        {cities.map((city, index) => {
+                            return <a key={index} className="text-green-4 hover:underline" href="/">{city}</a>
+                        })}
                     </div>
                 </div>
-                <div className="shortcut flex">
-                    <div className="shortcut-link-type">
+                <div className="grid grid-cols-[1fr_6fr]">
+                    <div className="text-sm">
                         <span>Other</span>
                     </div>
-                    <div className="shortcut-links">
-                    {others.map((other, index) => {
-                        return <a key={index} href="/">{other}</a>
-                    })}
+                    <div className="text-sm flex space-x-10">
+                        {others.map((other, index) => {
+                            return <a key={index} className="text-green-4 hover:underline" href="/">{other}</a>
+                        })}
                     </div>
                 </div>
             </div>
