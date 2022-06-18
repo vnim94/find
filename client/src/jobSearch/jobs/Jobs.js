@@ -126,10 +126,10 @@ function Jobs() {
     )
 }
 
-function JobCard(props) {
+function JobCard({ job }) {
 
-    const { title, headliner, summary, company, location, industry, profession, workType, added } = props.job;
-
+    const { title, headliner, summary, company, location, industry, profession, workType, added } = job;
+    
     return (
         <div className="job-card">
             <div className="flex flex-row flex-jc-sb">

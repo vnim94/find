@@ -8,6 +8,7 @@ export const getTimeElapsed = (timestamp) => {
 
     let currentDate = Date.now();
     let date = new Date(timestamp);
+    
     let timeElapsed = currentDate - date
     
     if (timeElapsed < minute) {
@@ -28,6 +29,9 @@ export const getTimeElapsed = (timestamp) => {
         timeElapsed = Math.round(timeElapsed / day);
         return `${timeElapsed}d ago`;
     }
+    
+    return 'More than 30d ago';
+
 }
 
 export const formatNumber = (number) => {
